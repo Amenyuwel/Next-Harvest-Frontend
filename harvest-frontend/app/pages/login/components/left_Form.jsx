@@ -29,7 +29,7 @@ function LeftForm() {
             </div>
             <input 
               type="email" 
-              className='w-full pl-12 pr-4 py-3 sm:py-4 bg-white rounded-3xl border-0 shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 text-sm sm:text-base'
+              className='w-full pl-12 pr-4 py-3  sm:py-4 bg-white rounded-3xl border-0 shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 text-sm sm:text-base text-black font-bold'
               placeholder="Email"
             />
           </div>
@@ -43,7 +43,7 @@ function LeftForm() {
             </div>
             <input 
               type="password" 
-              className='w-full pl-12 pr-12 py-3 sm:py-4 bg-white rounded-3xl border-0 shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 text-sm sm:text-base'
+              className='w-full pl-12 pr-12 py-3 sm:py-4 bg-white rounded-3xl border-0 shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 text-sm sm:text-base text-black font-bold'
               placeholder="Password"
             />
             <div className='absolute right-3 top-1/2 transform -translate-y-1/2'>
