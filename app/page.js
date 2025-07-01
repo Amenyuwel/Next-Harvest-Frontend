@@ -6,7 +6,6 @@ const page = () => {
   return (
     <main>
       <LoginPage />
-      <DashboardPage />
     </main>
   );
 };
