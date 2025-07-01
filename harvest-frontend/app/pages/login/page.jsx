@@ -2,10 +2,10 @@ import React from 'react'
 import LeftForm from './components/left_Form'
 import RightImage from './components/right_Image'
 
-function page() {
+function Loginpage() {
   return (
-    <div className='w-screen h-screen flex items-center bg-black-400 justify-center p-4 sm:p-6 lg:p-20'>
-      <div className='bg-[#FEFEFE] rounded-3xl shadow-2xl overflow-hidden max-w-7xl w-full h-full sm:h-[600px] lg:h-[900px] flex flex-col lg:flex-row p-4 sm:p-6 lg:p-10 gap-4 lg:gap-10'>
+    <div className='w-screen h-screen flex items-center bg-black-400 justify-center px-5 py-5'>
+      <div className='bg-[#FEFEFE] rounded-3xl shadow-2xl overflow-hidden  w-full h-full flex flex-col lg:flex-row p-4 sm:p-6 lg:px-20 gap-4 lg:gap-10'>
         <LeftForm />
         <RightImage />
       </div>
@@ -13,4 +13,4 @@ function page() {
   )
 }
 
-export default page
+export default Loginpage
