@@ -1,15 +1,11 @@
+/* Import Tailwind if your build process supports it */
 @import "tailwindcss";
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --column-pests: #e2f7cc;
+  --column-farmer: #8787871f;
 }
 
 @media (prefers-color-scheme: dark) {
