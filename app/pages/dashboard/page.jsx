@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import Sidebar from "./components/Sidebar";
+import Sidebar from "../../components/UI/Sidebar";
 import ReportsColumn from "./components/report";
 
 // Simple Graph Placeholder
@@ -82,7 +82,7 @@ const DashboardPage = () => {
         `}
       </style>
       <div className="bg-[#F3F3F3] rounded-3xl shadow-2xl overflow-hidden w-full h-full flex flex-col lg:flex-row p-4 sm:p-6 lg:px-20 gap-4 lg:gap-10">
-        <Sidebar />
+      
         <div className="flex-1 flex flex-col h-full">
           <div className="w-full flex justify-start items-start ml-5 mt-6 mb-6">
             <h1 className="text-4xl font-semibold text-black">Hi Admin!</h1>

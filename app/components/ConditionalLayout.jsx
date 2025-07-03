@@ -1,6 +1,6 @@
 "use client";
 import { usePathname } from 'next/navigation';
-import Sidebar from '../pages/dashboard/components/Sidebar';
+import Sidebar from './UI/Sidebar';
 
 export default function ConditionalLayout({ children }) {
   const pathname = usePathname();
