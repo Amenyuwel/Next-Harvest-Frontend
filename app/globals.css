@@ -1,6 +1,17 @@
 /* Import Tailwind if your build process supports it */
 @import "tailwindcss";
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --font-lato: 'Lato', sans-serif;
+    --font-quicksand: 'Quicksand', sans-serif;
+  }
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;

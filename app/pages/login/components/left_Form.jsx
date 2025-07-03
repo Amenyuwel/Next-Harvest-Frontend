@@ -4,6 +4,7 @@ import { Icon } from '@iconify/react'
 import { useRouter } from 'next/navigation'
 import Register from './Register/register'
 
+
 function LeftForm() {
   const [showRegister, setShowRegister] = useState(false)
   const router = useRouter()
@@ -23,9 +24,9 @@ function LeftForm() {
         }`}>
           <div className='max-w-sm mx-auto w-full h-full flex flex-col justify-center'>
             <div className='text-center mb-6 sm:mb-8'>
-              <h1 className='text-[#019601] text-xl sm:text-2xl font-bold mb-2'>Harvest Assistant</h1>
-              <h2 className='text-2xl sm:text-3xl font-bold text-gray-800 mb-1'>Your farming journey</h2>
-              <h3 className='text-2xl sm:text-3xl font-bold text-gray-800 mb-6 sm:mb-8'>Starts here</h3>
+              <h1 className='text-[#019601] text-xl sm:text-2xl font-lato font-bold mb-2'>Harvest Assistant</h1>
+              <h2 className='text-2xl sm:text-3xl font-lato font-bold text-gray-800 mb-1'>Your farming journey</h2>
+              <h3 className='text-2xl sm:text-3xl font-lato font-bold text-gray-800 mb-6 sm:mb-8'>Starts here</h3>
             </div>
             
             {/* Social Login Icons */}
@@ -46,7 +47,7 @@ function LeftForm() {
                 </div>
                 <input 
                   type="email" 
-                  className='w-full pl-12 pr-4 py-3 sm:py-4 bg-white rounded-3xl border-0 shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 text-sm sm:text-base text-black'
+                  className='w-full pl-12 pr-4 py-3 sm:py-4 bg-white rounded-3xl border-0 shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 text-sm sm:text-base text-black font-lato'
                   placeholder="Email"
                 />
               </div>
@@ -60,7 +61,7 @@ function LeftForm() {
                 </div>
                 <input 
                   type="password" 
-                  className='w-full pl-12 pr-12 py-3 sm:py-4 bg-white rounded-3xl border-0 shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 text-sm sm:text-base text-black'
+                  className='w-full pl-12 pr-12 py-3 sm:py-4 bg-white rounded-3xl border-0 shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 text-sm sm:text-base text-black font-lato'
                   placeholder="Password"
                 />
                 <div className='absolute right-3 top-1/2 transform -translate-y-1/2'>
@@ -72,15 +73,15 @@ function LeftForm() {
             {/* Login Button */}
             <button 
               onClick={handleLogin}
-              className='w-full bg-black text-white py-3 sm:py-4 rounded-3xl font-medium mb-4 hover:bg-gray-800 transition duration-200 text-sm sm:text-base'
+              className='w-full bg-black text-white py-3 sm:py-4 rounded-3xl font-lato font-medium mb-4 hover:bg-gray-800 transition duration-200 text-sm sm:text-base'
             >
               Log in
             </button>
             
             {/* Sign Up Link */}
-            <p className='text-center text-xs sm:text-sm text-gray-600'>
+            <p className='text-center text-xs sm:text-sm text-gray-600 font-lato'>
               Don't have an account? <span 
-                className='font-medium text-black cursor-pointer hover:underline' 
+                className='font-medium text-black cursor-pointer hover:underline font-lato' 
                 onClick={() => setShowRegister(true)}
               >
                 Sign Up
