@@ -8,7 +8,6 @@ const FieldsMap = () => (
     <div className="bg-white rounded-3xl shadow p-4 flex flex-col items-center mt-6">
       {" "}
       {/* Added mt-6 for space */}
-      <div className="w-[300px] h-[420px] rounded-2xl overflow-hidden">
         <iframe
           title="Fields Map"
           width="100%"

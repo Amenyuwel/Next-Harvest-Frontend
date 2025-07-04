@@ -35,7 +35,7 @@ const CalendarColumn = () => {
   return (
     <div
       className="bg-white rounded-3xl shadow p-6 flex flex-col justify-center"
-      style={{ minWidth: 500, maxWidth: 530, height: 460 }} // Set a fixed height
+      style={{ minWidth: 500, maxWidth: 530, height: 360 }} // Set a fixed height
     >
       <div className="bg-[#F9FFCC] rounded-2xl p-6 h-full flex flex-col justify-center">
         <div className="text-center font-bold text-lg mb-4 text-gray-700">
