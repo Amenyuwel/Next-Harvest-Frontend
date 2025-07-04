@@ -19,7 +19,7 @@ const ProgressBar = ({ label, value, max }) => {
         style={{
           background: "#e6ffe6",
           borderRadius: 20,
-          height: 24,
+          height: 34,
           width: "100%",
           overflow: "hidden",
         }}
