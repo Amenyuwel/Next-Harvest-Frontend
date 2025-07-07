@@ -9,7 +9,7 @@ import FieldsMap from "./components/Map";
 
 const DashboardPage = () => {
   return (
-    <main className="w-full h-screen ">
+    <main className="w-full h-screen items-center justify-center bg-[#F5F5F5] scrollbar-hide">
       <div className="w-full h-full flex flex-col lg:flex-row p-2 ">
    
         <div className="flex-1 flex flex-col h-full">
@@ -27,7 +27,8 @@ const DashboardPage = () => {
               <div className="flex flex-row gap-6 items-start">
                 {/* Notifications */}
                 <div className="w-[500px] flex flex-col gap-3">
-                  <NotificationColumn />
+                  
+                <NotificationColumn />
                   <GraphColumn />
                 </div>
 
