@@ -1,17 +1,17 @@
 import React from "react";
 
 const FieldsMap = () => (
-  <div className="relative">
-    <div className="absolute -top-6 left-0">
+  <div className="relative h-full">
+    <div className="mb-4">
       <span className="text-2xl font-bold text-black">Fields</span>
     </div>
-    <div className="bg-white rounded-3xl shadow p-4 flex flex-col items-center mt-6">
+    <div className="bg-white rounded-3xl shadow p-4 flex flex-col items-center mt-6 ">
       {" "}
       {/* Added mt-6 for space */}
         <iframe
           title="Fields Map"
           width="100%"
-          height="100%"
+          height="250"
           style={{ border: 0 }}
           loading="lazy"
           allowFullScreen
@@ -20,7 +20,7 @@ const FieldsMap = () => (
         ></iframe>
       </div>
     </div>
-  </div>
+ 
 );
 
 export default FieldsMap;

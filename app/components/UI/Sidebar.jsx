@@ -86,7 +86,7 @@ function Sidebar() {
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.3, delay: index * 0.1 }}
       onClick={() => handleItemClick(item)}
-      className={`w-12 h-12 rounded-3xl flex items-center justify-center cursor-pointer transition-all duration-200 group relative${
+      className={`w-20 h-20 rounded-3xl flex items-center justify-center cursor-pointer transition-all duration-200 group relative${
         activeItem === item.id 
           ? 'border-icons bg-transparent' 
           : 'border-transparent hover:border-gray-500'
@@ -125,7 +125,7 @@ function Sidebar() {
 
   return (
     <motion.div 
-      className='w-20 h-[96%] bg-[#2C2C2C] rounded-3xl flex flex-col items-center py-6 shadow-lg mt-4'
+      className='w-25 h-[96%] bg-[#2C2C2C] rounded-3xl flex flex-col items-center py-6 shadow-lg mt-4'
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.4 }}
@@ -141,7 +141,7 @@ function Sidebar() {
       </motion.div>
 
       {/* Main Menu Items */}
-      <div className='flex flex-col gap-6 flex-1'>
+      <div className='flex flex-col  flex-1'>
         {mainMenuItems.map((item, index) => renderMenuItem(item, index))}
       </div>
 
@@ -154,7 +154,7 @@ function Sidebar() {
       />
 
       {/* Bottom Menu Items */}
-      <div className='flex flex-col gap-6'>
+      <div className='flex flex-col '>
         {bottomMenuItems.map((item, index) => renderMenuItem(item, index + mainMenuItems.length))}
       </div>
     </motion.div>
