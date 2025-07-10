@@ -11,7 +11,7 @@ const FieldsMap = () => (
         <iframe
           title="Fields Map"
           width="100%"
-          height="250"
+          height="265"
           style={{ border: 0 }}
           loading="lazy"
           allowFullScreen

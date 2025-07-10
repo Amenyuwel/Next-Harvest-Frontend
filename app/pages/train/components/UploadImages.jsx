@@ -36,9 +36,9 @@ const UploadImages = () => {
   };
 
   return (
-    <div className=" p-4 sm:p-6 h-full flex flex-col">
+    <div className=" p-4 sm:p-6 h-full flex flex-col mb-2">
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2">
           <h2 className="text-xl sm:text-2xl font-bold text-black">Upload Images</h2>
           <Icon icon="material-symbols:upload" width="24" height="24" className="text-gray-500" />

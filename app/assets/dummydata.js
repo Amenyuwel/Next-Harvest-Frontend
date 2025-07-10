@@ -175,3 +175,46 @@ export const notifications = [
     tagColor: "#059669"
   }
 ];
+
+export const pestReportsData = [
+  {
+    id: 1,
+    number: "01",
+    pestName: "Caterpillar",
+    description: "Regular",
+    recommended: "Manual Rams",
+    activeMonth: "Decreased",
+    season: "All season",
+    image: "/api/placeholder/32/32"
+  },
+  {
+    id: 2,
+    number: "02",
+    pestName: "Caterpillar",
+    description: "Regular",
+    recommended: "Manual Rams",
+    activeMonth: "Decreased",
+    season: "All season",
+    image: "/api/placeholder/32/32"
+  },
+  {
+    id: 3,
+    number: "03",
+    pestName: "Snail",
+    description: "Regular",
+    recommended: "Manual Rams",
+    activeMonth: "Decreased",
+    season: "All season",
+    image: "/api/placeholder/32/32"
+  },
+  {
+    id: 4,
+    number: "04",
+    pestName: "Snail",
+    description: "Regular",
+    recommended: "Manual Rams",
+    activeMonth: "Decreased",
+    season: "All season",
+    image: "/api/placeholder/32/32"
+  }
+];
