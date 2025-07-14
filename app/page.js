@@ -5,8 +5,8 @@ import DashboardPage from "./pages/dashboard/page";
 const page = () => {
   return (
     <main>
-    
-     <LoginPage />
+       <Sidebar />
+      <DashboardPage />
     </main>
   );
 };
