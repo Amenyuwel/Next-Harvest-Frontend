@@ -66,7 +66,7 @@ export default function PagesLayout({ children }) {
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: -20 }}
-          transition={{ duration: 0.3, ease: "easeInOut" }}
+          transition={{ duration: 0.1, ease: "easeInOut" }}
         >
           {children}
         </motion.div>
@@ -113,24 +113,11 @@ export default function PagesLayout({ children }) {
             />
           </motion.div>
 
-          {/* Page Content with transitions */}
+          {/* Page Content - no transitions */}
           <div className="flex-1 overflow-auto">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={pathname}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ 
-                  duration: 0.4, 
-                  ease: "easeInOut",
-                  delay: 0.2 
-                }}
-                className="h-full"
-              >
-                {children}
-              </motion.div>
-            </AnimatePresence>
+            <div className="h-full">
+              {children}
+            </div>
           </div>
         </div>
       </motion.div>

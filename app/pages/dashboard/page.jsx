@@ -8,7 +8,7 @@ import FieldsMap from "./components/Map";
 
 const DashboardPage = () => {
   return (
-    <div className="w-full h-full flex flex-col lg:flex-row px-6 pb-6 gap-6 overflow-hidden justify-center items-center">
+    <div className="w-full h-full flex flex-col lg:flex-row px-6 pb-6 gap-6 overflow-auto scrollbar-hide justify-center items-center">
       {/* Left side - Reports */}
       <div className="min-w-[320px] max-w-full w-full">
         <ReportsColumn />

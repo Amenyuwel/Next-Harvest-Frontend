@@ -3,7 +3,7 @@ import { Icon } from "@iconify/react";
 
 const PieChart = () => {
   return (
-    <div className="bg-white rounded-2xl p-4 sm:p-6 shadow w-full lg:w-64 flex flex-col">
+    <div className="bg-white rounded-2xl p-4 sm:p-6 shadow w-full lg:w-100 h-full flex flex-col">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6">
         <h3 className="text-base sm:text-lg font-semibold text-black mb-1 sm:mb-0">Reports per pests</h3>
@@ -11,7 +11,7 @@ const PieChart = () => {
       </div>
       
       {/* Donut Chart */}
-      <div className="relative w-32 h-32 sm:w-40 sm:h-40 mx-auto mb-4 sm:mb-6">
+      <div className="relative w-50 h-50 sm:w-40 sm:h-40 mx-auto mb-4 sm:mb-6">
         <svg className="w-32 h-32 sm:w-40 sm:h-40 transform -rotate-90" viewBox="0 0 100 100">
           {/* Background circle */}
           <circle 

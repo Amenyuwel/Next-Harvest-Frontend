@@ -6,7 +6,12 @@ export default function ConditionalLayout({ children }) {
   const pathname = usePathname();
   
   // Check if current path is a dashboard page
-  const isDashboardPage = pathname?.startsWith('/pages/dashboard');
+  const isDashboardPage = pathname?.startsWith('/pages/dashboard') || 
+                         pathname?.startsWith('/pages/inventory') ||
+                         pathname?.startsWith('/pages/train') ||
+                         pathname?.startsWith('/pages/reports') ||
+                         pathname?.startsWith('/pages/profile') ||
+                         pathname?.startsWith('/pages/settings');
   
   if (isDashboardPage) {
     return (
