@@ -8,16 +8,18 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: "#4F46E5",
-        secondary: "#F3F4F6",
-        accent: "#D1D5DB",
-        dark: "#111827",
-        light: "#F9FAFB",
-        sidebar:"#292929",
-        icons:"#BDFFAF",
-        bg: "#F3F3F3",
+        primary: "var(--primary)",
+        secondary: "var(--secondary)",
+        accent: "var(--accent)",
+        dark: "var(--dark)",
+        light: "var(--light)",
+        sidebar: "var(--sidebar)",
+        icons: "var(--icons)",
+        bg: "var(--bg)",
+        bgColor: "var(--background)",
+        foreground: "var(--foreground)",
         columnPests: "var(--column-pests)",
-        columFarmer: "var(--column-farmer)",
+        columnFarmer: "var(--column-farmer)",
       },
       fontFamily: {
         sans: ["Inter", "sans-serif"],

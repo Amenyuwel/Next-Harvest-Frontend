@@ -36,29 +36,36 @@ const UploadImages = () => {
   };
 
   return (
-    <div className=" p-4 sm:p-6 h-full flex flex-col">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center gap-2">
-          <h2 className="text-xl sm:text-2xl font-bold text-black">Upload Images</h2>
-          <Icon icon="material-symbols:upload" width="24" height="24" className="text-gray-500" />
+    <div className="h-full flex flex-col">
+      {/* Fixed Header */}
+      <div className="flex-shrink-0 px-6 py-4 bg-white sticky top-0 z-10">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <h2 className="text-xl sm:text-2xl font-bold text-black">Upload Images</h2>
+            <Icon icon="material-symbols:upload" width="24" height="24" className="text-gray-500" />
+          </div>
         </div>
       </div>
 
-      {/* Training Section */}
-      <TrainingSection 
-        isTraining={isTraining}
-        onTrainModel={handleTrainModel}
-      />
+      {/* Scrollable Content - Hidden Scrollbar */}
+      <div className="flex-1 overflow-auto px-6 pb-6 scrollbar-hide">
+        {/* Training Section */}
+        <div className="mb-6">
+          <TrainingSection 
+            isTraining={isTraining}
+            onTrainModel={handleTrainModel}
+          />
+        </div>
 
-      {/* Connection Lines and Classes Container */}
-      <div className="relative flex-1 -mt-2">
-        <ConnectionLines />
-        <ClassGrid 
-          classes={classes}
-          onFileUpload={handleFileUpload}
-          onAddClass={addClass}
-        />
+        {/* Connection Lines and Classes Container - Increased height */}
+        <div className="relative min-h-[800px] lg:min-h-[1000px]">
+          <ConnectionLines />
+          <ClassGrid 
+            classes={classes}
+            onFileUpload={handleFileUpload}
+            onAddClass={addClass}
+          />
+        </div>
       </div>
     </div>
   );
