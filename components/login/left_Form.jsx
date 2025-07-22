@@ -2,7 +2,7 @@
 import React, { useState } from 'react'
 import { Icon } from '@iconify/react'
 import { useRouter } from 'next/navigation'
-import Register from './Register/register'
+import Register from './register'
 
 
 function LeftForm() {
@@ -16,7 +16,7 @@ function LeftForm() {
   }
 
   return (
-    <div className='w-full lg:w-1/2 bg-[#E6E6E6] rounded-3xl p-6 sm:p-12 lg:p-20 flex flex-col justify-center relative overflow-hidden'>
+    <div className='w-full lg:w-1/2 bg-[var(--color-background-light-gray)] rounded-3xl p-6 sm:p-12 lg:p-20 flex flex-col justify-center relative overflow-hidden'>
       <div className='relative w-full h-full'>
         {/* Login Form */}
         <div className={`absolute inset-0 transition-transform duration-500 ease-in-out ${
@@ -24,7 +24,7 @@ function LeftForm() {
         }`}>
           <div className='max-w-sm mx-auto w-full h-full flex flex-col justify-center'>
             <div className='text-center mb-6 sm:mb-8'>
-              <h1 className='text-[#019601] text-xl sm:text-2xl font-lato font-bold mb-2'>Harvest Assistant</h1>
+              <h1 className='text-[var(--color-primary)] text-xl sm:text-2xl font-lato font-bold mb-2'>Harvest Assistant</h1>
               <h2 className='text-2xl sm:text-3xl font-lato font-bold text-gray-800 mb-1'>Your farming journey</h2>
               <h3 className='text-2xl sm:text-3xl font-lato font-bold text-gray-800 mb-6 sm:mb-8'>Starts here</h3>
             </div>

@@ -11,7 +11,7 @@ import {
   Filler,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import { graphData, graphOptions } from '../../../assets/dummydata';
+import { graphData, graphOptions } from '@/assets/dummydata';
 
 ChartJS.register(
   CategoryScale,

@@ -9,7 +9,7 @@ const ConnectionLines = () => {
       <defs>
         <marker id="arrowhead" markerWidth="10" markerHeight="7" 
           refX="9" refY="3.5" orient="auto">
-          <polygon points="0 0, 10 3.5, 0 7" fill="#9CA3AF" />
+          <polygon points="0 0, 10 3.5, 0 7" fill="var(--color-chart-gray)" />
         </marker>
       </defs>
       
@@ -19,7 +19,7 @@ const ConnectionLines = () => {
         y1="20"
         x2="25%"
         y2="120"
-        stroke="#9CA3AF"
+        stroke="var(--color-chart-gray)"
         strokeWidth="2"
         markerEnd="url(#arrowhead)"
       />
@@ -28,7 +28,7 @@ const ConnectionLines = () => {
         y1="20"
         x2="75%"
         y2="120"
-        stroke="#9CA3AF"
+        stroke="var(--color-chart-gray)"
         strokeWidth="2"
         markerEnd="url(#arrowhead)"
       />
@@ -39,7 +39,7 @@ const ConnectionLines = () => {
         y1="20"
         x2="25%"
         y2="280"
-        stroke="#9CA3AF"
+        stroke="var(--color-chart-gray)"
         strokeWidth="2"
         markerEnd="url(#arrowhead)"
       />
@@ -48,7 +48,7 @@ const ConnectionLines = () => {
         y1="20"
         x2="75%"
         y2="280"
-        stroke="#9CA3AF"
+        stroke="var(--color-chart-gray)"
         strokeWidth="2"
         markerEnd="url(#arrowhead)"
       />

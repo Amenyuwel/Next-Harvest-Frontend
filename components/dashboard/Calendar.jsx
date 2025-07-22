@@ -37,7 +37,7 @@ const CalendarColumn = () => {
       className="bg-white rounded-3xl shadow p-6 flex flex-col justify-center"
       style={{ minWidth: 500, maxWidth: 530, height: 360 }} // Set a fixed height
     >
-      <div className="bg-[#F9FFCC] rounded-2xl p-6 h-full flex flex-col justify-center">
+      <div className="bg-[var(--color-calendar-highlight)] rounded-2xl p-6 h-full flex flex-col justify-center">
         <div className="text-center font-bold text-lg mb-4 text-gray-700">
           {monthName} {year}
         </div>
@@ -72,7 +72,7 @@ const CalendarColumn = () => {
                       }
                       ${!inMonth ? "text-gray-400" : "text-gray-700"}
                     `}
-                    style={isToday ? { boxShadow: "0 4px 16px #bdbdbd" } : {}}
+                    style={isToday ? { boxShadow: "0 4px 16px var(--color-calendar-shadow)" } : {}}
                   >
                     {date.getDate()}
                   </div>

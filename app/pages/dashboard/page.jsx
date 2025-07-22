@@ -1,10 +1,10 @@
 "use client";
 import React from "react";
-import ReportsColumn from "./components/report";
-import NotificationColumn from "./components/Notification";
-import GraphColumn from "./components/GraphColumn";
-import CalendarColumn from "./components/Calendar";
-import FieldsMap from "./components/Map";
+import ReportsColumn from "@/components/dashboard/report";
+import NotificationColumn from "@/components/dashboard/Notification";
+import GraphColumn from "@/components/dashboard/GraphColumn";
+import CalendarColumn from "@/components/dashboard/Calendar";
+import FieldsMap from "@/components/dashboard/Map";
 
 const DashboardPage = () => {
   return (

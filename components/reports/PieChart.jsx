@@ -3,7 +3,7 @@ import { Icon } from "@iconify/react";
 
 const PieChart = () => {
   return (
-    <div className="bg-white rounded-2xl p-4 sm:p-6 shadow w-full lg:w-100 h-full flex flex-col">
+    <div className="bg-white rounded-2xl p-4 sm:p-6 shadow w-full lg:w-100 h-[93%] flex flex-col">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6">
         <h3 className="text-base sm:text-lg font-semibold text-black mb-1 sm:mb-0">Reports per pests</h3>
@@ -18,7 +18,7 @@ const PieChart = () => {
             cx="50" 
             cy="50" 
             r="35" 
-            stroke="#f3f4f6" 
+            stroke="var(--color-secondary)" 
             strokeWidth="10" 
             fill="none"
           />
@@ -28,7 +28,7 @@ const PieChart = () => {
             cx="50" 
             cy="50" 
             r="35" 
-            stroke="#10b981" 
+            stroke="var(--color-chart-green)" 
             strokeWidth="10" 
             fill="none"
             strokeDasharray="87.96 219.91"
@@ -41,7 +41,7 @@ const PieChart = () => {
             cx="50" 
             cy="50" 
             r="35" 
-            stroke="#f87171" 
+            stroke="var(--color-chart-red)" 
             strokeWidth="10" 
             fill="none"
             strokeDasharray="54.98 219.91"
@@ -54,7 +54,7 @@ const PieChart = () => {
             cx="50" 
             cy="50" 
             r="35" 
-            stroke="#fbbf24" 
+            stroke="var(--color-chart-yellow)" 
             strokeWidth="10" 
             fill="none"
             strokeDasharray="43.98 219.91"
@@ -67,7 +67,7 @@ const PieChart = () => {
             cx="50" 
             cy="50" 
             r="35" 
-            stroke="#d1d5db" 
+            stroke="var(--color-accent)" 
             strokeWidth="10" 
             fill="none"
             strokeDasharray="32.99 219.91"

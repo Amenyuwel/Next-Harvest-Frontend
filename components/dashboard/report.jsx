@@ -3,13 +3,13 @@ import ProgressBar from "./progressBar";
 import { Icon } from "@iconify/react";
 
 const ReportsColumn = () => (
-  <div className="bg-white rounded-2xl sm:rounded-3xl shadow p-3 sm:p-4 md:p-6 h-[90%] w-full max-w-full overflow-hidden">
+  <div className="bg-white rounded-2xl sm:rounded-3xl shadow p-3 sm:p-4 md:p-6 h-full w-full max-w-full overflow-hidden">
     <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold mb-3 sm:mb-4 text-black">Reports</h2>
     
     {/* Top Section - Farmers and Pest Cards */}
     <div className="flex flex-col sm:flex-row gap-3 sm:gap-6 md:gap-10 justify-center items-stretch mb-6 sm:mb-8">
       {/* Farmers Column */}
-      <div className="flex-1 bg-[var(--column-farmer)] rounded-2xl sm:rounded-3xl p-3 sm:p-4 flex flex-col relative min-h-[200px] sm:min-h-[250px] md:min-h-[300px]">
+      <div className="flex-1 bg-[var(--color-column-farmer)] rounded-2xl sm:rounded-3xl p-3 sm:p-4 flex flex-col relative min-h-[200px] sm:min-h-[250px] md:min-h-[300px]">
         <div className="flex items-center justify-between mb-2 sm:mb-3">
           <h3 className="text-sm sm:text-base font-semibold text-black">Farmers</h3>
           <Icon
@@ -43,7 +43,7 @@ const ReportsColumn = () => (
       </div>
 
       {/* Pests Column */}
-      <div className="flex-1 bg-[var(--column-pests)] rounded-2xl sm:rounded-3xl p-3 sm:p-4 flex flex-col relative min-h-[200px] sm:min-h-[250px] md:min-h-[300px]">
+      <div className="flex-1 bg-[var(--color-column-pests)] rounded-2xl sm:rounded-3xl p-3 sm:p-4 flex flex-col relative min-h-[200px] sm:min-h-[250px] md:min-h-[300px]">
         <div className="flex items-center justify-between mb-2 sm:mb-3">
           <h3 className="text-sm sm:text-base font-semibold text-black">Pest</h3>
           <Icon

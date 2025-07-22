@@ -29,7 +29,7 @@ const ClassCard = ({ classData, onFileUpload, onDeleteClass, onEditClass }) => {
 
   return (
     <>
-      <div className="bg-[#F4FFB3] rounded-2xl p-4 min-h-[140px] flex flex-col relative">
+      <div className="bg-[var(--color-training-highlight)] rounded-2xl p-4 min-h-[140px] flex flex-col relative">
         <div className="flex items-center justify-between mb-3">
           <span className="text-sm font-medium text-black flex items-center">
             {name}

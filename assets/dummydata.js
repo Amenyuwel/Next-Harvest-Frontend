@@ -1,49 +1,62 @@
 export const graphData = {
-  labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+  labels: [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ],
   datasets: [
     {
-      label: 'Rice Production',
+      label: "Rice Production",
       data: [65, 59, 80, 81, 56, 55, 40, 85, 90, 75, 82, 88],
-      borderColor: '#10B981',
-      backgroundColor: 'rgba(16, 185, 129, 0.1)',
+      borderColor: "#10B981",
+      backgroundColor: "rgba(16, 185, 129, 0.1)",
       borderWidth: 3,
       fill: true,
       tension: 0.4,
-      pointBackgroundColor: '#10B981',
-      pointBorderColor: '#fff',
+      pointBackgroundColor: "#10B981",
+      pointBorderColor: "#fff",
       pointBorderWidth: 2,
       pointRadius: 5,
       pointHoverRadius: 7,
     },
     {
-      label: 'Corn Production',
+      label: "Corn Production",
       data: [28, 48, 40, 19, 86, 27, 90, 65, 70, 55, 60, 75],
-      borderColor: '#F59E0B',
-      backgroundColor: 'rgba(245, 158, 11, 0.1)',
+      borderColor: "#F59E0B",
+      backgroundColor: "rgba(245, 158, 11, 0.1)",
       borderWidth: 3,
       fill: true,
       tension: 0.4,
-      pointBackgroundColor: '#F59E0B',
-      pointBorderColor: '#fff',
+      pointBackgroundColor: "#F59E0B",
+      pointBorderColor: "#fff",
       pointBorderWidth: 2,
       pointRadius: 5,
       pointHoverRadius: 7,
     },
     {
-      label: 'Wheat Production',
+      label: "Wheat Production",
       data: [45, 35, 60, 70, 45, 50, 55, 60, 65, 70, 55, 60],
-      borderColor: '#8B5CF6',
-      backgroundColor: 'rgba(139, 92, 246, 0.1)',
+      borderColor: "#8B5CF6",
+      backgroundColor: "rgba(139, 92, 246, 0.1)",
       borderWidth: 3,
       fill: true,
       tension: 0.4,
-      pointBackgroundColor: '#8B5CF6',
-      pointBorderColor: '#fff',
+      pointBackgroundColor: "#8B5CF6",
+      pointBorderColor: "#fff",
       pointBorderWidth: 2,
       pointRadius: 5,
       pointHoverRadius: 7,
-    }
-  ]
+    },
+  ],
 };
 
 export const graphOptions = {
@@ -51,31 +64,31 @@ export const graphOptions = {
   maintainAspectRatio: false,
   plugins: {
     legend: {
-      position: 'top',
+      position: "top",
       labels: {
         usePointStyle: true,
-        pointStyle: 'circle',
+        pointStyle: "circle",
         padding: 20,
         font: {
           size: 12,
-          weight: 'bold'
-        }
-      }
+          weight: "bold",
+        },
+      },
     },
     title: {
       display: false,
     },
     tooltip: {
-      mode: 'index',
+      mode: "index",
       intersect: false,
-      backgroundColor: 'rgba(0, 0, 0, 0.8)',
-      titleColor: '#fff',
-      bodyColor: '#fff',
-      borderColor: '#e5e7eb',
+      backgroundColor: "rgba(0, 0, 0, 0.8)",
+      titleColor: "#fff",
+      bodyColor: "#fff",
+      borderColor: "#e5e7eb",
       borderWidth: 1,
       padding: 10,
       cornerRadius: 8,
-    }
+    },
   },
   scales: {
     x: {
@@ -83,40 +96,40 @@ export const graphOptions = {
         display: false,
       },
       ticks: {
-        color: '#6b7280',
+        color: "#6b7280",
         font: {
           size: 11,
-          weight: 'bold'
-        }
-      }
+          weight: "bold",
+        },
+      },
     },
     y: {
       grid: {
-        color: '#f3f4f6',
+        color: "#f3f4f6",
         drawBorder: false,
       },
       ticks: {
-        color: '#6b7280',
+        color: "#6b7280",
         font: {
           size: 11,
-          weight: 'bold'
+          weight: "bold",
         },
-        callback: function(value) {
-          return value + 't';
-        }
-      }
-    }
+        callback: function (value) {
+          return value + "t";
+        },
+      },
+    },
   },
   elements: {
     point: {
-      hoverBackgroundColor: '#fff',
-    }
+      hoverBackgroundColor: "#fff",
+    },
   },
   interaction: {
-    mode: 'nearest',
-    axis: 'x',
-    intersect: false
-  }
+    mode: "nearest",
+    axis: "x",
+    intersect: false,
+  },
 };
 
 export const notifications = [
@@ -129,7 +142,7 @@ export const notifications = [
     icon: "solar:bug-bold",
     iconBg: "#DDF5D6",
     tagBg: "#FFE6B2",
-    tagColor: "#FF9900"
+    tagColor: "#FF9900",
   },
   {
     id: 2,
@@ -140,7 +153,7 @@ export const notifications = [
     icon: "mdi:water-alert",
     iconBg: "#E0F2FE",
     tagBg: "#DBEAFE",
-    tagColor: "#2563EB"
+    tagColor: "#2563EB",
   },
   {
     id: 3,
@@ -151,7 +164,7 @@ export const notifications = [
     icon: "mdi:wheat",
     iconBg: "#FEF3C7",
     tagBg: "#FEF3C7",
-    tagColor: "#D97706"
+    tagColor: "#D97706",
   },
   {
     id: 4,
@@ -162,7 +175,7 @@ export const notifications = [
     icon: "mdi:weather-lightning-rainy",
     iconBg: "#FEE2E2",
     tagBg: "#FEE2E2",
-    tagColor: "#DC2626"
+    tagColor: "#DC2626",
   },
   {
     id: 5,
@@ -173,6 +186,49 @@ export const notifications = [
     icon: "mdi:leaf",
     iconBg: "#D1FAE5",
     tagBg: "#D1FAE5",
-    tagColor: "#059669"
-  }
+    tagColor: "#059669",
+  },
+];
+
+export const pestReportsData = [
+  {
+    id: 1,
+    number: "01",
+    pestName: "Caterpillar",
+    description: "Regular",
+    recommended: "Manual Rams",
+    activeMonth: "Decreased",
+    season: "All season",
+    image: "/api/placeholder/32/32",
+  },
+  {
+    id: 2,
+    number: "02",
+    pestName: "Caterpillar",
+    description: "Regular",
+    recommended: "Manual Rams",
+    activeMonth: "Decreased",
+    season: "All season",
+    image: "/api/placeholder/32/32",
+  },
+  {
+    id: 3,
+    number: "03",
+    pestName: "Snail",
+    description: "Regular",
+    recommended: "Manual Rams",
+    activeMonth: "Decreased",
+    season: "All season",
+    image: "/api/placeholder/32/32",
+  },
+  {
+    id: 4,
+    number: "04",
+    pestName: "Snail",
+    description: "Regular",
+    recommended: "Manual Rams",
+    activeMonth: "Decreased",
+    season: "All season",
+    image: "/api/placeholder/32/32",
+  },
 ];

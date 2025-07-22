@@ -1,6 +1,6 @@
 import React from "react";
 import { Icon } from "@iconify/react";
-import { notifications } from "../../../assets/dummydata";
+import { notifications } from "@/assets/dummydata";
 
 const NotificationColumn = () => (
   <div className="bg-transparent w-full h-full overflow-hidden">
@@ -20,7 +20,7 @@ const NotificationColumn = () => (
               icon={n.icon}
               width="20"
               height="20"
-              className="text-[#404040] sm:w-6 sm:h-6 md:w-10 md:h-10"
+              className="text-[var(--color-text-primary)] sm:w-6 sm:h-6 md:w-10 md:h-10"
             />
           </div>
           

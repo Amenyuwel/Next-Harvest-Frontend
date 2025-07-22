@@ -88,7 +88,7 @@ function Sidebar() {
       onClick={() => handleItemClick(item)}
       className={`w-20 h-20 rounded-3xl flex items-center justify-center cursor-pointer transition-all duration-200 group relative${
         activeItem === item.id 
-          ? 'border-icons bg-transparent' 
+          ? 'border-[var(--color-icons-accent)] bg-transparent' 
           : 'border-transparent hover:border-gray-500'
       }`}
       whileHover={{ scale: 1.05 }}
@@ -104,7 +104,7 @@ function Sidebar() {
           height="24" 
           className={`transition-colors duration-200 ${
             activeItem === item.id 
-              ? 'text-[#BDFFAF]' 
+              ? 'text-[var(--color-icons-accent)]' 
               : 'text-gray-400 group-hover:text-white'
           }`}
         />
@@ -125,7 +125,7 @@ function Sidebar() {
 
   return (
     <motion.div 
-      className='w-25 h-[96%] bg-[#2C2C2C] rounded-3xl flex flex-col items-center py-6 shadow-lg mt-4'
+      className='w-25 h-[96%] bg-[var(--color-sidebar-bg)] rounded-3xl flex flex-col items-center py-6 shadow-lg mt-4'
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.4 }}

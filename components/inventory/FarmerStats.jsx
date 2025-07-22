@@ -37,25 +37,25 @@ const FarmerStats = () => {
             {/* Example line chart paths */}
             <path
               d="M 0 80 Q 100 60 200 100 T 400 120"
-              stroke="#8b5cf6"
+              stroke="var(--color-chart-purple)"
               strokeWidth="2"
               fill="none"
             />
             <path
               d="M 0 100 Q 100 80 200 60 T 400 80"
-              stroke="#3b82f6"
+              stroke="var(--color-chart-blue)"
               strokeWidth="2"
               fill="none"
             />
             <path
               d="M 0 120 Q 100 100 200 80 T 400 60"
-              stroke="#10b981"
+              stroke="var(--color-chart-green)"
               strokeWidth="2"
               fill="none"
             />
             <path
               d="M 0 140 Q 100 120 200 100 T 400 140"
-              stroke="#f59e0b"
+              stroke="var(--color-chart-orange)"
               strokeWidth="2"
               fill="none"
             />

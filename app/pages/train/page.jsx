@@ -1,7 +1,7 @@
 "use client";
-import React from 'react';
-import Reports from './components/Reports';
-import UploadImages from './components/UploadImages';
+import React from "react";
+import Reports from "@/components/train/Reports";
+import UploadImages from "@/components/train/UploadImages";
 
 function TrainPage() {
   return (

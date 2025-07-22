@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Icon } from "@iconify/react";
-import TrainingSection from "./uploadimage/TrainingSection";
-import ClassGrid from "./uploadimage/ClassGrid";
-import ConnectionLines from "./uploadimage/ConnectionLines";
+import TrainingSection from "./TrainingSection";
+import ClassGrid from "./ClassGrid";
+import ConnectionLines from "./ConnectionLines";
 
 const UploadImages = () => {
   const [isTraining, setIsTraining] = useState(false);
@@ -10,7 +10,7 @@ const UploadImages = () => {
     { id: 1, name: "Class 1", files: [] },
     { id: 2, name: "Class 1", files: [] },
     { id: 3, name: "Class 1", files: [] },
-    { id: 4, name: "Class 1", files: [] }
+    { id: 4, name: "Class 1", files: [] },
   ]);
 
   const handleTrainModel = () => {
@@ -21,16 +21,18 @@ const UploadImages = () => {
   };
 
   const handleFileUpload = (classId, files) => {
-    setClasses(prev => prev.map(cls => 
-      cls.id === classId ? { ...cls, files: [...cls.files, ...files] } : cls
-    ));
+    setClasses((prev) =>
+      prev.map((cls) =>
+        cls.id === classId ? { ...cls, files: [...cls.files, ...files] } : cls
+      )
+    );
   };
 
   const addClass = () => {
     const newClass = {
       id: classes.length + 1,
       name: `Class ${classes.length + 1}`,
-      files: []
+      files: [],
     };
     setClasses([...classes, newClass]);
   };
@@ -41,17 +43,24 @@ const UploadImages = () => {
       <div className="flex-shrink-0 px-6 py-4 bg-white sticky top-0 z-10">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <h2 className="text-xl sm:text-2xl font-bold text-black">Upload Images</h2>
-            <Icon icon="material-symbols:upload" width="24" height="24" className="text-gray-500" />
+            <h2 className="text-xl sm:text-2xl font-bold text-black">
+              Upload Images
+            </h2>
+            <Icon
+              icon="material-symbols:upload"
+              width="24"
+              height="24"
+              className="text-gray-500"
+            />
           </div>
         </div>
       </div>
 
       {/* Scrollable Content - Hidden Scrollbar */}
-      <div className="flex-1 overflow-auto px-6 pb-6 scrollbar-hide">
+      <div className="flex-1 overflow-y-hidden px-6 pb-6 scrollbar-hide">
         {/* Training Section */}
         <div className="mb-6">
-          <TrainingSection 
+          <TrainingSection
             isTraining={isTraining}
             onTrainModel={handleTrainModel}
           />
@@ -60,7 +69,7 @@ const UploadImages = () => {
         {/* Connection Lines and Classes Container - Increased height */}
         <div className="relative min-h-[800px] lg:min-h-[1000px]">
           <ConnectionLines />
-          <ClassGrid 
+          <ClassGrid
             classes={classes}
             onFileUpload={handleFileUpload}
             onAddClass={addClass}

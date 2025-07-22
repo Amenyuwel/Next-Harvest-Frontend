@@ -21,7 +21,7 @@ const ReportsChart = () => {
           preserveAspectRatio="xMidYMid meet"
         >
           {/* Grid lines */}
-          <g stroke="#e5e7eb" strokeWidth="1">
+          <g stroke="var(--color-chart-grid)" strokeWidth="1">
             {/* Vertical axis */}
             <line x1="50" y1="20" x2="50" y2="250" />
             {/* Horizontal axis */}
@@ -42,40 +42,40 @@ const ReportsChart = () => {
           <polyline 
             points="50,70 150,60 250,180 350,40 450,160" 
             fill="none" 
-            stroke="#8b5cf6" 
+            stroke="var(--color-chart-purple)" 
             strokeWidth="2"
           />
           {/* Light blue line */}
           <polyline 
             points="50,80 150,120 250,140 350,170 450,180" 
             fill="none" 
-            stroke="#06b6d4" 
+            stroke="var(--color-chart-cyan)" 
             strokeWidth="2"
           />
           {/* Red/pink line */}
           <polyline 
             points="50,75 150,85 250,95 350,130 450,200" 
             fill="none" 
-            stroke="#f87171" 
+            stroke="var(--color-chart-red)" 
             strokeWidth="2"
           />
           
           {/* Data points */}
-          <g fill="#8b5cf6">
+          <g fill="var(--color-chart-purple)">
             <circle cx="50" cy="70" r="3" />
             <circle cx="150" cy="60" r="3" />
             <circle cx="250" cy="180" r="3" />
             <circle cx="350" cy="40" r="3" />
             <circle cx="450" cy="160" r="3" />
           </g>
-          <g fill="#06b6d4">
+          <g fill="var(--color-chart-cyan)">
             <circle cx="50" cy="80" r="3" />
             <circle cx="150" cy="120" r="3" />
             <circle cx="250" cy="140" r="3" />
             <circle cx="350" cy="170" r="3" />
             <circle cx="450" cy="180" r="3" />
           </g>
-          <g fill="#f87171">
+          <g fill="var(--color-chart-red)">
             <circle cx="50" cy="75" r="3" />
             <circle cx="150" cy="85" r="3" />
             <circle cx="250" cy="95" r="3" />
@@ -84,15 +84,15 @@ const ReportsChart = () => {
           </g>
           
           {/* Y-axis labels */}
-          <text x="40" y="25" fontSize="10" fill="#6b7280" textAnchor="end" className="sm:text-xs">100</text>
-          <text x="40" y="55" fontSize="10" fill="#6b7280" textAnchor="end" className="sm:text-xs">80</text>
-          <text x="40" y="105" fontSize="10" fill="#6b7280" textAnchor="end" className="sm:text-xs">60</text>
-          <text x="40" y="155" fontSize="10" fill="#6b7280" textAnchor="end" className="sm:text-xs">40</text>
-          <text x="40" y="205" fontSize="10" fill="#6b7280" textAnchor="end" className="sm:text-xs">20</text>
-          <text x="40" y="255" fontSize="10" fill="#6b7280" textAnchor="end" className="sm:text-xs">0</text>
+          <text x="40" y="25" fontSize="10" fill="var(--color-chart-text)" textAnchor="end" className="sm:text-xs">100</text>
+          <text x="40" y="55" fontSize="10" fill="var(--color-chart-text)" textAnchor="end" className="sm:text-xs">80</text>
+          <text x="40" y="105" fontSize="10" fill="var(--color-chart-text)" textAnchor="end" className="sm:text-xs">60</text>
+          <text x="40" y="155" fontSize="10" fill="var(--color-chart-text)" textAnchor="end" className="sm:text-xs">40</text>
+          <text x="40" y="205" fontSize="10" fill="var(--color-chart-text)" textAnchor="end" className="sm:text-xs">20</text>
+          <text x="40" y="255" fontSize="10" fill="var(--color-chart-text)" textAnchor="end" className="sm:text-xs">0</text>
           
           {/* X-axis labels - responsive text */}
-          <g fontSize="10" fill="#6b7280" textAnchor="middle" className="sm:text-xs">
+          <g fontSize="10" fill="var(--color-chart-text)" textAnchor="middle" className="sm:text-xs">
             <text x="100" y="270" className="hidden sm:block">Caterpillar</text>
             <text x="200" y="270" className="hidden sm:block">Worm</text>
             <text x="300" y="270" className="hidden sm:block">Cricket</text>

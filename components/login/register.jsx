@@ -5,7 +5,7 @@ function Register({ onBackToLogin }) {
   return (
     <div className='max-w-sm mx-auto w-full h-full flex flex-col justify-center'>
       <div className='text-center mb-6 sm:mb-8'>
-        <h1 className='text-[#019601] text-xl sm:text-2xl font-bold mb-2'>Harvest Assistant</h1>
+        <h1 className='text-[var(--color-primary)] text-xl sm:text-2xl font-bold mb-2'>Harvest Assistant</h1>
         <h2 className='text-2xl sm:text-3xl font-bold text-gray-800 mb-1'>Your farming journey</h2>
         <h3 className='text-2xl sm:text-3xl font-bold text-gray-800 mb-6 sm:mb-8'>Starts here</h3>
       </div>

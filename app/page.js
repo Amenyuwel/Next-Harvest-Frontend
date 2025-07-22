@@ -1,14 +1,14 @@
 "use client";
 import React from "react";
-import LoginPage from "./pages/login/page";
 import DashboardPage from "./pages/dashboard/page";
+import Sidebar from "@/components/Sidebar";
+
 const page = () => {
   return (
     <main>
-       <Sidebar />
+      <Sidebar />
       <DashboardPage />
     </main>
   );
 };
-
 export default page;
