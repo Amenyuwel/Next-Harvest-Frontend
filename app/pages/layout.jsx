@@ -77,7 +77,7 @@ export default function PagesLayout({ children }) {
   const headerConfig = getHeaderConfig();
 
   return (
-    <div className="flex h-screen bg-[var(--color-background-gray)] p-4">
+    <div className="flex h-screen bg-[var(--color-sidebar-bg)] p-4">
       {/* Main container with white background and rounded edges */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}

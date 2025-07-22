@@ -33,27 +33,50 @@ const CalendarColumn = () => {
   const monthName = today.toLocaleString("default", { month: "long" });
 
   return (
-    <div
-      className="bg-white rounded-3xl shadow p-6 flex flex-col justify-center"
-      style={{ minWidth: 500, maxWidth: 530, height: 360 }} // Set a fixed height
-    >
-      <div className="bg-[var(--color-calendar-highlight)] rounded-2xl p-6 h-full flex flex-col justify-center">
-        <div className="text-center font-bold text-lg mb-4 text-gray-700">
+    <div className="bg-white rounded-2xl shadow p-4 h-full w-full flex flex-col">
+      <header className="mb-3 flex-shrink-0">
+        <h2 className="text-lg font-bold text-black">Calendar</h2>
+      </header>
+      <div className="bg-[var(--color-calendar-highlight)] rounded-xl p-3 flex-1 flex flex-col min-h-0">
+        <h3 className="text-center font-semibold text-sm mb-3 text-gray-700 flex-shrink-0">
           {monthName} {year}
-        </div>
-        <div className="grid grid-cols-8 gap-2 flex-1 items-center">
-          <div className="text-xs text-gray-400"></div>
+        </h3>
+        <div
+          className="grid grid-cols-8 gap-1 flex-1"
+          role="grid"
+          aria-label={`Calendar for ${monthName} ${year}`}
+        >
+          <div className="text-xs text-gray-400" aria-hidden="true"></div>
           {daysShort.map((d) => (
             <div
               key={d}
-              className="text-xs text-gray-500 text-center font-semibold"
+              className="text-xs text-gray-500 text-center font-medium"
+              role="columnheader"
+              aria-label={`${
+                d === "Mo"
+                  ? "Monday"
+                  : d === "Tu"
+                  ? "Tuesday"
+                  : d === "We"
+                  ? "Wednesday"
+                  : d === "Th"
+                  ? "Thursday"
+                  : d === "Fr"
+                  ? "Friday"
+                  : d === "Sa"
+                  ? "Saturday"
+                  : "Sunday"
+              }`}
             >
               {d}
             </div>
           ))}
           {weeks.map((week, i) => (
             <React.Fragment key={i}>
-              <div className="text-xs text-gray-400 flex items-center justify-center font-semibold">
+              <div
+                className="text-xs text-gray-400 flex items-center justify-center font-medium"
+                aria-label={`Week ${i + 1}`}
+              >
                 {String(i + 1).padStart(2, "0")}
               </div>
               {week.map(({ date, inMonth }, j) => {
@@ -62,9 +85,9 @@ const CalendarColumn = () => {
                   date.getMonth() === today.getMonth() &&
                   date.getFullYear() === today.getFullYear();
                 return (
-                  <div
+                  <button
                     key={j}
-                    className={`text-sm flex items-center justify-center rounded-full w-8 h-8
+                    className={`text-sm flex items-center justify-center rounded-full w-8 h-8 transition-colors hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-300
                       ${
                         isToday
                           ? "bg-gray-300 shadow-lg text-white font-bold"
@@ -72,10 +95,24 @@ const CalendarColumn = () => {
                       }
                       ${!inMonth ? "text-gray-400" : "text-gray-700"}
                     `}
-                    style={isToday ? { boxShadow: "0 4px 16px var(--color-calendar-shadow)" } : {}}
+                    style={
+                      isToday
+                        ? {
+                            boxShadow:
+                              "0 4px 16px var(--color-calendar-shadow)",
+                          }
+                        : {}
+                    }
+                    role="gridcell"
+                    aria-label={`${date.toDateString()}${
+                      isToday ? ", today" : ""
+                    }`}
+                    aria-current={isToday ? "date" : undefined}
                   >
-                    {date.getDate()}
-                  </div>
+                    <time dateTime={date.toISOString().split("T")[0]}>
+                      {date.getDate()}
+                    </time>
+                  </button>
                 );
               })}
             </React.Fragment>

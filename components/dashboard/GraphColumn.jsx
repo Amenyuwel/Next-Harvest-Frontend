@@ -9,9 +9,9 @@ import {
   Tooltip,
   Legend,
   Filler,
-} from 'chart.js';
-import { Line } from 'react-chartjs-2';
-import { graphData, graphOptions } from '@/assets/dummydata';
+} from "chart.js";
+import { Line } from "react-chartjs-2";
+import { graphData, graphOptions } from "@/assets/dummydata";
 
 ChartJS.register(
   CategoryScale,
@@ -25,16 +25,18 @@ ChartJS.register(
 );
 
 const GraphColumn = () => (
-  <div className="relative h-full w-full">
-    <div className="mb-4">
-      <span className="text-xl sm:text-2xl font-bold text-black">Graph</span>
+  <section className="bg-white rounded-2xl shadow p-4 h-full w-full flex flex-col">
+    <header className="mb-3 flex-shrink-0">
+      <h2 className="text-lg font-bold text-black">Performance Graph</h2>
+    </header>
+    <div
+      className="w-full flex-1 min-h-0"
+      role="img"
+      aria-label="Performance data visualization chart"
+    >
+      <Line data={graphData} options={graphOptions} />
     </div>
-    <div className="bg-white rounded-2xl sm:rounded-3xl shadow p-3 sm:p-4 md:p-6 flex flex-col h-full min-h-[290px]">
-      <div className="flex-1 w-full h-full">
-        <Line data={graphData} options={graphOptions} />
-      </div>
-    </div>
-  </div>
+  </section>
 );
 
 export default GraphColumn;

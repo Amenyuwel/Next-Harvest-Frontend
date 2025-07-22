@@ -38,45 +38,49 @@ const UploadImages = () => {
   };
 
   return (
-    <div className="h-full flex flex-col">
-      {/* Fixed Header */}
-      <div className="flex-shrink-0 px-6 py-4 bg-white sticky top-0 z-10">
+    <section
+      className="bg-white rounded-2xl shadow h-full w-full flex flex-col overflow-hidden"
+      aria-label="Model training interface"
+    >
+      {/* Header */}
+      <header className="flex-shrink-0 px-4 py-4 border-b border-gray-100">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <h2 className="text-xl sm:text-2xl font-bold text-black">
-              Upload Images
-            </h2>
-            <Icon
-              icon="material-symbols:upload"
-              width="24"
-              height="24"
-              className="text-gray-500"
-            />
+          <div className="flex items-center gap-3">
+            <h2 className="text-lg font-bold text-black">Model Training</h2>
           </div>
         </div>
-      </div>
+      </header>
 
-      {/* Scrollable Content - Hidden Scrollbar */}
-      <div className="flex-1 overflow-y-hidden px-6 pb-6 scrollbar-hide">
-        {/* Training Section */}
-        <div className="mb-6">
+      {/* Main Content */}
+      <main className="flex-1 min-h-0 px-4 pb-4 flex flex-col">
+        {/* Training Controls */}
+        <section className="mb-4 mt-4 flex-shrink-0" aria-labelledby="training-controls">
+          <h3 id="training-controls" className="sr-only">
+            Training Controls
+          </h3>
           <TrainingSection
             isTraining={isTraining}
             onTrainModel={handleTrainModel}
           />
-        </div>
+        </section>
 
-        {/* Connection Lines and Classes Container - Increased height */}
-        <div className="relative min-h-[800px] lg:min-h-[1000px]">
+        {/* Class Management */}
+        <section
+          className="relative flex-1 min-h-0"
+          aria-labelledby="class-management"
+        >
+          <h3 id="class-management" className="sr-only">
+            Training Class Management
+          </h3>
           <ConnectionLines />
           <ClassGrid
             classes={classes}
             onFileUpload={handleFileUpload}
             onAddClass={addClass}
           />
-        </div>
-      </div>
-    </div>
+        </section>
+      </main>
+    </section>
   );
 };
 

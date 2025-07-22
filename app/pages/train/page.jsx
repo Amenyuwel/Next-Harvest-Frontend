@@ -5,17 +5,20 @@ import UploadImages from "@/components/train/UploadImages";
 
 function TrainPage() {
   return (
-    <div className="w-full h-full flex flex-col lg:flex-row gap-6 px-6 pb-6 overflow-auto lg:overflow-hidden scrollbar-hide">
-      {/* Reports - Left Side */}
-      <div className="w-full lg:w-[400px] xl:w-[450px] lg:flex-shrink-0 lg:overflow-y-auto">
+    <main className="w-full h-full grid grid-cols-1 lg:grid-cols-[400px_1fr] gap-4 p-4">
+      {/* Training Reports - Left Side */}
+      <aside
+        className="h-full"
+        aria-label="Training reports and analytics"
+      >
         <Reports />
-      </div>
+      </aside>
 
-      {/* Upload Images - Right Side */}
-      <div className="flex-1 lg:overflow-y-auto bg-white rounded-2xl sm:rounded-3xl shadow">
+      {/* Model Training Interface - Right Side */}
+      <section className="h-full" aria-label="Model training and image upload">
         <UploadImages />
-      </div>
-    </div>
+      </section>
+    </main>
   );
 }
 
