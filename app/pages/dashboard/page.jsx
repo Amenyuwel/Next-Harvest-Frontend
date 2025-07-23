@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import ReportsColumn from "@/components/dashboard/report";
+import ReportsColumn from "@/components/dashboard/DashboardReport";
 import NotificationColumn from "@/components/dashboard/Notification";
 import GraphColumn from "@/components/dashboard/GraphColumn";
 import CalendarColumn from "@/components/dashboard/Calendar";

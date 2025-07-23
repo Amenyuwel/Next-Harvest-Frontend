@@ -1,18 +1,20 @@
 "use client";
-import { usePathname } from 'next/navigation';
-import Sidebar from '@/components/Sidebar';
+import { usePathname } from "next/navigation";
+import { useMemo } from "react";
+import Sidebar from "@/components/Sidebar";
 
 export default function ConditionalLayout({ children }) {
   const pathname = usePathname();
 
-  // Check if current path is a dashboard page
-  const isDashboardPage =
-    pathname?.startsWith("/pages/dashboard") ||
-    pathname?.startsWith("/pages/inventory") ||
-    pathname?.startsWith("/pages/train") ||
-    pathname?.startsWith("/pages/reports") ||
-    pathname?.startsWith("/pages/profile") ||
-    pathname?.startsWith("/pages/settings");
+  // Memoize dashboard page check to avoid recalculation
+  const isDashboardPage = useMemo(() => {
+    return pathname?.startsWith("/pages/dashboard") ||
+           pathname?.startsWith("/pages/records") ||
+           pathname?.startsWith("/pages/train") ||
+           pathname?.startsWith("/pages/reports") ||
+           pathname?.startsWith("/pages/profile") ||
+           pathname?.startsWith("/pages/settings");
+  }, [pathname]);
 
   if (isDashboardPage) {
     return (

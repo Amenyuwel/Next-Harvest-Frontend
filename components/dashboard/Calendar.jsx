@@ -87,10 +87,10 @@ const CalendarColumn = () => {
                 return (
                   <button
                     key={j}
-                    className={`text-sm flex items-center justify-center rounded-full w-8 h-8 transition-colors hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-300
+                    className={`text-sm flex items-center justify-center rounded-full w-8 h-8 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-300
                       ${
                         isToday
-                          ? "bg-gray-300 shadow-lg text-white font-bold"
+                          ? "bg-blue-400 shadow-lg text-white font-bold"
                           : ""
                       }
                       ${!inMonth ? "text-gray-400" : "text-gray-700"}

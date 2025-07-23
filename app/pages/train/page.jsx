@@ -1,11 +1,11 @@
 "use client";
 import React from "react";
-import Reports from "@/components/train/Reports";
+import Reports from "@/components/train/TrainingReports";
 import UploadImages from "@/components/train/UploadImages";
 
 function TrainPage() {
   return (
-    <main className="w-full h-full grid grid-cols-1 lg:grid-cols-[400px_1fr] gap-4 p-4">
+    <main className="w-full h-full grid grid-cols-1 lg:grid-cols-2 gap-4 p-4">
       {/* Training Reports - Left Side */}
       <aside
         className="h-full"

@@ -39,7 +39,7 @@ const UploadImages = () => {
 
   return (
     <section
-      className="bg-white rounded-2xl shadow h-full w-full flex flex-col overflow-hidden"
+      className="bg-white rounded-2xl shadow h-full w-full flex flex-col overflow-x-hidden"
       aria-label="Model training interface"
     >
       {/* Header */}
@@ -66,18 +66,20 @@ const UploadImages = () => {
 
         {/* Class Management */}
         <section
-          className="relative flex-1 min-h-0"
+          className="relative flex-1 min-h-0 overflow-y-auto overflow-x-hidden"
           aria-labelledby="class-management"
         >
           <h3 id="class-management" className="sr-only">
             Training Class Management
           </h3>
-          <ConnectionLines />
-          <ClassGrid
-            classes={classes}
-            onFileUpload={handleFileUpload}
-            onAddClass={addClass}
-          />
+          <div className="relative min-h-full">
+            <ConnectionLines />
+            <ClassGrid
+              classes={classes}
+              onFileUpload={handleFileUpload}
+              onAddClass={addClass}
+            />
+          </div>
         </section>
       </main>
     </section>

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Icon } from "@iconify/react";
 import DropdownMenu from "./DropdownMenu";
-import Modal from "./Modal";
+import Modal from "./TrainingModal";
 
 const ClassCard = ({ classData, onFileUpload, onDeleteClass, onEditClass }) => {
   const { id, name } = classData;

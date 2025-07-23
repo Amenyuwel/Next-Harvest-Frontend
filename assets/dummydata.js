@@ -42,20 +42,6 @@ export const graphData = {
       pointRadius: 5,
       pointHoverRadius: 7,
     },
-    {
-      label: "Wheat Production",
-      data: [45, 35, 60, 70, 45, 50, 55, 60, 65, 70, 55, 60],
-      borderColor: "#8B5CF6",
-      backgroundColor: "rgba(139, 92, 246, 0.1)",
-      borderWidth: 3,
-      fill: true,
-      tension: 0.4,
-      pointBackgroundColor: "#8B5CF6",
-      pointBorderColor: "#fff",
-      pointBorderWidth: 2,
-      pointRadius: 5,
-      pointHoverRadius: 7,
-    },
   ],
 };
 
@@ -154,17 +140,6 @@ export const notifications = [
     iconBg: "#E0F2FE",
     tagBg: "#DBEAFE",
     tagColor: "#2563EB",
-  },
-  {
-    id: 3,
-    title: "Harvest Ready",
-    subtitle: "Wheat Field",
-    date: "May 10",
-    tag: "5 days ago",
-    icon: "mdi:wheat",
-    iconBg: "#FEF3C7",
-    tagBg: "#FEF3C7",
-    tagColor: "#D97706",
   },
   {
     id: 4,

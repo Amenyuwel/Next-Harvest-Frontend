@@ -3,19 +3,19 @@ import { Icon } from "@iconify/react";
 import { notifications } from "@/assets/dummydata";
 
 const NotificationColumn = () => (
-  <div className="bg-white rounded-2xl shadow p-4 h-full w-full overflow-hidden flex flex-col">
+  <div className="rounded-2xl p-4 h-full w-full overflow-hidden flex flex-col">
     <h2 className="text-lg font-bold mb-3 text-black flex-shrink-0">Notifications</h2>
     <div className="flex flex-col gap-2 flex-1 overflow-y-auto scrollbar-hide" role="list" aria-label="Recent notifications">
       {notifications.map((n) => (
         <article
           key={n.id}
-          className="flex items-center bg-[var(--color-background-off-white)] rounded-lg p-3 gap-3 shadow-sm hover:shadow-md transition-shadow flex-shrink-0"
+          className="flex items-center bg-[var(--color-background-off-white)] rounded-3xl p-4 gap-3 shadow-sm hover:shadow-md transition-shadow flex-shrink-0"
           role="listitem"
           aria-labelledby={`notification-title-${n.id}`}
         >
           {/* Icon container */}
           <div 
-            className="flex items-center justify-center w-10 h-10 rounded-lg flex-shrink-0"
+            className="flex items-center justify-center w-10 h-10 rounded-3xl flex-shrink-0"
             style={{ backgroundColor: n.iconBg }}
             aria-hidden="true"
           >
