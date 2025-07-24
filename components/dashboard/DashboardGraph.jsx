@@ -21,16 +21,16 @@ ChartJS.register(
   Title,
   Tooltip,
   Legend,
-  Filler
+  Filler,
 );
 
-const GraphColumn = () => (
-  <section className="bg-white rounded-2xl shadow p-4 h-full w-full flex flex-col">
+const DashboardGraph = () => (
+  <section className="flex h-full w-full flex-col rounded-2xl bg-white p-4 shadow">
     <header className="mb-3 flex-shrink-0">
-      <h2 className="text-lg font-bold text-black">Performance Graph</h2>
+      <h2 className="text-lg font-bold text-black">Annual Grain Production</h2>
     </header>
     <div
-      className="w-full flex-1 min-h-0"
+      className="min-h-0 w-full flex-1"
       role="img"
       aria-label="Performance data visualization chart"
     >
@@ -39,4 +39,4 @@ const GraphColumn = () => (
   </section>
 );
 
-export default GraphColumn;
+export default DashboardGraph;

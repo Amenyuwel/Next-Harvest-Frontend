@@ -1,17 +1,7 @@
 export const graphData = {
   labels: [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
+    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
   ],
   datasets: [
     {
@@ -78,15 +68,10 @@ export const graphOptions = {
   },
   scales: {
     x: {
-      grid: {
-        display: false,
-      },
+      grid: { display: false },
       ticks: {
         color: "#6b7280",
-        font: {
-          size: 11,
-          weight: "bold",
-        },
+        font: { size: 11, weight: "bold" },
       },
     },
     y: {
@@ -96,20 +81,13 @@ export const graphOptions = {
       },
       ticks: {
         color: "#6b7280",
-        font: {
-          size: 11,
-          weight: "bold",
-        },
-        callback: function (value) {
-          return value + "t";
-        },
+        font: { size: 11, weight: "bold" },
+        callback: (value) => value + "t",
       },
     },
   },
   elements: {
-    point: {
-      hoverBackgroundColor: "#fff",
-    },
+    point: { hoverBackgroundColor: "#fff" },
   },
   interaction: {
     mode: "nearest",
@@ -205,5 +183,28 @@ export const pestReportsData = [
     activeMonth: "Decreased",
     season: "All season",
     image: "/api/placeholder/32/32",
+  },
+];
+
+export const farmReports = [
+  {
+    id: 1,
+    title: "Registered Farmers in System",
+    icon: "ph:farm-fill",
+    stats: [
+      { label: "Total Registered", value: 7 },
+      { label: "Corn Farmers", value: 4 },
+      { label: "Rice Farmers", value: 3 },
+    ],
+  },
+  {
+    id: 2,
+    title: "Recent Harvests",
+    icon: "ph:farm-fill",
+    stats: [
+      { label: "Total Registered", value: 7 },
+      { label: "Corn Farmers", value: 4 },
+      { label: "Rice Farmers", value: 3 },
+    ],
   },
 ];

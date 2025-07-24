@@ -5,7 +5,7 @@ import Sidebar from "@/components/Sidebar";
 
 const page = () => {
   return (
-    <main>
+    <main className="flex h-screen">
       <Sidebar />
       <DashboardPage />
     </main>

@@ -126,7 +126,7 @@ function RecordsPage() {
   );
 
   return (
-    <div className="h-full w-full bg-gray-50/30 p-8">
+    <div className="h-full w-full bg-gray-50/30 p-4">
       <div className="flex gap-8 h-full w-full">
         {/* Left side: Chart */}
         <div className="w-80">

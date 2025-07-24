@@ -12,37 +12,38 @@ const FarmerTable = ({
   const tabs = ["All", "Monthly", "Weekly", "Today"];
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 w-full h-full flex flex-col">
-      <div className="px-6 py-5 flex justify-between items-center border-b border-gray-100">
+    <div className="flex h-full w-full flex-col rounded-2xl border border-gray-100 bg-white shadow-sm">
+      {/* Header Section */}
+      <div className="flex items-center justify-between border-b border-gray-100 px-6 py-5">
         <div>
           <h2 className="text-xl font-semibold text-gray-800">
             Total Records: {riceFarmers + cornFarmers}
           </h2>
-          <div className="flex gap-4 mt-3">
-            <span className="text-xs px-3 py-1 bg-green-100 text-green-800 rounded-full font-medium">
+          <div className="mt-3 flex gap-4">
+            <span className="rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-800">
               Rice Farmers: {riceFarmers}
             </span>
-            <span className="text-xs px-3 py-1 bg-orange-100 text-orange-800 rounded-full font-medium">
+            <span className="rounded-full bg-orange-100 px-3 py-1 text-xs font-medium text-orange-800">
               Corn Farmers: {cornFarmers}
             </span>
-            <span className="text-xs px-3 py-1 bg-blue-100 text-blue-800 rounded-full font-medium">
+            <span className="rounded-full bg-blue-100 px-3 py-1 text-xs font-medium text-blue-800">
               Total Records: {riceFarmers + cornFarmers}
             </span>
           </div>
         </div>
-        <button className="p-2 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">
+        <button className="rounded-lg p-2 text-gray-600 transition-colors hover:bg-gray-50">
           <span className="text-lg">⋮</span>
         </button>
       </div>
 
-      {/* Tabs */}
+      {/* Tabs and Search */}
       <div className="flex items-center justify-between border-b border-gray-100">
         <div className="flex px-6 py-1">
           {tabs.map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`px-6 py-3 font-medium text-sm cursor-pointer transition-colors relative ${
+              className={`relative cursor-pointer px-6 py-3 text-sm font-medium transition-colors ${
                 activeTab === tab
                   ? "text-blue-600"
                   : "text-gray-600 hover:text-gray-800"
@@ -50,24 +51,24 @@ const FarmerTable = ({
             >
               {tab}
               {activeTab === tab && (
-                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-500 rounded-full"></div>
+                <div className="absolute right-0 bottom-0 left-0 h-0.5 rounded-full bg-blue-500"></div>
               )}
             </button>
           ))}
         </div>
 
-        {/* Search Bar */}
+        {/* Search */}
         <div className="px-6 py-3">
           <div className="relative">
             <input
               type="text"
               placeholder="Search farmer"
-              className="pl-10 pr-4 py-2.5 border border-gray-200 rounded-lg w-72 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+              className="w-72 rounded-lg border border-gray-200 py-2.5 pr-4 pl-10 text-sm transition-all focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
             <svg
-              className="absolute left-3 top-3 w-4 h-4 text-gray-400"
+              className="absolute top-3 left-3 h-4 w-4 text-gray-400"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -83,11 +84,11 @@ const FarmerTable = ({
         </div>
       </div>
 
-      {/* Table */}
-      <div className="overflow-auto flex-1">
-        <table className="w-full table-auto h-full">
-          <thead className="bg-gray-50/70 sticky top-0">
-            <tr className="text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+      {/* Table Section */}
+      <div className="scrollbar-hide overflow-auto rounded-b-2xl">
+        <table className="w-full table-auto">
+          <thead className="sticky top-0 z-10 bg-gray-50/70">
+            <tr className="text-left text-xs font-semibold tracking-wider text-gray-600 uppercase">
               <th className="px-6 py-4">RSBSA Number</th>
               <th className="px-4 py-4">Full Name</th>
               <th className="px-4 py-4">Description</th>
@@ -97,15 +98,15 @@ const FarmerTable = ({
               <th className="px-4 py-4">Contact</th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-100">
+          <tbody className="divide-y divide-gray-100 bg-white">
             {farmers.map((farmer, index) => (
               <tr
                 key={farmer.id + index}
-                className="hover:bg-gray-50/50 transition-colors duration-150"
+                className="transition-colors duration-150 hover:bg-gray-50/50"
               >
                 <td className="px-6 py-5 whitespace-nowrap">
                   <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-green-100">
                       <span className="text-lg">👨‍🌾</span>
                     </div>
                     <span className="text-sm font-medium text-gray-700">
@@ -127,17 +128,17 @@ const FarmerTable = ({
                   <span className="text-sm text-gray-600">{farmer.crop}</span>
                 </td>
                 <td className="px-4 py-5 whitespace-nowrap">
-                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 border border-green-200">
+                  <span className="inline-flex items-center rounded-full border border-green-200 bg-green-100 px-3 py-1 text-xs font-medium text-green-800">
                     {farmer.area}
                   </span>
                 </td>
                 <td className="px-4 py-5 whitespace-nowrap">
-                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 border border-blue-200">
+                  <span className="inline-flex items-center rounded-full border border-blue-200 bg-blue-100 px-3 py-1 text-xs font-medium text-blue-800">
                     {farmer.barangay}
                   </span>
                 </td>
                 <td className="px-4 py-5 whitespace-nowrap">
-                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800 border border-orange-200">
+                  <span className="inline-flex items-center rounded-full border border-orange-200 bg-orange-100 px-3 py-1 text-xs font-medium text-orange-800">
                     {farmer.contact}
                   </span>
                 </td>

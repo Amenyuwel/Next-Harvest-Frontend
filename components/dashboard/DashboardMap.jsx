@@ -1,11 +1,11 @@
 import React from "react";
 
-const FieldsMap = () => (
-  <section className="bg-white rounded-2xl shadow p-4 h-full w-full flex flex-col">
+const DashboardMap = () => (
+  <section className="flex h-full w-full flex-col rounded-2xl bg-white p-4 shadow">
     <header className="mb-3 flex-shrink-0">
-      <h2 className="text-lg font-bold text-black">Farm Fields Location</h2>
+      <h2 className="text-lg font-bold text-black">Map</h2>
     </header>
-    <div className="bg-[var(--color-background-off-white)] rounded-xl p-3 flex-1 flex flex-col min-h-0">
+    <div className="flex min-h-0 flex-1 flex-col rounded-xl bg-[var(--color-background-off-white)] p-3">
       <iframe
         title="Interactive map showing farm field locations in General Santos City"
         width="100%"
@@ -21,4 +21,4 @@ const FieldsMap = () => (
   </section>
 );
 
-export default FieldsMap;
+export default DashboardMap;

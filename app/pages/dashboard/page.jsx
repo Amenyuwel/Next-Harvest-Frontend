@@ -1,36 +1,33 @@
 "use client";
 import React from "react";
 import ReportsColumn from "@/components/dashboard/DashboardReport";
-import NotificationColumn from "@/components/dashboard/Notification";
-import GraphColumn from "@/components/dashboard/GraphColumn";
-import CalendarColumn from "@/components/dashboard/Calendar";
-import FieldsMap from "@/components/dashboard/Map";
+import NotificationColumn from "@/components/dashboard/DashboardNotification";
+import GraphColumn from "@/components/dashboard/DashboardGraph";
+import FieldsMap from "@/components/dashboard/DashboardMap";
 
 const DashboardPage = () => {
   return (
-    <div className="w-full h-full overflow-hidden  grid grid-cols-1 lg:grid-cols-3 gap-4 p-4 scrollbar-hide">
+    <div className="flex h-full w-full gap-4 p-4">
       {/* Left Column - Reports */}
-      <div className="lg:col-span-1 h-full min-h-0">
+      <div className="w-full max-w-sm flex-shrink-0">
         <ReportsColumn />
       </div>
 
-      {/* Middle Column - Notifications and Graph */}
-      <div className="lg:col-span-1 flex flex-col gap-4 h-full min-h-0">
-        <div className="flex-1 min-h-0">
-          <NotificationColumn />
+      {/* Right Column - Notification + Map on top, Graph below */}
+      <div className="flex w-full flex-col gap-4">
+        {/* Top Row: Notification + Map side by side */}
+        <div className="flex h-full w-full gap-4 overflow-auto">
+          <div className="w-1/2">
+            <NotificationColumn />
+          </div>
+          <div className="w-1/2">
+            <FieldsMap />
+          </div>
         </div>
-        <div className="flex-1 min-h-0">
-          <GraphColumn />
-        </div>
-      </div>
 
-      {/* Right Column - Calendar and Map */}
-      <div className="lg:col-span-1 flex flex-col gap-4 h-full min-h-0">
-        <div className="flex-1 min-h-0">
-          <CalendarColumn />
-        </div>
-        <div className="flex-1 min-h-0">
-          <FieldsMap />
+        {/* Bottom Row: Full-width Graph */}
+        <div className="h-full w-full">
+          <GraphColumn />
         </div>
       </div>
     </div>

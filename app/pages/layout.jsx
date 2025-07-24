@@ -10,19 +10,19 @@ export default function PagesLayout({ children }) {
   // Don't show sidebar on login pages
   const isLoginPage = pathname.includes("/login");
 
-  // Get page-specific header configuration
+  // Get page-specific header configuration, including title
   const getHeaderConfig = () => {
     switch (pathname) {
       case "/pages/dashboard":
         return {
-          title: "Hi Admin!",
+          title: "Dashboard",
           showAddButton: true,
           addButtonText: "Add Farmer",
           onAddClick: () => console.log("Add farmer clicked"),
         };
       case "/pages/train":
         return {
-          title: "Train Model",
+          title: "Train",
           showAddButton: true,
           addButtonText: "Preview model",
           onAddClick: () => console.log("Preview model clicked"),
@@ -50,7 +50,7 @@ export default function PagesLayout({ children }) {
         };
       default:
         return {
-          title: "Hi Admin!",
+          title: "Profile",
           showAddButton: false,
           addButtonText: "",
           onAddClick: () => {},
@@ -83,7 +83,7 @@ export default function PagesLayout({ children }) {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, ease: "easeOut" }}
-        className="flex w-full h-full bg-[var(--color-background-gray)] rounded-3xl shadow-sm overflow-hidden"
+        className="flex h-full w-full overflow-hidden rounded-3xl bg-[var(--color-background-gray)] shadow-sm"
       >
         {/* Sidebar inside the white container */}
         <motion.div
@@ -96,7 +96,7 @@ export default function PagesLayout({ children }) {
         </motion.div>
 
         {/* Main Content Area */}
-        <div className="flex-1 flex flex-col overflow-hidden">
+        <div className="flex flex-1 flex-col overflow-hidden">
           {/* Global Header */}
           <motion.div
             initial={{ opacity: 0, y: -20 }}

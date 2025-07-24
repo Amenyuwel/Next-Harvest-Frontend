@@ -3,7 +3,7 @@ import { Icon } from "@iconify/react";
 
 const PieChart = () => {
   return (
-    <div className="bg-white rounded-2xl p-4 sm:p-6 shadow w-full lg:w-100 h-[93%] flex flex-col">
+    <div className="bg-white rounded-2xl p-4 sm:p-6 shadow w-full lg:w-100 h-full flex flex-col">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6">
         <h3 className="text-base sm:text-lg font-semibold text-black mb-1 sm:mb-0">Reports per pests</h3>

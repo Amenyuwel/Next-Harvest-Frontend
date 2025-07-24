@@ -43,7 +43,7 @@ function Sidebar() {
         path: "/pages/profile",
       },
     ],
-    []
+    [],
   );
 
   // Bottom navigation items - memoized to prevent recreation
@@ -62,13 +62,13 @@ function Sidebar() {
         action: "logout",
       },
     ],
-    []
+    [],
   );
 
   // Memoize combined menu items
   const allItems = React.useMemo(
     () => [...mainMenuItems, ...bottomMenuItems],
-    []
+    [],
   );
 
   // Update active item based on current path
@@ -90,7 +90,7 @@ function Sidebar() {
         router.push(item.path);
       }
     },
-    [router]
+    [router],
   );
 
   const renderMenuItem = React.useCallback(
@@ -99,7 +99,7 @@ function Sidebar() {
         key={item.id}
         initial={false}
         onClick={() => handleItemClick(item)}
-        className={`w-20 h-20 rounded-3xl flex items-center justify-center cursor-pointer transition-all duration-200 group relative${
+        className={`group flex h-20 w-20 cursor-pointer items-center justify-center rounded-3xl transition-all duration-200 relative${
           activeItem === item.id
             ? "border-[var(--color-icons-accent)] bg-transparent"
             : "border-transparent hover:border-gray-500"
@@ -119,34 +119,34 @@ function Sidebar() {
         />
 
         {/* Simplified Tooltip */}
-        <div className="absolute left-16 bg-gray-800 text-white text-sm px-3 py-2 rounded-lg pointer-events-none whitespace-nowrap z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+        <div className="pointer-events-none absolute left-16 z-10 rounded-lg bg-gray-800 px-3 py-2 text-sm whitespace-nowrap text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100">
           {item.label}
-          <div className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-1 w-2 h-2 bg-gray-800 rotate-45"></div>
+          <div className="absolute top-1/2 left-0 h-2 w-2 -translate-x-1 -translate-y-1/2 rotate-45 transform bg-gray-800"></div>
         </div>
       </motion.div>
     ),
-    [activeItem, handleItemClick]
+    [activeItem, handleItemClick],
   );
 
   return (
-    <div className="w-25 h-[96%] bg-[var(--color-sidebar-bg)] rounded-3xl flex flex-col items-center py-6 shadow-lg mt-4">
+    <div className="mt-4 flex h-[98.5%] w-25 flex-col items-center rounded-3xl bg-[var(--color-sidebar-bg)] py-6 shadow-lg">
       {/* Logo/Avatar */}
-      <div className="w-12 h-12 rounded-full mb-8 flex items-center justify-center">
-        <div className="w-8 h-8 bg-gray-500 rounded-full"></div>
+      <div className="mb-8 flex h-12 w-12 items-center justify-center rounded-full">
+        <div className="h-8 w-8 rounded-full bg-gray-500"></div>
       </div>
 
       {/* Main Menu Items */}
-      <div className="flex flex-col  flex-1">
+      <div className="flex flex-1 flex-col">
         {mainMenuItems.map((item, index) => renderMenuItem(item, index))}
       </div>
 
       {/* Separator Line */}
-      <div className="w-8 h-px bg-gray-600 my-4" />
+      <div className="my-4 h-px w-8 bg-gray-600" />
 
       {/* Bottom Menu Items */}
-      <div className="flex flex-col ">
+      <div className="flex flex-col">
         {bottomMenuItems.map((item, index) =>
-          renderMenuItem(item, index + mainMenuItems.length)
+          renderMenuItem(item, index + mainMenuItems.length),
         )}
       </div>
     </div>
