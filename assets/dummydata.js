@@ -208,3 +208,27 @@ export const farmReports = [
     ],
   },
 ];
+
+export const pestReports = [
+  {
+    id: 1,
+    title: "Pest Reports",
+    icon: "ph:farm-fill",
+    stats: [
+      { label: "Total Registered", value: 7 },
+      { label: "Corn Farmers", value: 4 },
+      { label: "Rice Farmers", value: 3 },
+    ],
+  },
+  {
+    id: 2,
+    title: "Average Income Est.",
+    icon: "ph:farm-fill",
+    stats: [
+      { label: "Total Registered", value: 7 },
+      { label: "Corn Farmers", value: 4 },
+      { label: "Rice Farmers", value: 3 },
+    ],
+  },
+];
+

@@ -1,6 +1,6 @@
 import React from "react";
 
-const FarmerTable = ({
+const RecordsFarmerTable = ({
   farmers,
   activeTab,
   setActiveTab,
@@ -17,46 +17,13 @@ const FarmerTable = ({
       <div className="flex items-center justify-between border-b border-gray-100 px-6 py-5">
         <div>
           <h2 className="text-xl font-semibold text-gray-800">
-            Total Records: {riceFarmers + cornFarmers}
+            Farmer Records Table
           </h2>
-          <div className="mt-3 flex gap-4">
-            <span className="rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-800">
-              Rice Farmers: {riceFarmers}
-            </span>
-            <span className="rounded-full bg-orange-100 px-3 py-1 text-xs font-medium text-orange-800">
-              Corn Farmers: {cornFarmers}
-            </span>
-            <span className="rounded-full bg-blue-100 px-3 py-1 text-xs font-medium text-blue-800">
-              Total Records: {riceFarmers + cornFarmers}
-            </span>
-          </div>
         </div>
-        <button className="rounded-lg p-2 text-gray-600 transition-colors hover:bg-gray-50">
-          <span className="text-lg">⋮</span>
-        </button>
       </div>
 
       {/* Tabs and Search */}
       <div className="flex items-center justify-between border-b border-gray-100">
-        <div className="flex px-6 py-1">
-          {tabs.map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={`relative cursor-pointer px-6 py-3 text-sm font-medium transition-colors ${
-                activeTab === tab
-                  ? "text-blue-600"
-                  : "text-gray-600 hover:text-gray-800"
-              }`}
-            >
-              {tab}
-              {activeTab === tab && (
-                <div className="absolute right-0 bottom-0 left-0 h-0.5 rounded-full bg-blue-500"></div>
-              )}
-            </button>
-          ))}
-        </div>
-
         {/* Search */}
         <div className="px-6 py-3">
           <div className="relative">
@@ -81,6 +48,27 @@ const FarmerTable = ({
               />
             </svg>
           </div>
+        </div>
+        <div className="flex px-6 py-1">
+          {tabs.map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              className={`relative cursor-pointer px-6 py-3 text-sm font-medium transition-colors ${
+                activeTab === tab
+                  ? "text-blue-600"
+                  : "text-gray-600 hover:text-gray-800"
+              }`}
+            >
+              {tab}
+              {activeTab === tab && (
+                <div className="absolute right-0 bottom-0 left-0 h-0.5 rounded-full bg-blue-500"></div>
+              )}
+            </button>
+          ))}
+          <button className="rounded-lg p-4 text-gray-600 transition-colors hover:bg-gray-50">
+            <span className="text-lg">⋮</span>
+          </button>
         </div>
       </div>
 
@@ -151,4 +139,4 @@ const FarmerTable = ({
   );
 };
 
-export default FarmerTable;
+export default RecordsFarmerTable;

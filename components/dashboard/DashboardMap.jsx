@@ -1,24 +1,100 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
+import { Icon } from "@iconify/react";
 
-const DashboardMap = () => (
-  <section className="flex h-full w-full flex-col rounded-2xl bg-white p-4 shadow">
-    <header className="mb-3 flex-shrink-0">
-      <h2 className="text-lg font-bold text-black">Map</h2>
-    </header>
-    <div className="flex min-h-0 flex-1 flex-col rounded-xl bg-[var(--color-background-off-white)] p-3">
-      <iframe
-        title="Interactive map showing farm field locations in General Santos City"
-        width="100%"
-        height="100%"
-        style={{ border: 0, borderRadius: "8px" }}
-        loading="lazy"
-        allowFullScreen
-        referrerPolicy="no-referrer-when-downgrade"
-        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d62813.01392492741!2d125.099519!3d6.116394!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x32f7b7e2e2e2e2e2%3A0x7e2e2e2e2e2e2e2e!2sGeneral%20Santos%20City!5e0!3m2!1sen!2sph!4v1688888888888!5m2!1sen!2sph"
-        aria-label="Map of farm locations"
-      ></iframe>
-    </div>
-  </section>
-);
+const DashboardMap = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [mapSrc, setMapSrc] = useState(
+    process.env.NEXT_PUBLIC_GOOGLE_MAPS_EMBED_URL,
+  );
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  const handleSearch = () => {
+    if (!searchQuery.trim()) return;
+    const encodedQuery = encodeURIComponent(searchQuery);
+    setMapSrc(`https://www.google.com/maps?q=${encodedQuery}&output=embed`);
+  };
+
+  return (
+    <>
+      {/* Main map section */}
+      <section className="flex h-full w-full flex-col rounded-2xl bg-white p-4 shadow">
+        <header className="mb-3 flex flex-shrink-0 items-center justify-between">
+          <h2 className="p-2 text-lg font-bold text-black">Map</h2>
+          <button
+            onClick={() => setIsExpanded(true)}
+            className="flex cursor-pointer items-center gap-1 text-sm text-blue-500 hover:underline"
+            alt="Expand map"
+            title="Expand map"
+          >
+            <Icon icon="mdi:arrow-expand" width="18" height="18" />
+          </button>
+        </header>
+
+        <div className="p-2">
+          <div className="relative">
+            <input
+              type="text"
+              placeholder="Search place or lat,long"
+              className="w-60 rounded-lg border border-gray-200 py-2.5 pr-4 pl-10 text-sm transition-all focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+            />
+            <svg
+              className="absolute top-3 left-3 h-4 w-4 text-gray-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              />
+            </svg>
+          </div>
+        </div>
+
+        <div className="flex min-h-0 flex-1 flex-col rounded-xl bg-[var(--color-background-off-white)] p-3">
+          <iframe
+            title="Interactive map showing farm field locations"
+            width="100%"
+            height="100%"
+            style={{ border: 0, borderRadius: "8px" }}
+            loading="lazy"
+            allowFullScreen
+            referrerPolicy="no-referrer-when-downgrade"
+            src={mapSrc}
+            aria-label="Map of farm locations"
+          ></iframe>
+        </div>
+      </section>
+
+      {/* Modal for enlarged map */}
+      {isExpanded && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
+          <div className="relative h-full w-full">
+            <button
+              onClick={() => setIsExpanded(false)}
+              className="absolute top-4 right-4 z-50 cursor-pointer rounded bg-white px-3 py-1 text-sm font-medium text-black hover:bg-gray-200"
+            >
+              Close
+            </button>
+            <iframe
+              title="Full-screen map"
+              src={mapSrc}
+              className="h-full w-full border-0"
+              loading="lazy"
+              allowFullScreen
+              referrerPolicy="no-referrer-when-downgrade"
+            ></iframe>
+          </div>
+        </div>
+      )}
+    </>
+  );
+};
 
 export default DashboardMap;

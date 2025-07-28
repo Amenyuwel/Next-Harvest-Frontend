@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
-import FarmerTable from "@/components/records/FarmerTable";
-import FarmerStats from "@/components/records/FarmerStats";
+import FarmerTable from "@/components/records/RecordsFarmerTable";
+import FarmerStats from "@/components/records/RecordsFarmerPie";
 
 function RecordsPage() {
   const [activeTab, setActiveTab] = useState("All");
@@ -109,26 +109,26 @@ function RecordsPage() {
       barangay: "San Isidro",
       contact: "+63 912 345 6798",
     },
-  ]; 
+  ];
 
   // Count farmers by crop type
   const riceFarmers = farmersData.filter(
-    (farmer) => farmer.crop === "Rice"
+    (farmer) => farmer.crop === "Rice",
   ).length;
   const cornFarmers = farmersData.filter(
-    (farmer) => farmer.crop === "Corn"
+    (farmer) => farmer.crop === "Corn",
   ).length;
 
   const filteredFarmers = farmersData.filter(
     (farmer) =>
       farmer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       farmer.barangay.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      farmer.crop.toLowerCase().includes(searchTerm.toLowerCase())
+      farmer.crop.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   return (
     <div className="h-full w-full bg-gray-50/30 p-4">
-      <div className="flex gap-8 h-full w-full">
+      <div className="flex h-full w-full gap-4">
         {/* Left side: Chart */}
         <div className="w-80">
           <FarmerStats />

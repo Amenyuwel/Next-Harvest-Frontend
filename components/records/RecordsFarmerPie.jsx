@@ -1,6 +1,6 @@
 import React from "react";
 
-const FarmerStats = () => {
+const RecordsFarmerPie = () => {
   const statsData = [
     { crop: "Rice", value: 35, color: "#10b981", lightColor: "#f0fdf4" },
     { crop: "Corn", value: 40, color: "#f59e0b", lightColor: "#fffbeb" },
@@ -12,35 +12,20 @@ const FarmerStats = () => {
   const centerY = 150;
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 h-full flex flex-col">
-      <div className="flex items-center justify-between mb-8">
+    <div className="flex h-full flex-col rounded-2xl border border-gray-100 bg-white p-8 shadow-sm">
+      <div className="mb-8 flex items-center justify-between">
         <div>
           <h3 className="text-xl font-semibold text-gray-900">
             Crop Distribution
           </h3>
-          <p className="text-sm text-gray-600 mt-1">
+          <p className="mt-1 text-sm text-gray-600">
             Farmer statistics by crop type
           </p>
-        </div>
-        <div className="bg-green-50 rounded-full p-2">
-          <svg
-            className="w-5 h-5 text-green-600"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-            />
-          </svg>
         </div>
       </div>
 
       {/* Pie Chart */}
-      <div className="relative mb-8 flex justify-center flex-1">
+      <div className="relative mb-8 flex flex-1 justify-center">
         <svg
           width="400"
           height="300"
@@ -113,7 +98,7 @@ const FarmerStats = () => {
                   fill={`url(#pieGradient${index + 1})`}
                   stroke="white"
                   strokeWidth="3"
-                  className="transition-all duration-300 hover:scale-105 origin-center"
+                  className="origin-center transition-all duration-300 hover:scale-105"
                   style={{ transformOrigin: `${centerX}px ${centerY}px` }}
                 />
 
@@ -123,7 +108,7 @@ const FarmerStats = () => {
                   y={centerY + radius * 0.7 * Math.sin(midRad)}
                   textAnchor="middle"
                   dominantBaseline="middle"
-                  className="text-sm font-bold fill-white"
+                  className="fill-white text-sm font-bold"
                 >
                   {item.value}
                 </text>
@@ -134,7 +119,7 @@ const FarmerStats = () => {
                   y={labelY}
                   textAnchor="middle"
                   dominantBaseline="middle"
-                  className="text-xs font-medium fill-gray-600"
+                  className="fill-gray-600 text-xs font-medium"
                 >
                   {percentage}%
                 </text>
@@ -170,7 +155,7 @@ const FarmerStats = () => {
             y={centerY - 5}
             textAnchor="middle"
             dominantBaseline="middle"
-            className="text-lg font-bold fill-gray-900"
+            className="fill-gray-900 text-lg font-bold"
           >
             {totalValue}
           </text>
@@ -179,7 +164,7 @@ const FarmerStats = () => {
             y={centerY + 12}
             textAnchor="middle"
             dominantBaseline="middle"
-            className="text-xs fill-gray-500"
+            className="fill-gray-500 text-xs"
           >
             Total
           </text>
@@ -187,13 +172,13 @@ const FarmerStats = () => {
       </div>
 
       {/* Legend */}
-      <div className="flex flex-wrap gap-6 justify-center mb-6">
+      <div className="mb-6 flex flex-wrap justify-center gap-6">
         {statsData.map((item, index) => {
           const percentage = ((item.value / totalValue) * 100).toFixed(1);
           return (
             <div key={index} className="flex items-center gap-2">
               <div
-                className="w-4 h-4 rounded-sm"
+                className="h-4 w-4 rounded-sm"
                 style={{ backgroundColor: item.color }}
               ></div>
               <span className="text-sm font-medium text-gray-700">
@@ -226,4 +211,4 @@ const FarmerStats = () => {
   );
 };
 
-export default FarmerStats;
+export default RecordsFarmerPie;

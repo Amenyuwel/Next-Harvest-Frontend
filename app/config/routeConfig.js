@@ -8,7 +8,7 @@ const routeConfig = {
     onAddClick: () => {},
   },
   "/pages/records": {
-    title: "Records of Farmers",
+    title: "Farmers",
     showAddButton: true,
     addButtonText: "Review Records",
     onAddClick: () => {},

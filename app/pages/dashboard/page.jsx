@@ -1,16 +1,16 @@
 "use client";
 import React from "react";
-import ReportsColumn from "@/components/dashboard/DashboardReport";
-import NotificationColumn from "@/components/dashboard/DashboardNotification";
-import GraphColumn from "@/components/dashboard/DashboardGraph";
-import FieldsMap from "@/components/dashboard/DashboardMap";
+import DashboardGraph from "@/components/dashboard/DashboardGraph";
+import DashboardMap from "@/components/dashboard/DashboardMap";
+import DashboardReport from "@/components/dashboard/DashboardReport";
+import DashboardNotification from "@/components/dashboard/DashboardNotification";
 
 const DashboardPage = () => {
   return (
     <div className="flex h-full w-full gap-4 p-4">
       {/* Left Column - Reports */}
       <div className="w-full max-w-sm flex-shrink-0">
-        <ReportsColumn />
+        <DashboardReport />
       </div>
 
       {/* Right Column - Notification + Map on top, Graph below */}
@@ -18,16 +18,16 @@ const DashboardPage = () => {
         {/* Top Row: Notification + Map side by side */}
         <div className="flex h-full w-full gap-4 overflow-auto">
           <div className="w-1/2">
-            <NotificationColumn />
+            <DashboardNotification />
           </div>
           <div className="w-1/2">
-            <FieldsMap />
+            <DashboardMap />
           </div>
         </div>
 
         {/* Bottom Row: Full-width Graph */}
         <div className="h-full w-full">
-          <GraphColumn />
+          <DashboardGraph />
         </div>
       </div>
     </div>
