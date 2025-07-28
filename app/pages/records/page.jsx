@@ -7,6 +7,7 @@ function RecordsPage() {
   const [activeTab, setActiveTab] = useState("All");
   const [searchTerm, setSearchTerm] = useState("");
 
+  // This needs to be transferred to assets/dummyData.js
   const farmersData = [
     {
       id: 1,
@@ -108,7 +109,7 @@ function RecordsPage() {
       barangay: "San Isidro",
       contact: "+63 912 345 6798",
     },
-  ];
+  ]; 
 
   // Count farmers by crop type
   const riceFarmers = farmersData.filter(

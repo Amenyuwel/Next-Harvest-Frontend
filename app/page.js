@@ -1,14 +1,13 @@
 "use client";
-import React from "react";
-import DashboardPage from "./pages/dashboard/page";
-import Sidebar from "@/components/Sidebar";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
-const page = () => {
-  return (
-    <main className="flex h-screen">
-      <Sidebar />
-      <DashboardPage />
-    </main>
-  );
-};
-export default page;
+export default function Page() {
+  const router = useRouter();
+
+  useEffect(() => {
+    router.replace("/login");
+  }, [router]);
+
+  return null;
+}
