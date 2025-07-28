@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { Icon } from "@iconify/react";
 import { useRouter, usePathname } from "next/navigation";
 import { motion } from "framer-motion";
@@ -9,8 +9,7 @@ function Sidebar() {
   const router = useRouter();
   const pathname = usePathname();
 
-  // Main navigation items - memoized to prevent recreation
-  const mainMenuItems = React.useMemo(
+  const mainMenuItems = useMemo(
     () => [
       {
         id: "dashboard",
@@ -46,8 +45,7 @@ function Sidebar() {
     [],
   );
 
-  // Bottom navigation items - memoized to prevent recreation
-  const bottomMenuItems = React.useMemo(
+  const bottomMenuItems = useMemo(
     () => [
       {
         id: "settings",
@@ -65,27 +63,28 @@ function Sidebar() {
     [],
   );
 
-  // Memoize combined menu items
-  const allItems = React.useMemo(
+  const allItems = useMemo(
     () => [...mainMenuItems, ...bottomMenuItems],
-    [],
+    [mainMenuItems, bottomMenuItems],
   );
 
-  // Update active item based on current path
   useEffect(() => {
     const currentItem = allItems.find((item) => item.path === pathname);
-    if (currentItem) {
-      setActiveItem(currentItem.id);
-    }
+    if (currentItem) setActiveItem(currentItem.id);
   }, [pathname, allItems]);
 
-  const handleItemClick = React.useCallback(
+  useEffect(() => {
+    mainMenuItems.forEach((item) => {
+      if (item.path) router.prefetch(item.path);
+    });
+  }, [mainMenuItems, router]);
+
+  const handleItemClick = useCallback(
     (item) => {
       setActiveItem(item.id);
-
       if (item.action === "logout") {
         localStorage.removeItem("token");
-        router.push("/pages/login");
+        router.push("/login");
       } else if (item.path) {
         router.push(item.path);
       }
@@ -93,13 +92,13 @@ function Sidebar() {
     [router],
   );
 
-  const renderMenuItem = React.useCallback(
-    (item, index) => (
+  const renderMenuItem = useCallback(
+    (item) => (
       <motion.div
         key={item.id}
         initial={false}
         onClick={() => handleItemClick(item)}
-        className={`group flex h-20 w-20 cursor-pointer items-center justify-center rounded-3xl transition-all duration-200 relative${
+        className={`group relative flex h-20 w-20 cursor-pointer items-center justify-center rounded-3xl transition-all duration-200 ${
           activeItem === item.id
             ? "border-[var(--color-icons-accent)] bg-transparent"
             : "border-transparent hover:border-gray-500"
@@ -117,8 +116,6 @@ function Sidebar() {
               : "text-gray-400 group-hover:text-white"
           }`}
         />
-
-        {/* Simplified Tooltip */}
         <div className="pointer-events-none absolute left-16 z-10 rounded-lg bg-gray-800 px-3 py-2 text-sm whitespace-nowrap text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100">
           {item.label}
           <div className="absolute top-1/2 left-0 h-2 w-2 -translate-x-1 -translate-y-1/2 rotate-45 transform bg-gray-800"></div>
@@ -130,25 +127,14 @@ function Sidebar() {
 
   return (
     <div className="mt-4 flex h-[98.5%] w-25 flex-col items-center rounded-3xl bg-[var(--color-sidebar-bg)] py-6 shadow-lg">
-      {/* Logo/Avatar */}
       <div className="mb-8 flex h-12 w-12 items-center justify-center rounded-full">
         <div className="h-8 w-8 rounded-full bg-gray-500"></div>
       </div>
-
-      {/* Main Menu Items */}
       <div className="flex flex-1 flex-col">
-        {mainMenuItems.map((item, index) => renderMenuItem(item, index))}
+        {mainMenuItems.map(renderMenuItem)}
       </div>
-
-      {/* Separator Line */}
       <div className="my-4 h-px w-8 bg-gray-600" />
-
-      {/* Bottom Menu Items */}
-      <div className="flex flex-col">
-        {bottomMenuItems.map((item, index) =>
-          renderMenuItem(item, index + mainMenuItems.length),
-        )}
-      </div>
+      <div className="flex flex-col">{bottomMenuItems.map(renderMenuItem)}</div>
     </div>
   );
 }

@@ -8,23 +8,25 @@ export default function ConditionalLayout({ children }) {
 
   // Memoize dashboard page check to avoid recalculation
   const isDashboardPage = useMemo(() => {
-    return pathname?.startsWith("/pages/dashboard") ||
-           pathname?.startsWith("/pages/records") ||
-           pathname?.startsWith("/pages/train") ||
-           pathname?.startsWith("/pages/reports") ||
-           pathname?.startsWith("/pages/profile") ||
-           pathname?.startsWith("/pages/settings");
+    return (
+      pathname?.startsWith("/pages/dashboard") ||
+      pathname?.startsWith("/pages/records") ||
+      pathname?.startsWith("/pages/reports") ||
+      pathname?.startsWith("/pages/train") ||
+      pathname?.startsWith("/pages/profile") ||
+      pathname?.startsWith("/pages/settings")
+    );
   }, [pathname]);
 
   if (isDashboardPage) {
     return (
-      <main className="bg-white w-full h-screen p-6">
-        <div className="bg-[var(--color-background-gray)] rounded-3xl shadow-2xl overflow-hidden w-full h-full flex p-6 gap-6">
+      <main className="h-screen w-full bg-white p-6">
+        <div className="flex h-full w-full gap-6 overflow-hidden rounded-3xl bg-[var(--color-background-gray)] p-6 shadow-2xl">
           {/* Sidebar for dashboard pages */}
           <Sidebar />
 
           {/* Page Content */}
-          <div className="flex-1 bg-white rounded-3xl p-8 overflow-auto">
+          <div className="flex-1 overflow-auto rounded-3xl bg-white p-8">
             {children}
           </div>
         </div>
