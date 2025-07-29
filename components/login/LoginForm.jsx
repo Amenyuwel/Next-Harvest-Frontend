@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Icon } from "@iconify/react";
 import { useRouter } from "next/navigation";
-import Register from "./Register";
+import Register from "../register/RegisterForm";
 
 function LoginForm() {
   const [showRegister, setShowRegister] = useState(false);
@@ -15,8 +15,8 @@ function LoginForm() {
   };
 
   return (
-    <div className="w-full lg:w-1/2 bg-[var(--color-background-light-gray)] rounded-3xl p-6 sm:p-12 lg:p-20 flex flex-col justify-center relative overflow-hidden">
-      <div className="relative w-full h-full">
+    <div className="relative flex w-full flex-col justify-center overflow-hidden rounded-3xl bg-[var(--color-background-light-gray)] p-6 sm:p-12 lg:w-1/2 lg:p-20">
+      <div className="relative h-full w-full">
         {/* Login Form */}
         <div
           className={`absolute inset-0 transition-transform duration-500 ease-in-out ${
@@ -25,25 +25,25 @@ function LoginForm() {
               : "translate-x-0 opacity-100"
           }`}
         >
-          <div className="max-w-sm mx-auto w-full h-full flex flex-col justify-center">
-            <div className="text-center mb-6 sm:mb-8">
-              <h1 className="text-[var(--color-primary)] text-xl sm:text-2xl font-lato font-bold mb-2">
+          <div className="mx-auto flex h-full w-full max-w-sm flex-col justify-center">
+            <div className="mb-6 text-center sm:mb-8">
+              <h1 className="font-lato mb-2 text-xl font-bold text-[var(--color-primary)] sm:text-2xl">
                 Harvest Assistant
               </h1>
-              <h2 className="text-2xl sm:text-3xl font-lato font-bold text-gray-800 mb-1">
+              <h2 className="font-lato mb-1 text-2xl font-bold text-gray-800 sm:text-3xl">
                 Your farming journey
               </h2>
-              <h3 className="text-2xl sm:text-3xl font-lato font-bold text-gray-800 mb-6 sm:mb-8">
+              <h3 className="font-lato mb-6 text-2xl font-bold text-gray-800 sm:mb-8 sm:text-3xl">
                 Starts here
               </h3>
             </div>
 
             {/* Social Login Icons */}
-            <div className="flex gap-4 mb-6 sm:mb-8 justify-center">
-              <div className="w-12 h-12 bg-white rounded-3xl flex items-center justify-center shadow-md cursor-pointer hover:shadow-lg transition-shadow">
+            <div className="mb-6 flex justify-center gap-4 sm:mb-8">
+              <div className="flex h-12 w-12 cursor-pointer items-center justify-center rounded-3xl bg-white shadow-md transition-shadow hover:shadow-lg">
                 <Icon icon="logos:google-icon" width="24" height="24" />
               </div>
-              <div className="w-12 h-12 bg-white rounded-3xl flex items-center justify-center shadow-md cursor-pointer hover:shadow-lg transition-shadow">
+              <div className="flex h-12 w-12 cursor-pointer items-center justify-center rounded-3xl bg-white shadow-md transition-shadow hover:shadow-lg">
                 <Icon icon="logos:facebook" width="24" height="24" />
               </div>
             </div>
@@ -51,7 +51,7 @@ function LoginForm() {
             {/* Email Input */}
             <div className="mb-4">
               <div className="relative">
-                <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
+                <div className="absolute top-1/2 left-3 -translate-y-1/2 transform">
                   <Icon
                     icon="mdi:email-outline"
                     width="20"
@@ -61,7 +61,7 @@ function LoginForm() {
                 </div>
                 <input
                   type="email"
-                  className="w-full pl-12 pr-4 py-3 sm:py-4 bg-white rounded-3xl border-0 shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 text-sm sm:text-base text-black font-lato"
+                  className="font-lato w-full rounded-3xl border-0 bg-white py-3 pr-4 pl-12 text-sm text-black shadow-sm focus:ring-2 focus:ring-pink-500 focus:outline-none sm:py-4 sm:text-base"
                   placeholder="Email"
                 />
               </div>
@@ -70,7 +70,7 @@ function LoginForm() {
             {/* Password Input */}
             <div className="mb-6">
               <div className="relative">
-                <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
+                <div className="absolute top-1/2 left-3 -translate-y-1/2 transform">
                   <Icon
                     icon="mdi:lock-outline"
                     width="20"
@@ -80,34 +80,26 @@ function LoginForm() {
                 </div>
                 <input
                   type="password"
-                  className="w-full pl-12 pr-12 py-3 sm:py-4 bg-white rounded-3xl border-0 shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 text-sm sm:text-base text-black font-lato"
+                  className="font-lato w-full rounded-3xl border-0 bg-white py-3 pr-12 pl-12 text-sm text-black shadow-sm focus:ring-2 focus:ring-pink-500 focus:outline-none sm:py-4 sm:text-base"
                   placeholder="Password"
                 />
-                <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                  <Icon
-                    icon="mdi:eye-outline"
-                    width="20"
-                    height="20"
-                    className="text-gray-500 cursor-pointer"
-                  />
-                </div>
               </div>
             </div>
 
             {/* Login Button */}
             <button
               onClick={handleLogin}
-              className="w-full bg-black text-white py-3 sm:py-4 rounded-3xl font-lato font-medium mb-4 hover:bg-gray-800 transition duration-200 text-sm sm:text-base"
+              className="font-lato mb-4 w-full rounded-3xl bg-black py-3 text-sm font-medium text-white transition duration-200 hover:bg-gray-800 sm:py-4 sm:text-base"
             >
               Log in
             </button>
 
             {/* Sign Up Link */}
-            <p className="text-center text-xs sm:text-sm text-gray-600 font-lato">
+            <p className="font-lato text-center text-xs text-gray-600 sm:text-sm">
               Don't have an account?{" "}
               <span
-                className="font-medium text-black cursor-pointer hover:underline font-lato"
-                onClick={() => setShowRegister(true)}
+                className="font-lato cursor-pointer font-medium text-black hover:underline"
+                onClick={() => router.push("/register")}
               >
                 Sign Up
               </span>
