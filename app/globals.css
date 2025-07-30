@@ -62,3 +62,10 @@ body {
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
+
+/* Remove outline from focused chart container */
+.recharts-wrapper:focus,
+.recharts-wrapper svg:focus {
+  outline: none !important;
+}
+

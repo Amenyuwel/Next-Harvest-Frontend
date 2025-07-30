@@ -145,19 +145,9 @@ export const notifications = [
 
 export const pestReportsData = [
   {
-    id: 1,
-    number: "01",
-    pestName: "Caterpillar",
-    description: "Regular",
-    recommended: "Manual Rams",
-    activeMonth: "Decreased",
-    season: "All season",
-    image: "/api/placeholder/32/32",
-  },
-  {
     id: 2,
     number: "02",
-    pestName: "Caterpillar",
+    pestName: "Snail",
     description: "Regular",
     recommended: "Manual Rams",
     activeMonth: "Decreased",
@@ -167,7 +157,7 @@ export const pestReportsData = [
   {
     id: 3,
     number: "03",
-    pestName: "Snail",
+    pestName: "Fall Armyworm",
     description: "Regular",
     recommended: "Manual Rams",
     activeMonth: "Decreased",
@@ -177,7 +167,7 @@ export const pestReportsData = [
   {
     id: 4,
     number: "04",
-    pestName: "Snail",
+    pestName: "Stem Borer",
     description: "Regular",
     recommended: "Manual Rams",
     activeMonth: "Decreased",
