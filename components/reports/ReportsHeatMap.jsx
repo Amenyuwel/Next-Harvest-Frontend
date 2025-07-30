@@ -39,9 +39,6 @@ const ReportsHeatMap = () => {
         {/* Left: Button + Search */}
         <div className="flex flex-col gap-2 md:flex-row md:items-center md:gap-3">
           {/* Add Button */}
-          <button className="h-10 rounded-2xl bg-red-600 px-4 text-sm font-medium text-white transition hover:bg-red-700">
-            Add Barangay
-          </button>
 
           {/* Search */}
           <div className="relative w-full md:w-72">
