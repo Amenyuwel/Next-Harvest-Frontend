@@ -27,10 +27,6 @@ const RecordsFarmerTable = ({
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-gray-100 px-6 py-3">
         {/* Button and Search Group */}
         <div className="flex items-center gap-2">
-          <button className="h-10 rounded-2xl bg-red-600 px-4 text-sm font-medium text-white transition hover:bg-red-700">
-            Add Farmer
-          </button>
-
           <div className="relative">
             <input
               type="text"
@@ -152,4 +148,3 @@ const RecordsFarmerTable = ({
 };
 
 export default RecordsFarmerTable;
-  
