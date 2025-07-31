@@ -87,7 +87,7 @@ const ReportsBarGraph = () => {
   const [hoveredBar, setHoveredBar] = useState(null);
 
   return (
-    <div className="mx-auto h-[400px] w-full rounded-xl bg-gradient-to-br from-slate-50 to-gray-100 p-6 shadow-lg">
+    <div className="mx-auto h-full w-full rounded-xl bg-gradient-to-br from-slate-50 to-gray-100 p-6 shadow-lg">
       <div className="mb-6 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
         <div className="flex items-center gap-3">
           <h3 className="text-lg font-semibold text-gray-800">

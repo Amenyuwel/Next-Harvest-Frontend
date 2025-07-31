@@ -5,37 +5,31 @@ const routeConfig = {
     title: "Dashboard",
     showAddButton: true,
     addButtonText: "Add Farmer",
-    onAddClick: () => {},
   },
   "/pages/records": {
     title: "Farmers",
     showAddButton: true,
-    addButtonText: "Review Records",
-    onAddClick: () => {},
+    addButtonText: "Add Farmer",
   },
   "/pages/reports": {
     title: "Reports",
-    showAddButton: false,
-    addButtonText: "Review Reports",
-    onAddClick: () => {},
+    showAddButton: true,
+    addButtonText: "Add Barangay",
   },
   "/pages/train": {
     title: "Training",
     showAddButton: false,
     addButtonText: "",
-    onAddClick: () => {},
   },
   "/pages/profile": {
     title: "Profile",
     showAddButton: true,
     addButtonText: "Generate Report",
-    onAddClick: () => {},
   },
   "/pages/settings": {
     title: "Settings",
     showAddButton: false,
     addButtonText: "",
-    onAddClick: () => {},
   },
 };
 

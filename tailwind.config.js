@@ -25,6 +25,7 @@ module.exports = {
         trainingHighlight: "var(--color-training-highlight)",
         calendarHighlight: "var(--color-calendar-highlight)",
         reportsBg: "var(--color-reports-bg)",
+        modalBg: "var(--color-modal-bg)",
         // Chart specific colors
         chartGrid: "var(--color-chart-grid)",
         chartPurple: "var(--color-chart-purple)",

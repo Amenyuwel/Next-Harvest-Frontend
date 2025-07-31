@@ -18,6 +18,7 @@ const getHeatColor = (value) => {
   return "bg-red-100 text-red-700";
 };
 
+
 const ReportsHeatMap = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -38,11 +39,6 @@ const ReportsHeatMap = () => {
       <div className="flex flex-col gap-2 border-b border-gray-100 px-6 py-3 md:flex-row md:items-center md:justify-between">
         {/* Left: Button + Search */}
         <div className="flex flex-col gap-2 md:flex-row md:items-center md:gap-3">
-          {/* Add Button */}
-          <button className="h-10 rounded-2xl bg-red-600 px-4 text-sm font-medium text-white transition hover:bg-red-700">
-            Add Barangay
-          </button>
-
           {/* Search */}
           <div className="relative w-full md:w-72">
             <input
