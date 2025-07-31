@@ -204,7 +204,7 @@ const ReportsLineGraph = () => {
   const [hoveredLine, setHoveredLine] = useState(null);
 
   return (
-    <div className="mx-auto h-[400px] w-full rounded-xl bg-gradient-to-br from-slate-50 to-gray-100 p-6 shadow-lg">
+    <div className="mx-auto h-full w-full rounded-xl bg-gradient-to-br from-slate-50 to-gray-100 p-6 shadow-lg">
       {/* Chart Header */}
       <div className="mb-6 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
         <div className="flex items-center gap-3">
@@ -262,7 +262,6 @@ const ReportsLineGraph = () => {
               tickLine={{ stroke: "#9ca3af" }}
               axisLine={{ stroke: "#d1d5db" }}
               label={{
-                value: "Month (2024)",
                 position: "insideBottom",
                 offset: -10,
                 style: {

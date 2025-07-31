@@ -97,9 +97,6 @@ const RecordsFarmerTable = ({
               >
                 <td className="px-6 py-5 whitespace-nowrap">
                   <div className="flex items-center gap-3">
-                    <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-green-100">
-                      <span className="text-lg">👨‍🌾</span>
-                    </div>
                     <span className="text-sm font-medium text-gray-700">
                       {farmer.rsbsa}
                     </span>
