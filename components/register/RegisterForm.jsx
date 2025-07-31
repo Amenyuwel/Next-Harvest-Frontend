@@ -99,7 +99,7 @@ function RegisterForm() {
           </div>
 
           {error && (
-            <div className="mb-4 rounded-3xl border border-red-400 bg-red-100 px-4 py-3 text-sm text-red-700">
+            <div className="mb-4 rounded-3xl border border-red-500 bg-red-100 px-4 py-3 text-sm text-red-700">
               {error}
             </div>
           )}
