@@ -1,10 +1,86 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { Icon } from "@iconify/react";
 import { useRouter } from "next/navigation";
 
 function RegisterForm() {
   const router = useRouter();
+
+  const [formData, setFormData] = useState({
+    username: "",
+    password: "",
+    confirmPassword: "",
+    first_name: "",
+    middle_name: "",
+    last_name: "",
+    email: "",
+  });
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+
+    // Validation
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords do not match");
+      setLoading(false);
+      return;
+    }
+
+    if (formData.password.length < 6) {
+      setError("Password must be at least 6 characters long");
+      setLoading(false);
+      return;
+    }
+
+    if (formData.username.length < 3) {
+      setError("Username must be at least 3 characters long");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const { confirmPassword, ...submitData } = formData;
+
+      const response = await fetch("/api/auth/admin/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(submitData),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        // Store token in localStorage
+        localStorage.setItem("token", data.data.token);
+        localStorage.setItem("user", JSON.stringify(data.data.admin));
+
+        // Redirect to admin dashboard
+        router.push("/admin/dashboard");
+      } else {
+        setError(data.message || "Registration failed");
+      }
+    } catch (error) {
+      setError("Network error. Please try again.");
+      console.error("Registration error:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="relative flex w-full flex-col justify-center overflow-hidden rounded-3xl bg-[var(--color-background-light-gray)] p-6 sm:p-12 lg:w-1/2 lg:p-20">
@@ -15,102 +91,159 @@ function RegisterForm() {
               Harvest Assistant
             </h1>
             <h2 className="font-lato mb-1 text-2xl font-bold text-gray-800 sm:text-3xl">
-              Your farming journey
+              Admin Registration
             </h2>
             <h3 className="font-lato mb-6 text-2xl font-bold text-gray-800 sm:mb-8 sm:text-3xl">
-              Starts here
+              Create Admin Account
             </h3>
           </div>
 
-          {/* Social Register Icons */}
-          <div className="mb-6 flex justify-center gap-4 sm:mb-8">
-            <div className="flex h-12 w-12 cursor-pointer items-center justify-center rounded-3xl bg-white shadow-md transition-shadow hover:shadow-lg">
-              <Icon icon="logos:google-icon" width="24" height="24" />
+          {error && (
+            <div className="mb-4 rounded-3xl border border-red-400 bg-red-100 px-4 py-3 text-sm text-red-700">
+              {error}
             </div>
-            <div className="flex h-12 w-12 cursor-pointer items-center justify-center rounded-3xl bg-white shadow-md transition-shadow hover:shadow-lg">
-              <Icon icon="logos:facebook" width="24" height="24" />
-            </div>
-          </div>
+          )}
 
-          {/* First Name Input */}
-          <div className="mb-4">
-            <input
-              type="text"
-              className="font-lato w-full rounded-3xl border-0 bg-white py-3 pr-4 pl-6 text-sm text-black shadow-sm focus:ring-2 focus:ring-green-500 focus:outline-none sm:py-4 sm:text-base"
-              placeholder="First name"
-            />
-          </div>
-
-          {/* Last Name Input */}
-          <div className="mb-4">
-            <input
-              type="text"
-              className="font-lato w-full rounded-3xl border-0 bg-white py-3 pr-4 pl-6 text-sm text-black shadow-sm focus:ring-2 focus:ring-green-500 focus:outline-none sm:py-4 sm:text-base"
-              placeholder="Last name"
-            />
-          </div>
-
-          {/* Email Input */}
-          <div className="mb-4">
-            <div className="relative">
-              <div className="absolute top-1/2 left-3 -translate-y-1/2 transform">
-                <Icon
-                  icon="mdi:email-outline"
-                  width="20"
-                  height="20"
-                  className="text-gray-500"
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Username Input */}
+            <div>
+              <div className="relative">
+                <div className="absolute top-1/2 left-3 -translate-y-1/2 transform">
+                  <Icon
+                    icon="mdi:account-outline"
+                    width="20"
+                    height="20"
+                    className="text-gray-500"
+                  />
+                </div>
+                <input
+                  type="text"
+                  name="username"
+                  value={formData.username}
+                  onChange={handleInputChange}
+                  className="font-lato w-full rounded-3xl border-0 bg-white py-3 pr-4 pl-12 text-sm text-black shadow-sm focus:ring-2 focus:ring-green-500 focus:outline-none sm:py-4 sm:text-base"
+                  placeholder="Username"
+                  required
                 />
               </div>
+            </div>
+
+            {/* First Name Input */}
+            <div>
               <input
-                type="email"
-                className="font-lato w-full rounded-3xl border-0 bg-white py-3 pr-4 pl-12 text-sm text-black shadow-sm focus:ring-2 focus:ring-green-500 focus:outline-none sm:py-4 sm:text-base"
-                placeholder="Email"
+                type="text"
+                name="first_name"
+                value={formData.first_name}
+                onChange={handleInputChange}
+                className="font-lato w-full rounded-3xl border-0 bg-white py-3 pr-4 pl-6 text-sm text-black shadow-sm focus:ring-2 focus:ring-green-500 focus:outline-none sm:py-4 sm:text-base"
+                placeholder="First name"
+                required
               />
             </div>
-          </div>
 
-          {/* Create Password Input */}
-          <div className="mb-4">
-            <div className="relative">
-              <div className="absolute top-1/2 left-3 -translate-y-1/2 transform">
-                <Icon
-                  icon="mdi:lock-outline"
-                  width="20"
-                  height="20"
-                  className="text-gray-500"
+            {/* Middle Name Input */}
+            <div>
+              <input
+                type="text"
+                name="middle_name"
+                value={formData.middle_name}
+                onChange={handleInputChange}
+                className="font-lato w-full rounded-3xl border-0 bg-white py-3 pr-4 pl-6 text-sm text-black shadow-sm focus:ring-2 focus:ring-green-500 focus:outline-none sm:py-4 sm:text-base"
+                placeholder="Middle name (optional)"
+              />
+            </div>
+
+            {/* Last Name Input */}
+            <div>
+              <input
+                type="text"
+                name="last_name"
+                value={formData.last_name}
+                onChange={handleInputChange}
+                className="font-lato w-full rounded-3xl border-0 bg-white py-3 pr-4 pl-6 text-sm text-black shadow-sm focus:ring-2 focus:ring-green-500 focus:outline-none sm:py-4 sm:text-base"
+                placeholder="Last name"
+                required
+              />
+            </div>
+
+            {/* Email Input */}
+            <div>
+              <div className="relative">
+                <div className="absolute top-1/2 left-3 -translate-y-1/2 transform">
+                  <Icon
+                    icon="mdi:email-outline"
+                    width="20"
+                    height="20"
+                    className="text-gray-500"
+                  />
+                </div>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  className="font-lato w-full rounded-3xl border-0 bg-white py-3 pr-4 pl-12 text-sm text-black shadow-sm focus:ring-2 focus:ring-green-500 focus:outline-none sm:py-4 sm:text-base"
+                  placeholder="Email address"
+                  required
                 />
               </div>
-              <input
-                type="password"
-                className="font-lato w-full rounded-3xl border-0 bg-white py-3 pr-4 pl-12 text-sm text-black shadow-sm focus:ring-2 focus:ring-green-500 focus:outline-none sm:py-4 sm:text-base"
-                placeholder="Create password"
-              />
             </div>
-          </div>
 
-          {/* Confirm Password Input */}
-          <div className="mb-6">
-            <div className="relative">
-              <div className="absolute top-1/2 left-3 -translate-y-1/2 transform">
-                <Icon
-                  icon="mdi:lock-outline"
-                  width="20"
-                  height="20"
-                  className="text-gray-500"
+            {/* Password Input */}
+            <div>
+              <div className="relative">
+                <div className="absolute top-1/2 left-3 -translate-y-1/2 transform">
+                  <Icon
+                    icon="mdi:lock-outline"
+                    width="20"
+                    height="20"
+                    className="text-gray-500"
+                  />
+                </div>
+                <input
+                  type="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleInputChange}
+                  className="font-lato w-full rounded-3xl border-0 bg-white py-3 pr-4 pl-12 text-sm text-black shadow-sm focus:ring-2 focus:ring-green-500 focus:outline-none sm:py-4 sm:text-base"
+                  placeholder="Create password"
+                  required
                 />
               </div>
-              <input
-                type="password"
-                className="font-lato w-full rounded-3xl border-0 bg-white py-3 pr-4 pl-12 text-sm text-black shadow-sm focus:ring-2 focus:ring-green-500 focus:outline-none sm:py-4 sm:text-base"
-                placeholder="Confirm password"
-              />
             </div>
-          </div>
 
-          {/* Register Button */}
-          <button className="font-lato mb-4 w-full rounded-3xl bg-black py-3 text-sm font-medium text-white transition duration-200 hover:bg-gray-800 sm:py-4 sm:text-base">
-            Next
-          </button>
+            {/* Confirm Password Input */}
+            <div className="mb-6">
+              <div className="relative">
+                <div className="absolute top-1/2 left-3 -translate-y-1/2 transform">
+                  <Icon
+                    icon="mdi:lock-outline"
+                    width="20"
+                    height="20"
+                    className="text-gray-500"
+                  />
+                </div>
+                <input
+                  type="password"
+                  name="confirmPassword"
+                  value={formData.confirmPassword}
+                  onChange={handleInputChange}
+                  className="font-lato w-full rounded-3xl border-0 bg-white py-3 pr-4 pl-12 text-sm text-black shadow-sm focus:ring-2 focus:ring-green-500 focus:outline-none sm:py-4 sm:text-base"
+                  placeholder="Confirm password"
+                  required
+                />
+              </div>
+            </div>
+
+            {/* Register Button */}
+            <button
+              type="submit"
+              disabled={loading}
+              className="font-lato mb-4 w-full rounded-3xl bg-black py-3 text-sm font-medium text-white transition duration-200 hover:bg-gray-800 disabled:opacity-50 sm:py-4 sm:text-base"
+            >
+              {loading ? "Creating Account..." : "Create Admin Account"}
+            </button>
+          </form>
 
           {/* Log In Link */}
           <p className="font-lato text-center text-xs text-gray-600 sm:text-sm">
