@@ -5,7 +5,9 @@ import { farmReports, pestReports } from "@/assets/dummydata.js";
 const DashboardReport = () => (
   <section className="flex h-full w-full flex-col overflow-hidden rounded-2xl bg-white p-4 shadow">
     <header className="mb-3 flex-shrink-0">
-      <h2 className="text-lg font-bold text-black">Reports</h2>
+      <h2 className="text-lg font-bold text-[var(--color-text-primary)]">
+        Reports
+      </h2>
     </header>
 
     <div className="scrollbar-hide flex-1 overflow-y-auto">
@@ -17,7 +19,7 @@ const DashboardReport = () => (
             className="flex min-h-[140px] flex-col rounded-xl bg-[var(--color-column-farmer)] p-3"
           >
             <header className="mb-2 flex items-center justify-between">
-              <h3 className="text-sm font-semibold text-black">
+              <h3 className="text-sm font-semibold text-[var(--color-text-primary)]">
                 {report.title}
               </h3>
               <Icon
@@ -38,7 +40,7 @@ const DashboardReport = () => (
                 <div key={index} className="flex items-center" role="listitem">
                   <data
                     value={stat.value}
-                    className="mr-2 text-2xl font-bold text-black"
+                    className="mr-2 text-2xl font-bold text-[var(--color-text-primary)]"
                   >
                     {stat.value}
                   </data>
@@ -52,6 +54,7 @@ const DashboardReport = () => (
         ))}
       </div>
 
+      {/* Pest Reports Section */}
       <div className="mb-6 flex flex-col gap-3">
         {pestReports.map((report) => (
           <article
@@ -59,7 +62,7 @@ const DashboardReport = () => (
             className="flex min-h-[140px] flex-col rounded-xl bg-[var(--color-column-farmer)] p-3"
           >
             <header className="mb-2 flex items-center justify-between">
-              <h3 className="text-sm font-semibold text-black">
+              <h3 className="text-sm font-semibold text-[var(--color-text-primary)]">
                 {report.title}
               </h3>
               <Icon
@@ -80,7 +83,7 @@ const DashboardReport = () => (
                 <div key={index} className="flex items-center" role="listitem">
                   <data
                     value={stat.value}
-                    className="mr-2 text-2xl font-bold text-black"
+                    className="mr-2 text-2xl font-bold text-[var(--color-text-primary)]"
                   >
                     {stat.value}
                   </data>

@@ -46,7 +46,7 @@ const UploadImages = () => {
       <header className="flex-shrink-0 px-4 py-4 border-b border-gray-100">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <h2 className="text-lg font-bold text-black">Model Training</h2>
+            <h2 className="text-lg font-bold text-[var(--color-text-primary)]">Model Training</h2>
           </div>
         </div>
       </header>

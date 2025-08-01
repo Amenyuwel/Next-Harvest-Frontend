@@ -45,7 +45,7 @@ const AddBarangayModal = ({ isOpen, onClose, onSubmit }) => {
       <div className="mx-4 w-full max-w-md rounded-lg bg-white shadow-xl">
         {/* Modal Header */}
         <div className="flex items-center justify-between border-b border-gray-200 p-6">
-          <h2 className="text-xl font-semibold text-gray-800">
+          <h2 className="text-lg font-bold text-[var(--color-text-primary)]">
             Add New Barangay
           </h2>
           <button

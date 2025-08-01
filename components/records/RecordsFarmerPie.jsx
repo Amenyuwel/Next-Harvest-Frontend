@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { Pie, PieChart, ResponsiveContainer, Sector, Cell } from "recharts";
 
 const statsData = [
-  { name: "Rice", value: 35, color: "#10b981" },
-  { name: "Corn", value: 40, color: "#f59e0b" },
+  { name: "Rice", value: 35, color: "var(--color-rice)" },
+  { name: "Corn", value: 40, color: "var(--color-corn)" },
 ];
 
 const renderActiveShape = ({
@@ -32,9 +32,25 @@ const renderActiveShape = ({
 
   return (
     <g>
-      <text x={cx} y={cy} dy={8} textAnchor="middle" fill={fill}>
+      {/* Center text showing hovered item details */}
+      <text
+        x={cx}
+        y={cy}
+        dy={-10}
+        textAnchor="middle"
+        fill="#333"
+        fontSize="24"
+        fontWeight="bold"
+      >
+        {value}
+      </text>
+      <text x={cx} y={cy} dy={10} textAnchor="middle" fill="#666" fontSize="14">
         {payload.name}
       </text>
+      <text x={cx} y={cy} dy={25} textAnchor="middle" fill="#999" fontSize="12">
+        {`${((percent ?? 1) * 100).toFixed(1)}%`}
+      </text>
+
       <Sector
         cx={cx}
         cy={cy}
@@ -79,20 +95,17 @@ const renderActiveShape = ({
 };
 
 const RecordsFarmerPie = () => {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(null);
   const totalValue = statsData.reduce((sum, item) => sum + item.value, 0);
 
   return (
-    <div className="flex h-full flex-col rounded-2xl border border-gray-100 bg-white p-8 shadow-sm">
-      <div className="mb-8 flex items-center justify-between">
-        <div>
-          <h3 className="text-xl font-semibold text-gray-900">
+    <div className="flex h-[370px] flex-col rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+      <div className="flex items-center justify-center">
+        <header>
+          <h2 className="text-lg font-bold text-[var(--color-text-primary)]">
             Crop Distribution
-          </h3>
-          <p className="mt-1 text-sm text-gray-600">
-            Farmer statistics by crop type
-          </p>
-        </div>
+          </h2>
+        </header>
       </div>
 
       {/* Pie Chart */}
@@ -104,7 +117,7 @@ const RecordsFarmerPie = () => {
           <PieChart>
             <Pie
               activeIndex={activeIndex}
-              activeShape={renderActiveShape}
+              activeShape={activeIndex !== null ? renderActiveShape : undefined}
               data={statsData}
               cx="50%"
               cy="50%"
@@ -112,51 +125,40 @@ const RecordsFarmerPie = () => {
               outerRadius={90}
               dataKey="value"
               onMouseEnter={(_, idx) => setActiveIndex(idx)}
+              onMouseLeave={() => setActiveIndex(null)}
               isAnimationActive={false}
             >
               {statsData.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={entry.color} />
               ))}
             </Pie>
+            {activeIndex === null && (
+              <text
+                x="50%"
+                y="50%"
+                dy={-5}
+                textAnchor="middle"
+                fill="#333"
+                fontSize="28"
+                fontWeight="bold"
+              >
+                {totalValue}
+              </text>
+            )}
+            {activeIndex === null && (
+              <text
+                x="50%"
+                y="50%"
+                dy={20}
+                textAnchor="middle"
+                fill="#666"
+                fontSize="14"
+              >
+                Total Farmers
+              </text>
+            )}
           </PieChart>
         </ResponsiveContainer>
-      </div>
-
-      {/* Legend */}
-      <div className="mb-6 flex flex-wrap justify-center gap-6">
-        {statsData.map((item, index) => {
-          const percentage = ((item.value / totalValue) * 100).toFixed(1);
-          return (
-            <div key={index} className="flex items-center gap-2">
-              <div
-                className="h-4 w-4 rounded-sm"
-                style={{ backgroundColor: item.color }}
-              ></div>
-              <span className="text-sm font-medium text-gray-700">
-                {item.name}
-              </span>
-              <span className="text-sm text-gray-500">
-                ({item.value} - {percentage}%)
-              </span>
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Summary */}
-      <div className="border-t border-gray-100 pt-6">
-        <div className="grid grid-cols-2 gap-4">
-          <div className="text-center">
-            <p className="text-2xl font-bold text-gray-900">{totalValue}</p>
-            <p className="text-xs text-gray-600">Total Farmers</p>
-          </div>
-          <div className="text-center">
-            <p className="text-2xl font-bold text-gray-900">
-              {statsData.length}
-            </p>
-            <p className="text-xs text-gray-600">Crop Types</p>
-          </div>
-        </div>
       </div>
     </div>
   );

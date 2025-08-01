@@ -17,7 +17,7 @@ const RecordsFarmerTable = ({
       {/* Header */}
       <div className="flex items-center justify-between border-b border-gray-100 px-6 py-5">
         {/* Title on the left */}
-        <h2 className="text-xl font-semibold text-gray-800">
+        <h2 className="text-lg font-bold text-[var(--color-text-primary)]">
           Farmer Records Table
         </h2>
         {/* Search bar on the right */}
@@ -76,10 +76,10 @@ const RecordsFarmerTable = ({
       </div>
 
       {/* Table */}
-      <div className="scrollbar-hide overflow-auto rounded-b-2xl">
+      <div className="scrollbar-hide overflow-y-auto rounded-b-2xl flex-1">
         <table className="w-full table-auto">
           <thead className="sticky top-0 z-10 bg-gray-50/70">
-            <tr className="text-left text-xs font-semibold tracking-wider text-gray-600 uppercase">
+            <tr className="text-left text-xs font-semibold tracking-wider text-[var(--color-text-primary)] uppercase">
               <th className="px-6 py-4">RSBSA Number</th>
               <th className="px-4 py-4">Full Name</th>
               <th className="px-4 py-4">Crop</th>
@@ -97,38 +97,40 @@ const RecordsFarmerTable = ({
               >
                 <td className="px-6 py-5 whitespace-nowrap">
                   <div className="flex items-center gap-3">
-                    <span className="text-sm font-medium text-gray-700">
+                    <span className="text-sm font-medium text-[var(--color-text-description)]">
                       {farmer.rsbsa}
                     </span>
                   </div>
                 </td>
                 <td className="px-4 py-5 whitespace-nowrap">
-                  <span className="text-sm font-medium text-gray-900">
+                  <span className="text-sm font-medium text-[var(--color-text-description)]">
                     {farmer.name}
                   </span>
                 </td>
                 <td className="px-4 py-5 whitespace-nowrap">
-                  <span className="text-sm text-gray-600">{farmer.crop}</span>
+                  <span className="text-sm font-medium text-[var(--color-text-description)]">
+                    {farmer.crop}
+                  </span>
                 </td>
                 <td className="px-4 py-5 whitespace-nowrap">
-                  <span className="inline-flex items-center rounded-full border border-green-200 bg-green-100 px-3 py-1 text-xs font-medium text-green-800">
+                  <span className="text-sm font-medium text-[var(--color-text-description)]">
                     {farmer.area}
                   </span>
                 </td>
                 <td className="px-4 py-5 whitespace-nowrap">
-                  <span className="inline-flex items-center rounded-full border border-blue-200 bg-blue-100 px-3 py-1 text-xs font-medium text-blue-800">
+                  <span className="text-sm font-medium text-[var(--color-text-description)]">
                     {farmer.barangay}
                   </span>
                 </td>
                 <td className="px-4 py-5 whitespace-nowrap">
-                  <span className="inline-flex items-center rounded-full border border-orange-200 bg-orange-100 px-3 py-1 text-xs font-medium text-orange-800">
+                  <span className="text-sm font-medium text-[var(--color-text-description)]">
                     {farmer.contact}
                   </span>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="flex items-center gap-2">
-                    <button className="flex h-8 w-8 items-center justify-center rounded-lg bg-green-100 text-green-600 transition hover:bg-green-200">
-                      <Icon icon="mdi:check" width="16" height="16" />
+                    <button className="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-100 text-gray-600 transition hover:bg-gray-200">
+                      <Icon icon="mdi:pencil" width="16" height="16" />
                     </button>
                     <button className="flex h-8 w-8 items-center justify-center rounded-lg bg-red-100 text-red-600 transition hover:bg-red-200">
                       <Icon icon="mdi:delete-outline" width="16" height="16" />

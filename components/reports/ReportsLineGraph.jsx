@@ -94,8 +94,8 @@ const pestConfig = [
     name: "Rice Stem Borer",
     shortName: "Stem Borer",
     mobileLabel: "RSB",
-    color: "#8b5cf6",
-    gradient: "from-purple-400 to-purple-600",
+    color: "var(--color-stem)",
+    gradient: "from-orange-400 to-orange-600",
     trend: "volatile",
     strokeWidth: 3,
   },
@@ -103,8 +103,8 @@ const pestConfig = [
     name: "Golden Apple Snail",
     shortName: "Apple Snail",
     mobileLabel: "GAS",
-    color: "#06b6d4",
-    gradient: "from-cyan-400 to-cyan-600",
+    color: "var(--color-snail)",
+    gradient: "from-slate-400 to-slate-600",
     trend: "increasing",
     strokeWidth: 3,
   },
@@ -112,7 +112,7 @@ const pestConfig = [
     name: "Fall Armyworm",
     shortName: "Armyworm",
     mobileLabel: "FAW",
-    color: "#ef4444",
+    color: "var(--color-worm)",
     gradient: "from-red-400 to-red-600",
     trend: "increasing",
     strokeWidth: 3,
@@ -136,7 +136,7 @@ const CustomTooltip = ({ active, payload, label }) => {
       <div className="w-full rounded-lg border border-gray-200 bg-white p-4 shadow-lg">
         <div className="flex items-center gap-2">
           <CalendarIcon />
-          <h3 className="font-semibold text-gray-800">{data.fullMonth} 2024</h3>
+          <h4 className="font-semibold text-gray-800">{data.fullMonth} 2024</h4>
         </div>
         <div className="space-y-2">
           {payload.map((entry, index) => {
@@ -204,17 +204,22 @@ const ReportsLineGraph = () => {
   const [hoveredLine, setHoveredLine] = useState(null);
 
   return (
-    <div className="mx-auto h-full w-full rounded-xl bg-gradient-to-br from-slate-50 to-gray-100 p-6 shadow-lg">
+    <div className="mx-auto h-full w-full rounded-xl bg-white p-6 shadow">
       {/* Chart Header */}
       <div className="mb-6 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
         <div className="flex items-center gap-3">
-          <h3 className="text-lg font-semibold text-gray-800">
+          <h2 className="text-lg font-bold text-[var(--color-text-primary)]">
             Report Frequency Over Time
-          </h3>
+          </h2>
         </div>
         <div className="text-sm text-gray-600">
           Period:{" "}
-          <span className="font-semibold text-indigo-600">Jan - May 2024</span>
+          <time
+            className="font-semibold text-indigo-600"
+            dateTime="2024-01/2024-05"
+          >
+            Jan - May 2024
+          </time>
         </div>
       </div>
 
@@ -293,12 +298,12 @@ const ReportsLineGraph = () => {
             {/* Average reference line */}
             <ReferenceLine
               y={averageReports}
-              stroke="#8b5cf6"
+              stroke="var(--color-chart-gray)"
               strokeDasharray="5 5"
               label={{
                 value: `Average: ${averageReports}`,
                 position: "topRight",
-                fill: "#8b5cf6",
+                fill: "var(--color-chart-gray)",
                 fontSize: 12,
                 fontWeight: 600,
               }}

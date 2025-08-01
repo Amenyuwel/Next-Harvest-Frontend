@@ -6,44 +6,29 @@
     --font-lato: "Lato", sans-serif;
     --font-quicksand: "Quicksand", sans-serif;
 
-    /* Color variables */
+    /* Color variables - Only used colors */
     --color-primary: #4f46e5;
-    --color-secondary: #f3f4f6;
-    --color-accent: #d1d5db;
-    --color-dark: #111827;
-    --color-light: #f9fafb;
     --color-sidebar-bg: #292929;
     --color-icons-accent: #bdffaf;
     --color-background-gray: #f3f3f3;
-    --color-background-white: #ffffff;
     --color-background-off-white: #fefefe;
     --color-background-light-gray: #e6e6e6;
     --color-text-primary: #171717;
-    --color-column-pests: #e2f7cc;
+    --color-text-description: #4a5565;
     --color-column-farmer: #8787871f;
     --color-training-highlight: #f4ffb3;
-    --color-calendar-highlight: #f9ffcc;
     --color-reports-bg: #e8f5e8;
-    --color-modal-bg: #0C1316DE;
+    --color-modal-bg: #0c1316de;
 
-    /* Chart specific colors */
-    --color-chart-grid: #e5e7eb;
-    --color-chart-purple: #8b5cf6;
-    --color-chart-cyan: #06b6d4;
-    --color-chart-red: #f87171;
+    /* Graph colors */
+    --color-corn: #F4C542 ;
+    --color-rice: #A3D977 ;
+    --color-stem: #F97316;
+    --color-snail: #64748B;
+    --color-worm: #EF4444;
+
+    /* Chart specific colors - Only used colors */
     --color-chart-gray: #9ca3af;
-    --color-chart-text: #6b7280;
-    --color-chart-green: #10b981;
-    --color-chart-blue: #3b82f6;
-    --color-chart-orange: #f59e0b;
-    --color-chart-yellow: #fbbf24;
-
-    /* Progress bar colors */
-    --color-progress-bg: #e6ffe6;
-    --color-progress-fill: #b6ec8a;
-
-    /* Calendar colors */
-    --color-calendar-shadow: #bdbdbd;
   }
 }
 
@@ -69,4 +54,3 @@ body {
 .recharts-wrapper svg:focus {
   outline: none !important;
 }
-
