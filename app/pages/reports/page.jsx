@@ -8,7 +8,7 @@ const ReportsPage = () => {
   return (
     <div className="flex h-full w-full gap-4 p-4 overflow-hidden">
       {/* Left: Two stacked charts */}
-      <div className="flex w-1/2 flex-col gap-6">
+      <div className="flex w-1/2 flex-col gap-4">
         <div className="flex-1 min-h-0">
           <ReportsLineGraph />
         </div>

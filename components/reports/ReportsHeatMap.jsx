@@ -3,11 +3,41 @@ import React, { useState } from "react";
 import { Icon } from "@iconify/react";
 
 const barangayHeatData = [
-  { name: "Barangay 1", snail: 5, fallarmyworm: 2, stemborer: 0 },
-  { name: "Barangay 2", snail: 8, fallarmyworm: 4, stemborer: 1 },
-  { name: "Barangay 3", snail: 12, fallarmyworm: 7, stemborer: 3 },
-  { name: "Barangay 4", snail: 2, fallarmyworm: 1, stemborer: 0 },
-  { name: "Barangay 5", snail: 15, fallarmyworm: 10, stemborer: 4 },
+  {
+    number: "001",
+    name: "Barangay 1",
+    snail: 5,
+    fallarmyworm: 2,
+    stemborer: 0,
+  },
+  {
+    number: "002",
+    name: "Barangay 2",
+    snail: 8,
+    fallarmyworm: 4,
+    stemborer: 1,
+  },
+  {
+    number: "003",
+    name: "Barangay 3",
+    snail: 12,
+    fallarmyworm: 7,
+    stemborer: 3,
+  },
+  {
+    number: "004",
+    name: "Barangay 4",
+    snail: 2,
+    fallarmyworm: 1,
+    stemborer: 0,
+  },
+  {
+    number: "005",
+    name: "Barangay 5",
+    snail: 15,
+    fallarmyworm: 10,
+    stemborer: 4,
+  },
   // Add more as needed
 ];
 
@@ -24,6 +54,7 @@ const ReportsHeatMap = () => {
   const filteredData = barangayHeatData.filter(
     (row) =>
       row.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      row.number.includes(searchTerm) ||
       (searchTerm.toLowerCase() === "snail" && row.snail > 0) ||
       (searchTerm.toLowerCase() === "fall armyworm" && row.fallarmyworm > 0) ||
       (searchTerm.toLowerCase() === "stemborer" && row.stemborer > 0) ||
@@ -99,13 +130,15 @@ const ReportsHeatMap = () => {
 
       {/* Table */}
       <div className="scrollbar-hide flex-1 overflow-auto">
-        <table className="w-full table-auto">
+        <table className="w-full table-fixed">
           <thead className="sticky top-0 z-10 bg-gray-50/70">
             <tr className="text-left text-xs font-semibold tracking-wider text-[var(--color-text-primary)] uppercase">
-              <th className="px-6 py-4">Barangay</th>
-              <th className="px-6 py-4">Snail</th>
-              <th className="px-6 py-4">Fall Armyworm</th>
-              <th className="px-6 py-4">Stemborer</th>
+              <th className="w-1/6 px-6 py-4">Barangay Number</th>
+              <th className="w-1/6 px-6 py-4">Barangay</th>
+              <th className="w-1/6 px-6 py-4">Snail</th>
+              <th className="w-1/6 px-6 py-4">Fall Armyworm</th>
+              <th className="w-1/6 px-6 py-4">Stemborer</th>
+              <th className="w-1/6 px-6 py-4">Actions</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100 bg-white">
@@ -114,6 +147,11 @@ const ReportsHeatMap = () => {
                 key={idx}
                 className="transition-colors duration-150 hover:bg-gray-50/50"
               >
+                <td className="px-6 py-5 whitespace-nowrap">
+                  <span className="text-sm font-medium text-[var(--color-text-description)]">
+                    {row.number}
+                  </span>
+                </td>
                 <td className="px-6 py-5 whitespace-nowrap">
                   <span className="text-sm font-medium text-[var(--color-text-description)]">
                     {row.name}
@@ -139,6 +177,16 @@ const ReportsHeatMap = () => {
                   <span className="text-sm font-medium text-[var(--color-text-description)]">
                     {row.stemborer}
                   </span>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                  <div className="flex items-center gap-2">
+                    <button className="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-100 text-gray-600 transition hover:bg-gray-200">
+                      <Icon icon="mdi:pencil" width="16" height="16" />
+                    </button>
+                    <button className="flex h-8 w-8 items-center justify-center rounded-lg bg-red-100 text-red-600 transition hover:bg-red-200">
+                      <Icon icon="mdi:delete-outline" width="16" height="16" />
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}
