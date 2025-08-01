@@ -22,7 +22,7 @@ const GlobalHeader = ({
   return (
     <div className="flex w-full items-center justify-between px-6 py-4">
       {/* Title */}
-      <h1 className="text-4xl font-semibold text-black">{title}</h1>
+      <h1 className="text-4xl font-semibold text-[var(--color-text-primary)]">{title}</h1>
 
       {/* Right side - Add Button + Profile */}
       <div className="flex items-center gap-4">

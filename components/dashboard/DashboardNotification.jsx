@@ -4,9 +4,11 @@ import { notifications } from "@/assets/dummydata";
 
 const DashboardNotification = () => (
   <div className="flex h-full w-full flex-col overflow-hidden rounded-2xl p-4">
-    <h2 className="mb-3 flex-shrink-0 text-lg font-bold text-black">
-      General Notification
-    </h2>
+    <header className="mb-3 flex-shrink-0">
+      <h2 className="text-lg font-bold text-[var(--color-text-primary)]">
+        General Notification
+      </h2>
+    </header>
     <div
       className="scrollbar-hide flex flex-1 flex-col gap-2 overflow-y-auto"
       role="list"

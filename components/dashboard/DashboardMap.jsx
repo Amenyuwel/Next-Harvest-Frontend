@@ -20,7 +20,7 @@ const DashboardMap = () => {
       {/* Main map section */}
       <section className="flex h-full w-full flex-col rounded-2xl bg-white p-4 shadow">
         <header className="mb-3 flex flex-shrink-0 items-center justify-between">
-          <h2 className="p-2 text-lg font-bold text-black">Map</h2>
+          <h2 className="p-2 text-lg font-bold text-[var(--color-text-primary)]">Map</h2>
           <button
             onClick={() => setIsExpanded(true)}
             className="flex cursor-pointer items-center gap-1 text-sm text-blue-500 hover:underline"
