@@ -14,6 +14,8 @@ function RegisterForm() {
     middle_name: "",
     last_name: "",
     email: "",
+    role_id: 1, // Default to admin (1), change to 0 for super admin
+    is_active: true, // Default to active
   });
 
   const [loading, setLoading] = useState(false);
@@ -54,7 +56,9 @@ function RegisterForm() {
     try {
       const { confirmPassword, ...submitData } = formData;
 
-      const response = await fetch("/api/auth/admin/register", {
+      console.log('Sending data:', submitData); // Add this to debug
+
+      const response = await fetch("http://localhost:5000/api/auth/admin/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -62,7 +66,14 @@ function RegisterForm() {
         body: JSON.stringify(submitData),
       });
 
-      const data = await response.json();
+      const data = await response.json(); // Get response data first
+
+      if (!response.ok) {
+        // Now we can show the actual error message from server
+        setError(data.message || `HTTP error! status: ${response.status}`);
+        setLoading(false);
+        return;
+      }
 
       if (data.success) {
         // Store token in localStorage
@@ -75,8 +86,8 @@ function RegisterForm() {
         setError(data.message || "Registration failed");
       }
     } catch (error) {
-      setError("Network error. Please try again.");
       console.error("Registration error:", error);
+      setError("Network error. Please try again.");
     } finally {
       setLoading(false);
     }
