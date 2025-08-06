@@ -204,7 +204,7 @@ const ReportsLineGraph = () => {
   const [hoveredLine, setHoveredLine] = useState(null);
 
   return (
-    <div className="mx-auto h-full w-full rounded-xl bg-white p-6 shadow">
+    <div className="flex h-full w-full flex-col rounded-xl bg-white p-6 shadow">
       {/* Chart Header */}
       <div className="mb-6 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
         <div className="flex items-center gap-3">
@@ -224,7 +224,7 @@ const ReportsLineGraph = () => {
       </div>
 
       {/* Chart Area */}
-      <div className="h-96 w-full">
+      <div className="min-h-0 w-full flex-1">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart
             data={chartData}

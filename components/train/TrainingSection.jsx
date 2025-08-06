@@ -3,7 +3,7 @@ import { Icon } from "@iconify/react";
 
 const TrainingSection = ({ isTraining, onTrainModel }) => {
   return (
-    <div className="bg-[var(--color-training-highlight)] rounded-2xl p-4 mb-0 relative z-10">
+    <div className="bg-[var(--color-training-highlight)] rounded-2xl p-4 mb-0 relative z-10 ">
       <header className="mb-4">
         <h2 className="text-lg font-bold text-[var(--color-text-primary)]">Training</h2>
       </header>

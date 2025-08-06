@@ -23,9 +23,9 @@
     /* Graph colors */
     --color-corn: #F4C542 ;
     --color-rice: #A3D977 ;
-    --color-stem: #F97316;
-    --color-snail: #64748B;
-    --color-worm: #EF4444;
+    --color-stem: #FFD6B9;
+    --color-snail: #A2B7D4;
+    --color-worm: #FFB0B0;
 
     /* Chart specific colors - Only used colors */
     --color-chart-gray: #9ca3af;
@@ -53,4 +53,12 @@ body {
 .recharts-wrapper:focus,
 .recharts-wrapper svg:focus {
   outline: none !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-lato);
+}
+
+p, span, label, input, textarea, button {
+  font-family: var(--font-quicksand);
 }

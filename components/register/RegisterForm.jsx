@@ -14,8 +14,8 @@ function RegisterForm() {
     middle_name: "",
     last_name: "",
     email: "",
-    role_id: 1, // Default to admin (1), change to 0 for super admin
-    is_active: true, // Default to active
+    role: "admin",
+    is_active: true,
   });
 
   const [loading, setLoading] = useState(false);
@@ -56,7 +56,7 @@ function RegisterForm() {
     try {
       const { confirmPassword, ...submitData } = formData;
 
-      console.log('Sending data:', submitData); // Add this to debug
+      console.log('Sending data:', submitData);
 
       const response = await fetch("http://localhost:5000/api/auth/admin/register", {
         method: "POST",
@@ -81,7 +81,7 @@ function RegisterForm() {
         localStorage.setItem("user", JSON.stringify(data.data.admin));
 
         // Redirect to admin dashboard
-        router.push("/admin/dashboard");
+        router.push("/login");
       } else {
         setError(data.message || "Registration failed");
       }
