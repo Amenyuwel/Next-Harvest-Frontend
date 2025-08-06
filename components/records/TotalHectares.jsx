@@ -25,44 +25,44 @@ const TotalHectares = () => {
     }, 0);
 
   return (
-    <div className="flex flex-col rounded-2xl border border-gray-100 bg-white p-7 shadow-sm">
+    <div className="flex h-full flex-col rounded-2xl border border-gray-100 bg-white p-3 shadow-sm">
       {/* Main Total Display */}
       <div className="flex flex-1 flex-col items-center justify-center">
-        <div className="mb-8 text-center">
-          <p className="mb-2 text-5xl font-bold text-gray-900">
+        <div className="mb-2 text-center">
+          <p className="mb-1 text-4xl font-bold text-gray-900">
             {totalHectares.toFixed(1)}
           </p>
-          <p className="text-lg text-gray-600">Total Hectares</p>
+          <p className="text-sm text-gray-600">Total Hectares</p>
         </div>
 
         {/* Breakdown by Crop */}
-        <div className="w-full space-y-4">
-          <div className="flex items-center justify-between rounded-xl p-4">
-            <div className="flex items-center gap-3">
+        <div className="w-full space-y-2">
+          <div className="flex items-center justify-between rounded-lg p-2">
+            <div className="flex items-center gap-2">
               <div
-                className="h-4 w-4 rounded-sm"
+                className="h-3 w-3 rounded-sm"
                 style={{ backgroundColor: "var(--color-rice)" }}
               ></div>
-              <span className="font-medium text-[var(--color-text-description)]">
+              <span className="text-sm font-medium text-[var(--color-text-description)]">
                 Rice
               </span>
             </div>
-            <span className="text-xl font-bold text-gray-900">
+            <span className="text-lg font-bold text-gray-900">
               {riceHectares.toFixed(1)} ha
             </span>
           </div>
 
-          <div className="flex items-center justify-between rounded-xl p-4">
-            <div className="flex items-center gap-3">
+          <div className="flex items-center justify-between rounded-lg p-2">
+            <div className="flex items-center gap-2">
               <div
-                className="h-4 w-4 rounded-sm"
+                className="h-3 w-3 rounded-sm"
                 style={{ backgroundColor: "var(--color-corn)" }}
               ></div>
-              <span className="font-medium text-[var(--color-text-description)]">
+              <span className="text-sm font-medium text-[var(--color-text-description)]">
                 Corn
               </span>
             </div>
-            <span className="text-xl font-bold text-gray-900">
+            <span className="text-lg font-bold text-gray-900">
               {cornHectares.toFixed(1)} ha
             </span>
           </div>
@@ -70,10 +70,10 @@ const TotalHectares = () => {
       </div>
 
       {/* Footer Stats */}
-      <footer className="mt-6 border-t border-gray-100 pt-6">
+      <footer className="mt-1 border-t border-gray-100 pt-3">
         <div className="flex items-center justify-center gap-4">
           <div className="text-center">
-            <p className="text-2xl font-bold text-gray-900">
+            <p className="text-xl font-bold text-gray-900">
               {(totalHectares / farmersData.length).toFixed(1)}
             </p>
             <p className="text-xs text-gray-600">Avg. per Farmer</p>

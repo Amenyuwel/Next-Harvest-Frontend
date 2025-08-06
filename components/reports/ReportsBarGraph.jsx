@@ -87,7 +87,7 @@ const ReportsBarGraph = () => {
   const [hoveredBar, setHoveredBar] = useState(null);
 
   return (
-    <div className="mx-auto h-full w-full rounded-xl bg-white p-6 shadow">
+    <div className="flex h-full w-full flex-col rounded-xl bg-white p-6 shadow">
       <div className="mb-6 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
         <div className="flex items-center gap-3">
           <h2 className="text-lg font-bold text-[var(--color-text-primary)]">
@@ -105,7 +105,7 @@ const ReportsBarGraph = () => {
         </div>
       </div>
 
-      <div className="h-96 w-full">
+      <div className="flex-1 min-h-0 w-full">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
             data={data}

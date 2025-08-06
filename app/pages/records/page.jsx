@@ -26,16 +26,15 @@ function RecordsPage() {
   );
 
   return (
-    <div className="h-full w-full bg-gray-50/30 p-4">
-      <div className="flex h-full w-full gap-4">
-        {/* Left side: Pie chart + Total stacked */}
-        <div className="flex w-80 flex-col gap-4">
+    <div className="h-full overflow-auto scrollbar-hide w-full bg-gray-50/30 p-4">
+      <div className="grid grid-cols-[320px_1fr] grid-rows-2 h-full w-full gap-4">
+        {/* Top Left: Pie chart */}
+        <div>
           <FarmerStats />
-          <TotalHectares />
         </div>
 
-        {/* Right side: Farmer table */}
-        <div className="flex-1">
+        {/* Right side: Farmer table spanning both rows */}
+        <div className="row-span-2">
           <FarmerTable
             farmers={filteredFarmers}
             activeTab={activeTab}
@@ -45,6 +44,11 @@ function RecordsPage() {
             riceFarmers={riceFarmers}
             cornFarmers={cornFarmers}
           />
+        </div>
+
+        {/* Bottom Left: Total hectares */}
+        <div>
+          <TotalHectares />
         </div>
       </div>
     </div>
