@@ -4,18 +4,20 @@ import { Icon } from "@iconify/react";
 import { useRouter } from "next/navigation";
 
 function RegisterForm() {
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
   const router = useRouter();
 
   const [formData, setFormData] = useState({
     username: "",
     password: "",
     confirmPassword: "",
-    first_name: "",
-    middle_name: "",
-    last_name: "",
+    firstName: "",
+    middleName: "",
+    lastName: "",
     email: "",
     role: "admin",
-    is_active: true,
+    isActive: true,
   });
 
   const [loading, setLoading] = useState(false);
@@ -56,9 +58,9 @@ function RegisterForm() {
     try {
       const { confirmPassword, ...submitData } = formData;
 
-      console.log('Sending data:', submitData);
+      console.log("Sending data:", submitData);
 
-      const response = await fetch("http://localhost:5000/api/auth/admin/register", {
+      const response = await fetch(`${API_URL}/api/auth/admin/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -143,8 +145,8 @@ function RegisterForm() {
             <div>
               <input
                 type="text"
-                name="first_name"
-                value={formData.first_name}
+                name="firstName"
+                value={formData.firstName}
                 onChange={handleInputChange}
                 className="font-lato w-full rounded-3xl border-0 bg-white py-3 pr-4 pl-6 text-sm text-black shadow-sm focus:ring-2 focus:ring-green-500 focus:outline-none sm:py-4 sm:text-base"
                 placeholder="First name"
@@ -156,8 +158,8 @@ function RegisterForm() {
             <div>
               <input
                 type="text"
-                name="middle_name"
-                value={formData.middle_name}
+                name="middleName"
+                value={formData.middleName}
                 onChange={handleInputChange}
                 className="font-lato w-full rounded-3xl border-0 bg-white py-3 pr-4 pl-6 text-sm text-black shadow-sm focus:ring-2 focus:ring-green-500 focus:outline-none sm:py-4 sm:text-base"
                 placeholder="Middle name (optional)"
@@ -168,8 +170,8 @@ function RegisterForm() {
             <div>
               <input
                 type="text"
-                name="last_name"
-                value={formData.last_name}
+                name="lastName"
+                value={formData.lastName}
                 onChange={handleInputChange}
                 className="font-lato w-full rounded-3xl border-0 bg-white py-3 pr-4 pl-6 text-sm text-black shadow-sm focus:ring-2 focus:ring-green-500 focus:outline-none sm:py-4 sm:text-base"
                 placeholder="Last name"

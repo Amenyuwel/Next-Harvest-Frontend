@@ -1,9 +1,11 @@
-import React, { useState } from "react";
-import { X } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { X, ChevronDown } from "lucide-react";
 
 const AddFarmerModal = ({ isOpen, onClose, onSubmit }) => {
+  // Use environment variable for API URL
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
   const [formData, setFormData] = useState({
-    rsbsaNumber: "",
     firstName: "",
     middleName: "",
     lastName: "",
@@ -13,6 +15,106 @@ const AddFarmerModal = ({ isOpen, onClose, onSubmit }) => {
     contact: "",
   });
 
+  const [barangays, setBarangays] = useState([]);
+  const [crops, setCrops] = useState([]);
+  const [loadingBarangays, setLoadingBarangays] = useState(false);
+  const [loadingCrops, setLoadingCrops] = useState(false);
+
+  // Barangay search states
+  const [barangaySearch, setBarangaySearch] = useState("");
+  const [showBarangayDropdown, setShowBarangayDropdown] = useState(false);
+  const [filteredBarangays, setFilteredBarangays] = useState([]);
+
+  // Crop search states
+  const [cropSearch, setCropSearch] = useState("");
+  const [showCropDropdown, setShowCropDropdown] = useState(false);
+  const [filteredCrops, setFilteredCrops] = useState([]);
+
+  // Contact display state
+  const [contactDisplay, setContactDisplay] = useState("");
+
+  // Submitting state
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Fetch barangays and crops when modal opens
+  useEffect(() => {
+    if (isOpen) {
+      fetchBarangays();
+      fetchCrops();
+    }
+  }, [isOpen]);
+
+  // Filter barangays based on search
+  useEffect(() => {
+    if (barangaySearch) {
+      const filtered = barangays.filter((barangay) =>
+        barangay.barangayName
+          .toLowerCase()
+          .includes(barangaySearch.toLowerCase()),
+      );
+      setFilteredBarangays(filtered);
+    } else {
+      setFilteredBarangays(barangays);
+    }
+  }, [barangaySearch, barangays]);
+
+  // Filter crops based on search
+  useEffect(() => {
+    if (cropSearch) {
+      const filtered = crops.filter((crop) =>
+        crop.cropName.toLowerCase().includes(cropSearch.toLowerCase()),
+      );
+      setFilteredCrops(filtered);
+    } else {
+      setFilteredCrops(crops);
+    }
+  }, [cropSearch, crops]);
+
+  const fetchBarangays = async () => {
+    setLoadingBarangays(true);
+    try {
+      const response = await fetch(`${API_URL}/api/barangays`);
+      if (response.ok) {
+        const result = await response.json();
+        if (result.success && result.data) {
+          setBarangays(result.data);
+          setFilteredBarangays(result.data);
+        } else {
+          console.error("API returned error:", result.message);
+        }
+      } else {
+        const errorText = await response.text();
+        console.error("Failed to fetch barangays:", response.status, errorText);
+      }
+    } catch (error) {
+      console.error("Network error fetching barangays:", error);
+    } finally {
+      setLoadingBarangays(false);
+    }
+  };
+
+  const fetchCrops = async () => {
+    setLoadingCrops(true);
+    try {
+      const response = await fetch(`${API_URL}/api/crops`);
+      if (response.ok) {
+        const result = await response.json();
+        if (result.success && result.data) {
+          setCrops(result.data);
+        } else {
+          console.error("API returned error:", result.message);
+        }
+      } else {
+        const errorText = await response.text();
+        console.error("Failed to fetch crops:", response.status, errorText);
+      }
+    } catch (error) {
+      console.error("Network error fetching crops:", error);
+    } finally {
+      setLoadingCrops(false);
+    }
+  };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -21,28 +123,110 @@ const AddFarmerModal = ({ isOpen, onClose, onSubmit }) => {
     }));
   };
 
-  const handleSubmit = () => {
-    const fullName = `${formData.firstName} ${formData.lastName}`;
-    onSubmit?.({
-      ...formData,
-      fullName,
-    });
-    setFormData({
-      rsbsaNumber: "",
-      firstName: "",
-      middleName: "",
-      lastName: "",
-      crop: "",
-      area: "",
-      barangay: "",
-      contact: "",
-    });
-    onClose?.();
+  const handleBarangaySearch = (e) => {
+    const value = e.target.value;
+    setBarangaySearch(value);
+    setShowBarangayDropdown(true);
+  };
+
+  const handleBarangaySelect = (barangay) => {
+    setFormData((prev) => ({
+      ...prev,
+      barangay: barangay.barangayId,
+    }));
+    setBarangaySearch(barangay.barangayName);
+    setShowBarangayDropdown(false);
+  };
+
+  const handleCropSearch = (e) => {
+    const value = e.target.value;
+    setCropSearch(value);
+    setShowCropDropdown(true);
+  };
+
+  const handleCropSelect = (crop) => {
+    setFormData((prev) => ({
+      ...prev,
+      crop: crop.cropId,
+    }));
+    setCropSearch(
+      crop.cropName.charAt(0).toUpperCase() +
+        crop.cropName.slice(1).toLowerCase(),
+    );
+    setShowCropDropdown(false);
+  };
+
+  const handleContactChange = (e) => {
+    let value = e.target.value;
+
+    // Remove all non-digit characters
+    value = value.replace(/\D/g, "");
+
+    // If starts with 63, keep it
+    if (value.startsWith("63")) {
+      // Limit to 12 digits total (63 + 10 digits)
+      value = value.slice(0, 12);
+
+      // Format as +63 XXX XXX XXXX
+      if (value.length > 2) {
+        if (value.length <= 5) {
+          value = `+63 ${value.slice(2)}`;
+        } else if (value.length <= 8) {
+          value = `+63 ${value.slice(2, 5)} ${value.slice(5)}`;
+        } else {
+          value = `+63 ${value.slice(2, 5)} ${value.slice(5, 8)} ${value.slice(8)}`;
+        }
+      } else {
+        value = `+63`;
+      }
+    }
+    // If starts with 9 (typical PH mobile number without country code)
+    else if (value.startsWith("9")) {
+      // Limit to 10 digits for mobile number
+      value = value.slice(0, 10);
+
+      // Format as +63 9XX XXX XXXX
+      if (value.length <= 3) {
+        value = `+63 ${value}`;
+      } else if (value.length <= 6) {
+        value = `+63 ${value.slice(0, 3)} ${value.slice(3)}`;
+      } else {
+        value = `+63 ${value.slice(0, 3)} ${value.slice(3, 6)} ${value.slice(6)}`;
+      }
+    }
+    // If empty or other cases, show +63 prefix
+    else if (value === "") {
+      value = "";
+    }
+    // For other numbers, add +63 prefix
+    else {
+      // Limit to 10 digits
+      value = value.slice(0, 10);
+
+      if (value.length > 0) {
+        if (value.length <= 3) {
+          value = `+63 ${value}`;
+        } else if (value.length <= 6) {
+          value = `+63 ${value.slice(0, 3)} ${value.slice(3)}`;
+        } else {
+          value = `+63 ${value.slice(0, 3)} ${value.slice(3, 6)} ${value.slice(6)}`;
+        }
+      }
+    }
+
+    // Update form data with the raw number (digits only) for submission
+    const rawNumber = value.replace(/\D/g, "");
+    setFormData((prev) => ({
+      ...prev,
+      contact: rawNumber,
+    }));
+
+    // Update display value
+    setContactDisplay(value);
   };
 
   const handleCancel = () => {
     setFormData({
-      rsbsaNumber: "",
       firstName: "",
       middleName: "",
       lastName: "",
@@ -51,7 +235,119 @@ const AddFarmerModal = ({ isOpen, onClose, onSubmit }) => {
       barangay: "",
       contact: "",
     });
+    setBarangaySearch("");
+    setCropSearch("");
+    setContactDisplay("");
+    setShowBarangayDropdown(false);
+    setShowCropDropdown(false);
     onClose?.();
+  };
+
+  const handleSubmit = async () => {
+    setIsSubmitting(true);
+    try {
+      console.log("=== FRONTEND SUBMIT START ===");
+      console.log("API_URL:", API_URL);
+
+      // Generate RSBSA number before submitting
+      const rsbsaNumber = await generateRSBSANumber(formData.barangay);
+
+      const fullName = `${formData.firstName} ${formData.lastName}`;
+      const farmerData = {
+        ...formData,
+        rsbsaNumber,
+        fullName,
+      };
+
+      console.log("Generated RSBSA:", rsbsaNumber);
+      console.log("Farmer data to be sent:", farmerData);
+
+      // **THIS IS THE MISSING PART - ACTUALLY SAVE TO DATABASE**
+      console.log("Making fetch request to:", `${API_URL}/api/farmers`);
+
+      const response = await fetch(`${API_URL}/api/farmers`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(farmerData),
+      });
+
+      console.log("Response status:", response.status);
+      console.log("Response ok:", response.ok);
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Error response:", errorData);
+        throw new Error(errorData.message || "Failed to create farmer");
+      }
+
+      const result = await response.json();
+      console.log("✅ Farmer created successfully:", result);
+
+      // Show success message
+      alert(`Farmer added successfully! RSBSA: ${rsbsaNumber}`);
+
+      // Call onSubmit prop to notify parent component
+      onSubmit?.(result.data || farmerData);
+
+      // Reset form
+      setFormData({
+        firstName: "",
+        middleName: "",
+        lastName: "",
+        crop: "",
+        area: "",
+        barangay: "",
+        contact: "",
+      });
+      setBarangaySearch("");
+      setCropSearch("");
+      setContactDisplay("");
+      onClose?.();
+    } catch (error) {
+      console.error("❌ Error creating farmer:", error);
+      alert(`Error: ${error.message}`);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // Function to generate RSBSA number
+  const generateRSBSANumber = async (barangayId) => {
+    try {
+      // Get farmer count for this barangay
+      const response = await fetch(
+        `${API_URL}/api/farmers/count/${barangayId}`,
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to get farmer count");
+      }
+
+      const result = await response.json();
+      const farmerCount = result.data.count || 0;
+
+      // Find the selected barangay to get its barangayId
+      const selectedBarangay = barangays.find(
+        (b) => b.barangayId === barangayId,
+      );
+      if (!selectedBarangay) {
+        throw new Error("Selected barangay not found");
+      }
+
+      // Format: 126303-000-00000
+      const staticPart = "126303";
+      const barangayPart = selectedBarangay.barangayId
+        .toString()
+        .padStart(3, "0");
+      const farmerPart = (farmerCount + 1).toString().padStart(5, "0");
+
+      return `${staticPart}-${barangayPart}-${farmerPart}`;
+    } catch (error) {
+      console.error("Error generating RSBSA:", error);
+      throw error;
+    }
   };
 
   if (!isOpen) return null;
@@ -75,33 +371,6 @@ const AddFarmerModal = ({ isOpen, onClose, onSubmit }) => {
         {/* Modal Body */}
         <div className="scrollbar-hide max-h-[600px] overflow-auto p-6">
           <div className="space-y-4">
-            {/* RSBSA Number */}
-            <div>
-              <label
-                htmlFor="rsbsaNumber"
-                className="mb-1 block text-sm font-medium text-gray-700"
-              >
-                RSBSA Number <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="text"
-                id="rsbsaNumber"
-                name="rsbsaNumber"
-                value={formData.rsbsaNumber}
-                onChange={(e) => {
-                  const value = e.target.value;
-                  if (/^\d{0,5}$/.test(value)) {
-                    handleInputChange(e);
-                  }
-                }}
-                placeholder="e.g., 00001"
-                className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                inputMode="numeric"
-                pattern="\d{1,5}"
-                required
-              />
-            </div>
-
             {/* First Name */}
             <div>
               <label
@@ -161,22 +430,63 @@ const AddFarmerModal = ({ isOpen, onClose, onSubmit }) => {
               />
             </div>
 
-            {/* Crop */}
-            <div>
+            {/* Crop Search */}
+            <div className="relative">
               <label
                 htmlFor="crop"
                 className="mb-1 block text-sm font-medium text-gray-700"
               >
                 Crop <span className="text-red-500">*</span>
               </label>
-              <select
-                id="crop"
-                name="crop"
-                value={formData.crop}
-                onChange={handleInputChange}
-                className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                required
-              ></select>
+              <div className="relative">
+                <input
+                  type="text"
+                  id="crop"
+                  value={cropSearch}
+                  onChange={handleCropSearch}
+                  onFocus={() => setShowCropDropdown(true)}
+                  placeholder={
+                    loadingCrops ? "Loading crops..." : "Search crop..."
+                  }
+                  className="w-full rounded-md border border-gray-300 px-3 py-2 pr-10 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  disabled={loadingCrops}
+                  required
+                />
+                <ChevronDown
+                  size={20}
+                  className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 transform text-gray-400"
+                />
+              </div>
+
+              {/* Crop Dropdown */}
+              {showCropDropdown &&
+                !loadingCrops &&
+                filteredCrops.length > 0 && (
+                  <div className="scrollbar-hide absolute z-10 mt-1 max-h-40 w-full overflow-y-auto rounded-md border border-gray-300 bg-white shadow-lg">
+                    {filteredCrops.map((crop) => (
+                      <div
+                        key={crop._id}
+                        onClick={() => handleCropSelect(crop)}
+                        className="cursor-pointer px-3 py-2 text-sm hover:bg-gray-100"
+                      >
+                        {crop.cropName.charAt(0).toUpperCase() +
+                          crop.cropName.slice(1).toLowerCase()}
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+              {/* No crop results */}
+              {showCropDropdown &&
+                !loadingCrops &&
+                filteredCrops.length === 0 &&
+                cropSearch && (
+                  <div className="absolute z-10 mt-1 w-full rounded-md border border-gray-300 bg-white shadow-lg">
+                    <div className="px-3 py-2 text-sm text-gray-500">
+                      No crops found
+                    </div>
+                  </div>
+                )}
             </div>
 
             {/* Area */}
@@ -199,22 +509,64 @@ const AddFarmerModal = ({ isOpen, onClose, onSubmit }) => {
               />
             </div>
 
-            {/* Barangay */}
-            <div>
+            {/* Barangay Search */}
+            <div className="relative">
               <label
                 htmlFor="barangay"
                 className="mb-1 block text-sm font-medium text-gray-700"
               >
                 Barangay <span className="text-red-500">*</span>
               </label>
-              <select
-                id="barangay"
-                name="barangay"
-                value={formData.barangay}
-                onChange={handleInputChange}
-                className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                required
-              ></select>
+              <div className="relative">
+                <input
+                  type="text"
+                  id="barangay"
+                  value={barangaySearch}
+                  onChange={handleBarangaySearch}
+                  onFocus={() => setShowBarangayDropdown(true)}
+                  placeholder={
+                    loadingBarangays
+                      ? "Loading barangays..."
+                      : "Search barangay..."
+                  }
+                  className="w-full rounded-md border border-gray-300 px-3 py-2 pr-10 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  disabled={loadingBarangays}
+                  required
+                />
+                <ChevronDown
+                  size={20}
+                  className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 transform text-gray-400"
+                />
+              </div>
+
+              {/* Barangay Dropdown */}
+              {showBarangayDropdown &&
+                !loadingBarangays &&
+                filteredBarangays.length > 0 && (
+                  <div className="scrollbar-hide absolute z-10 mt-1 max-h-40 w-full overflow-y-auto rounded-md border border-gray-300 bg-white shadow-lg">
+                    {filteredBarangays.map((barangay) => (
+                      <div
+                        key={barangay._id}
+                        onClick={() => handleBarangaySelect(barangay)}
+                        className="cursor-pointer px-3 py-2 text-sm hover:bg-gray-100"
+                      >
+                        {barangay.barangayName}
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+              {/* No barangay results */}
+              {showBarangayDropdown &&
+                !loadingBarangays &&
+                filteredBarangays.length === 0 &&
+                barangaySearch && (
+                  <div className="absolute z-10 mt-1 w-full rounded-md border border-gray-300 bg-white shadow-lg">
+                    <div className="px-3 py-2 text-sm text-gray-500">
+                      No barangays found
+                    </div>
+                  </div>
+                )}
             </div>
 
             {/* Contact */}
@@ -229,9 +581,10 @@ const AddFarmerModal = ({ isOpen, onClose, onSubmit }) => {
                 type="tel"
                 id="contact"
                 name="contact"
-                value={formData.contact}
-                onChange={handleInputChange}
-                placeholder="+63 912 345 6790"
+                value={contactDisplay}
+                onChange={handleContactChange}
+                placeholder="+63 912 345 6789"
+                maxLength="17"
                 className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none"
                 required
               />
@@ -250,9 +603,10 @@ const AddFarmerModal = ({ isOpen, onClose, onSubmit }) => {
             <button
               type="button"
               onClick={handleSubmit}
-              className="flex-1 rounded-md bg-blue-600 px-4 py-2 font-medium text-white transition-colors hover:bg-blue-700"
+              disabled={isSubmitting}
+              className="flex-1 rounded-md bg-blue-600 px-4 py-2 font-medium text-white transition-colors hover:bg-blue-700 disabled:bg-blue-400"
             >
-              Add Farmer
+              {isSubmitting ? "Adding Farmer..." : "Add Farmer"}
             </button>
           </div>
         </div>
