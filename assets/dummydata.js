@@ -194,16 +194,6 @@ export const farmReports = [
       { label: "Rice Farmers", value: 3 },
     ],
   },
-  {
-    id: 2,
-    title: "Recent Harvests",
-    icon: "ph:farm-fill",
-    stats: [
-      { label: "Total Registered", value: 7 },
-      { label: "Corn Farmers", value: 4 },
-      { label: "Rice Farmers", value: 3 },
-    ],
-  },
 ];
 
 export const pestReports = [
