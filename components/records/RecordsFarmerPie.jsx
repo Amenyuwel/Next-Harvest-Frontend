@@ -1,10 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Pie, PieChart, ResponsiveContainer, Sector, Cell } from "recharts";
-
-const statsData = [
-  { name: "Rice", value: 35, color: "var(--color-rice)" },
-  { name: "Corn", value: 40, color: "var(--color-corn)" },
-];
 
 const renderActiveShape = ({
   cx,
@@ -94,8 +89,57 @@ const renderActiveShape = ({
   );
 };
 
-const RecordsFarmerPie = () => {
+const RecordsFarmerPie = ({ farmers = [], loading = false }) => {
   const [activeIndex, setActiveIndex] = useState(null);
+  const [crops, setCrops] = useState([]);
+
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+
+  // Fetch crops for name lookup
+  useEffect(() => {
+    fetchCrops();
+  }, []);
+
+  const fetchCrops = async () => {
+    try {
+      const response = await fetch(`${API_URL}/api/crops`);
+      if (response.ok) {
+        const result = await response.json();
+        if (result.success && result.data) {
+          setCrops(result.data);
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching crops:", error);
+    }
+  };
+
+  // Helper function to get crop name from ID
+  const getCropName = (cropId) => {
+    const crop = crops.find((c) => c.cropId === cropId);
+    return crop
+      ? crop.cropName.charAt(0).toUpperCase() +
+          crop.cropName.slice(1).toLowerCase()
+      : cropId;
+  };
+
+  // Calculate rice and corn farmers from real data
+  const riceFarmers = farmers.filter((farmer) => {
+    const cropName = getCropName(farmer.crop);
+    return cropName.toLowerCase().includes("rice");
+  }).length;
+
+  const cornFarmers = farmers.filter((farmer) => {
+    const cropName = getCropName(farmer.crop);
+    return cropName.toLowerCase().includes("corn");
+  }).length;
+
+  // Use real data instead of dummy data
+  const statsData = [
+    { name: "Rice", value: riceFarmers, color: "var(--color-rice)" },
+    { name: "Corn", value: cornFarmers, color: "var(--color-corn)" },
+  ];
+
   const totalValue = statsData.reduce((sum, item) => sum + item.value, 0);
 
   return (
@@ -110,7 +154,7 @@ const RecordsFarmerPie = () => {
 
       {/* Pie Chart */}
       <div
-        className="relative mb-8 flex flex-1 justify-center"
+        className="relative mb-10 flex flex-1 justify-center"
         style={{ minHeight: 300 }}
       >
         <ResponsiveContainer width="100%" height={300}>
@@ -120,7 +164,7 @@ const RecordsFarmerPie = () => {
               activeShape={activeIndex !== null ? renderActiveShape : undefined}
               data={statsData}
               cx="50%"
-              cy="50%"
+              cy="45%"
               innerRadius={60}
               outerRadius={90}
               dataKey="value"
@@ -135,7 +179,7 @@ const RecordsFarmerPie = () => {
             {activeIndex === null && (
               <text
                 x="50%"
-                y="50%"
+                y="45%"
                 dy={-5}
                 textAnchor="middle"
                 fill="#333"
@@ -148,7 +192,7 @@ const RecordsFarmerPie = () => {
             {activeIndex === null && (
               <text
                 x="50%"
-                y="50%"
+                y="45%"
                 dy={20}
                 textAnchor="middle"
                 fill="#666"

@@ -33,8 +33,8 @@ const ReportsHeatMap = () => {
         // Transform MongoDB data to match your component structure
         const transformedData = data.data.map((barangay) => ({
           id: barangay._id,
-          number: barangay.barangay_id,
-          name: barangay.barangay_name,
+          number: barangay.barangayId,
+          name: barangay.barangayName,
           // Add default pest data (you can fetch this from a separate endpoint later)
           snail: 0,
           fallarmyworm: 0,
@@ -62,8 +62,8 @@ const ReportsHeatMap = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          barangay_id: formData.barangayNumber,
-          barangay_name: formData.barangayName,
+          barangayId: formData.barangayNumber,
+          barangayName: formData.barangayName,
         }),
       });
 

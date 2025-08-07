@@ -21,7 +21,7 @@ const data = [
     color: "var(--color-snail)",
   },
   {
-    pest: "STEM_BORER",
+    pest: "STEMBORER",
     count: 30,
     fullName: "Rice Stem Borer",
     severity: "High",
