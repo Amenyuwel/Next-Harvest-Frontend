@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { Icon } from "@iconify/react";
+import toast from "react-hot-toast";
 import AddBarangayModal from "./AddBarangayModal";
 
 const getHeatColor = (value) => {
@@ -16,6 +17,7 @@ const ReportsHeatMap = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingBarangay, setEditingBarangay] = useState(null);
 
   // Fetch barangays from MongoDB
   const fetchBarangays = async () => {
@@ -62,7 +64,7 @@ const ReportsHeatMap = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          barangayId: formData.barangayNumber,
+          barangayId: formData.barangayId,
           barangayName: formData.barangayName,
         }),
       });
@@ -78,14 +80,102 @@ const ReportsHeatMap = () => {
       if (data.success) {
         // Refresh the barangay list
         fetchBarangays();
-        alert("Barangay added successfully!");
+        toast.success("Barangay added successfully!", {
+          duration: 4000,
+          position: "top-right",
+        });
       } else {
-        alert(data.message || "Failed to add barangay");
+        toast.error(data.message || "Failed to add barangay", {
+          duration: 4000,
+          position: "top-right",
+        });
       }
     } catch (error) {
       console.error("Error adding barangay:", error);
-      alert(error.message || "Failed to add barangay. Please try again.");
+      toast.error(
+        error.message || "Failed to add barangay. Please try again.",
+        {
+          duration: 4000,
+          position: "top-right",
+        },
+      );
     }
+  };
+
+  // Edit barangay
+  const handleEditBarangay = (barangay) => {
+    setEditingBarangay({
+      id: barangay.id,
+      barangayId: barangay.number,
+      barangayName: barangay.name,
+    });
+    setIsModalOpen(true);
+  };
+
+  // Update barangay
+  const handleUpdateBarangay = async (formData) => {
+    try {
+      const response = await fetch(
+        `http://localhost:5000/api/barangays/${editingBarangay.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            barangayId: formData.barangayId,
+            barangayName: formData.barangayName,
+          }),
+        },
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          data.message || `HTTP error! status: ${response.status}`,
+        );
+      }
+
+      if (data.success) {
+        // Refresh the barangay list
+        fetchBarangays();
+        setEditingBarangay(null);
+        toast.success("Barangay updated successfully!", {
+          duration: 4000,
+          position: "top-right",
+        });
+      } else {
+        toast.error(data.message || "Failed to update barangay", {
+          duration: 4000,
+          position: "top-right",
+        });
+      }
+    } catch (error) {
+      console.error("Error updating barangay:", error);
+      toast.error(
+        error.message || "Failed to update barangay. Please try again.",
+        {
+          duration: 4000,
+          position: "top-right",
+        },
+      );
+    }
+  };
+
+  // Handle modal submission (add or edit)
+  const handleModalSubmit = (formData) => {
+    if (editingBarangay) {
+      handleUpdateBarangay(formData);
+    } else {
+      handleAddBarangay(formData);
+    }
+  };
+
+  // Handle modal close
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+    setEditingBarangay(null);
   };
 
   // Delete barangay
@@ -113,13 +203,25 @@ const ReportsHeatMap = () => {
       if (data.success) {
         // Refresh the barangay list
         fetchBarangays();
-        alert("Barangay deleted successfully!");
+        toast.success("Barangay deleted successfully!", {
+          duration: 4000,
+          position: "top-right",
+        });
       } else {
-        alert(data.message || "Failed to delete barangay");
+        toast.error(data.message || "Failed to delete barangay", {
+          duration: 4000,
+          position: "top-right",
+        });
       }
     } catch (error) {
       console.error("Error deleting barangay:", error);
-      alert(error.message || "Failed to delete barangay. Please try again.");
+      toast.error(
+        error.message || "Failed to delete barangay. Please try again.",
+        {
+          duration: 4000,
+          position: "top-right",
+        },
+      );
     }
   };
 
@@ -187,8 +289,8 @@ const ReportsHeatMap = () => {
           </div>
         </div>
 
-        {/* Right: Legend + More Button */}
-        <div className="flex flex-wrap items-center justify-between gap-4 md:mt-0">
+        {/* Right: Legend */}
+        <div className="flex flex-wrap items-center justify-end gap-4 md:mt-0">
           {/* Legend */}
           <div className="flex flex-wrap items-center gap-3 text-sm font-medium">
             <div className="flex items-center gap-1">
@@ -307,12 +409,17 @@ const ReportsHeatMap = () => {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center gap-2">
-                        <button className="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-100 text-gray-600 transition hover:bg-gray-200">
+                        <button
+                          onClick={() => handleEditBarangay(row)}
+                          className="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-100 text-gray-600 transition hover:bg-gray-200"
+                          title="Edit Barangay"
+                        >
                           <Icon icon="mdi:pencil" width="16" height="16" />
                         </button>
                         <button
                           onClick={() => handleDeleteBarangay(row.id)}
                           className="flex h-8 w-8 items-center justify-center rounded-lg bg-red-100 text-red-600 transition hover:bg-red-200"
+                          title="Delete Barangay"
                         >
                           <Icon
                             icon="mdi:delete-outline"
@@ -333,8 +440,10 @@ const ReportsHeatMap = () => {
       {/* Add Barangay Modal */}
       <AddBarangayModal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onSubmit={handleAddBarangay}
+        onClose={handleModalClose}
+        onSubmit={handleModalSubmit}
+        editingData={editingBarangay}
+        isEditing={!!editingBarangay}
       />
     </div>
   );

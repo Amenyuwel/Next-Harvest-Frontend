@@ -1,13 +1,36 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { X } from "lucide-react";
 
-const AddBarangayModal = ({ isOpen, onClose, onSubmit }) => {
+const AddBarangayModal = ({
+  isOpen,
+  onClose,
+  onSubmit,
+  onSuccess,
+  editingData,
+  isEditing,
+}) => {
   const [formData, setFormData] = useState({
-    barangayNumber: "",
+    barangayId: "",
     barangayName: "",
-    municipality: "",
-    province: "",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState("");
+
+  // Update form data when editing
+  useEffect(() => {
+    if (isEditing && editingData) {
+      setFormData({
+        barangayId: editingData.barangayId || "",
+        barangayName: editingData.barangayName || "",
+      });
+    } else {
+      setFormData({
+        barangayId: "",
+        barangayName: "",
+      });
+    }
+    setError("");
+  }, [isEditing, editingData, isOpen]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -15,26 +38,46 @@ const AddBarangayModal = ({ isOpen, onClose, onSubmit }) => {
       ...prev,
       [name]: value,
     }));
+    // Clear error when user starts typing
+    if (error) setError("");
   };
 
-  const handleSubmit = () => {
-    onSubmit?.(formData);
-    setFormData({
-      barangayNumber: "",
-      barangayName: "",
-      municipality: "",
-      province: "",
-    });
-    onClose?.();
+  const handleSubmit = async () => {
+    // Validation
+    if (!formData.barangayId || !formData.barangayName) {
+      setError("Barangay ID and name are required");
+      return;
+    }
+
+    setIsSubmitting(true);
+    setError("");
+
+    try {
+      // Call the parent's onSubmit function directly
+      // The parent will handle whether it's add or edit
+      onSubmit?.(formData);
+      onSuccess?.(formData);
+
+      // Reset form and close modal
+      setFormData({
+        barangayId: "",
+        barangayName: "",
+      });
+      onClose?.();
+    } catch (err) {
+      console.error("Error adding barangay:", err);
+      setError(err.message || "Failed to add barangay. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleCancel = () => {
     setFormData({
-      barangayNumber: "",
+      barangayId: "",
       barangayName: "",
-      municipality: "",
-      province: "",
     });
+    setError("");
     onClose?.();
   };
 
@@ -46,11 +89,12 @@ const AddBarangayModal = ({ isOpen, onClose, onSubmit }) => {
         {/* Modal Header */}
         <div className="flex items-center justify-between border-b border-gray-200 p-6">
           <h2 className="text-lg font-bold text-[var(--color-text-primary)]">
-            Add New Barangay
+            {isEditing ? "Edit Barangay" : "Add New Barangay"}
           </h2>
           <button
             onClick={handleCancel}
-            className="cursor-pointer text-gray-400 transition-colors hover:text-gray-600"
+            disabled={isSubmitting}
+            className="cursor-pointer text-gray-400 transition-colors hover:text-gray-600 disabled:cursor-not-allowed disabled:opacity-50"
           >
             <X size={24} />
           </button>
@@ -58,40 +102,49 @@ const AddBarangayModal = ({ isOpen, onClose, onSubmit }) => {
 
         {/* Modal Body */}
         <div className="p-6">
+          {/* Error Message */}
+          {error && (
+            <div className="mb-4 rounded-md border border-red-200 bg-red-50 p-3">
+              <p className="text-sm text-red-600">{error}</p>
+            </div>
+          )}
+
           <div className="space-y-4">
-            {/* Barangay Number */}
+            {/* Barangay ID */}
             <div>
               <label
-                htmlFor="barangayNumber"
+                htmlFor="barangayId"
                 className="mb-1 block text-sm font-medium text-gray-700"
               >
-                Barangay Number
+                Barangay ID <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
-                id="barangayNumber"
-                name="barangayNumber"
-                value={formData.barangayNumber}
+                id="barangayId"
+                name="barangayId"
+                value={formData.barangayId}
                 onChange={(e) => {
                   const value = e.target.value;
                   if (/^\d{0,3}$/.test(value)) {
                     handleInputChange(e);
                   }
                 }}
-                placeholder="Enter barangay number"
+                placeholder="Enter barangay ID"
                 inputMode="numeric"
                 pattern="\d{1,3}"
-                className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none disabled:cursor-not-allowed disabled:bg-gray-50"
+                disabled={isSubmitting}
                 required
               />
             </div>
+
             {/* Barangay Name */}
             <div>
               <label
                 htmlFor="barangayName"
                 className="mb-1 block text-sm font-medium text-gray-700"
               >
-                Barangay Name
+                Barangay Name <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
@@ -100,7 +153,8 @@ const AddBarangayModal = ({ isOpen, onClose, onSubmit }) => {
                 value={formData.barangayName}
                 onChange={handleInputChange}
                 placeholder="Enter barangay name"
-                className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                className="w-full rounded-md border border-gray-300 px-3 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none disabled:cursor-not-allowed disabled:bg-gray-50"
+                disabled={isSubmitting}
                 required
               />
             </div>
@@ -111,16 +165,26 @@ const AddBarangayModal = ({ isOpen, onClose, onSubmit }) => {
             <button
               type="button"
               onClick={handleCancel}
-              className="flex-1 rounded-md bg-gray-100 px-4 py-2 font-medium text-gray-700 transition-colors hover:bg-gray-200"
+              disabled={isSubmitting}
+              className="flex-1 rounded-md bg-gray-100 px-4 py-2 font-medium text-gray-700 transition-colors hover:bg-gray-200 disabled:cursor-not-allowed disabled:opacity-50"
             >
               Cancel
             </button>
             <button
               type="button"
               onClick={handleSubmit}
-              className="flex-1 rounded-md bg-blue-600 px-4 py-2 font-medium text-white transition-colors hover:bg-blue-700"
+              disabled={
+                isSubmitting || !formData.barangayId || !formData.barangayName
+              }
+              className="flex-1 rounded-md bg-blue-600 px-4 py-2 font-medium text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
             >
-              Add Barangay
+              {isSubmitting
+                ? isEditing
+                  ? "Updating..."
+                  : "Adding..."
+                : isEditing
+                  ? "Update Barangay"
+                  : "Add Barangay"}
             </button>
           </div>
         </div>

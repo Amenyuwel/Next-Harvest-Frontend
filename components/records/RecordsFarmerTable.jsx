@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Icon } from "@iconify/react";
+import toast from "react-hot-toast";
+import AddFarmerModal from "./AddFarmerModal";
 
 const RecordsFarmerTable = ({
   farmers,
@@ -10,10 +12,14 @@ const RecordsFarmerTable = ({
   riceFarmers,
   cornFarmers,
   loading = false,
+  onEditFarmer,
+  onDeleteFarmer,
 }) => {
   const tabs = ["All", "Monthly", "Weekly", "Today"];
   const [barangays, setBarangays] = useState([]);
   const [crops, setCrops] = useState([]);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editingFarmer, setEditingFarmer] = useState(null);
 
   const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 
@@ -204,6 +210,75 @@ const RecordsFarmerTable = ({
 
   const tabCounts = getTabCounts();
 
+  // Handle edit farmer
+  const handleEditFarmer = (farmer) => {
+    if (onEditFarmer) {
+      onEditFarmer(farmer);
+    } else {
+      // Open edit modal with farmer data
+      setEditingFarmer(farmer);
+      setIsEditModalOpen(true);
+    }
+  };
+
+  // Handle farmer update after edit
+  const handleFarmerUpdate = (updatedFarmer) => {
+    // Close modal
+    setIsEditModalOpen(false);
+    setEditingFarmer(null);
+
+    // You can add a callback prop to refresh the farmers list
+    // or the parent component should handle this
+    console.log("Farmer updated:", updatedFarmer);
+  };
+
+  // Handle delete farmer
+  const handleDeleteFarmer = async (farmer) => {
+    if (
+      !confirm(
+        `Are you sure you want to delete farmer ${farmer.fullName || farmer.firstName + " " + farmer.lastName}?`,
+      )
+    ) {
+      return;
+    }
+
+    try {
+      if (onDeleteFarmer) {
+        await onDeleteFarmer(farmer);
+      } else {
+        // Default delete logic
+        const response = await fetch(`${API_URL}/api/farmers/${farmer._id}`, {
+          method: "DELETE",
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const result = await response.json();
+        if (result.success) {
+          toast.success("Farmer deleted successfully!", {
+            duration: 4000,
+            position: "top-right",
+          });
+          // You might want to refresh the farmers list here
+          window.location.reload(); // Simple refresh - better to use state management
+        } else {
+          throw new Error(result.message || "Failed to delete farmer");
+        }
+      }
+    } catch (error) {
+      console.error("Error deleting farmer:", error);
+      toast.error(
+        error.message || "Failed to delete farmer. Please try again.",
+        {
+          duration: 4000,
+          position: "top-right",
+        },
+      );
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex h-full w-full flex-col rounded-2xl border border-gray-100 bg-white shadow-sm">
@@ -351,10 +426,18 @@ const RecordsFarmerTable = ({
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center gap-2">
-                      <button className="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-100 text-gray-600 transition hover:bg-gray-200">
+                      <button
+                        onClick={() => handleEditFarmer(farmer)}
+                        className="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-100 text-gray-600 transition hover:bg-gray-200"
+                        title="Edit Farmer"
+                      >
                         <Icon icon="mdi:pencil" width="16" height="16" />
                       </button>
-                      <button className="flex h-8 w-8 items-center justify-center rounded-lg bg-red-100 text-red-600 transition hover:bg-red-200">
+                      <button
+                        onClick={() => handleDeleteFarmer(farmer)}
+                        className="flex h-8 w-8 items-center justify-center rounded-lg bg-red-100 text-red-600 transition hover:bg-red-200"
+                        title="Delete Farmer"
+                      >
                         <Icon
                           icon="mdi:delete-outline"
                           width="16"
@@ -369,6 +452,18 @@ const RecordsFarmerTable = ({
           </tbody>
         </table>
       </div>
+
+      {/* Edit Farmer Modal */}
+      <AddFarmerModal
+        isOpen={isEditModalOpen}
+        onClose={() => {
+          setIsEditModalOpen(false);
+          setEditingFarmer(null);
+        }}
+        onSubmit={handleFarmerUpdate}
+        editingData={editingFarmer}
+        isEditing={!!editingFarmer}
+      />
     </div>
   );
 };

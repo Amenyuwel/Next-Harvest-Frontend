@@ -1,7 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { X, ChevronDown } from "lucide-react";
+import toast from "react-hot-toast";
 
-const AddFarmerModal = ({ isOpen, onClose, onSubmit }) => {
+const AddFarmerModal = ({
+  isOpen,
+  onClose,
+  onSubmit,
+  editingData,
+  isEditing,
+}) => {
   // Use environment variable for API URL
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -43,6 +50,67 @@ const AddFarmerModal = ({ isOpen, onClose, onSubmit }) => {
       fetchCrops();
     }
   }, [isOpen]);
+
+  // Populate form when editing
+  useEffect(() => {
+    if (isEditing && editingData && barangays.length > 0 && crops.length > 0) {
+      // Find barangay name
+      const barangay = barangays.find(
+        (b) => b.barangayId === editingData.barangay,
+      );
+      const crop = crops.find((c) => c.cropId === editingData.crop);
+
+      setFormData({
+        firstName: editingData.firstName || "",
+        middleName: editingData.middleName || "",
+        lastName: editingData.lastName || "",
+        crop: editingData.crop || "",
+        area: editingData.area || "",
+        barangay: editingData.barangay || "",
+        contact: editingData.contact || "",
+      });
+
+      // Set search displays
+      setBarangaySearch(barangay ? barangay.barangayName : "");
+      setCropSearch(
+        crop
+          ? crop.cropName.charAt(0).toUpperCase() +
+              crop.cropName.slice(1).toLowerCase()
+          : "",
+      );
+
+      // Format contact for display
+      if (editingData.contact) {
+        const contact = editingData.contact.toString();
+        if (contact.startsWith("63") && contact.length === 12) {
+          const number = contact.slice(2);
+          setContactDisplay(
+            `+63 ${number.slice(0, 3)} ${number.slice(3, 6)} ${number.slice(6)}`,
+          );
+        } else if (contact.length === 10 && contact.startsWith("9")) {
+          setContactDisplay(
+            `+63 ${contact.slice(0, 3)} ${contact.slice(3, 6)} ${contact.slice(6)}`,
+          );
+        } else {
+          setContactDisplay(contact);
+        }
+      }
+    } else if (!isEditing) {
+      // Reset form for new farmer
+      setFormData({
+        firstName: "",
+        middleName: "",
+        lastName: "",
+        crop: "",
+        area: "",
+        barangay: "",
+        contact: "",
+      });
+      setBarangaySearch("");
+      setCropSearch("");
+      setContactDisplay("");
+    }
+  }, [isEditing, editingData, barangays, crops]);
 
   // Filter barangays based on search
   useEffect(() => {
@@ -248,30 +316,49 @@ const AddFarmerModal = ({ isOpen, onClose, onSubmit }) => {
     try {
       console.log("=== FRONTEND SUBMIT START ===");
       console.log("API_URL:", API_URL);
+      console.log("Is Editing:", isEditing);
 
-      // Generate RSBSA number before submitting
-      const rsbsaNumber = await generateRSBSANumber(formData.barangay);
+      let farmerData;
+      let response;
 
-      const fullName = `${formData.firstName} ${formData.lastName}`;
-      const farmerData = {
-        ...formData,
-        rsbsaNumber,
-        fullName,
-      };
+      if (isEditing) {
+        // Update existing farmer
+        const fullName = `${formData.firstName} ${formData.lastName}`;
+        farmerData = {
+          ...formData,
+          fullName,
+        };
 
-      console.log("Generated RSBSA:", rsbsaNumber);
-      console.log("Farmer data to be sent:", farmerData);
+        console.log("Updating farmer with data:", farmerData);
 
-      // **THIS IS THE MISSING PART - ACTUALLY SAVE TO DATABASE**
-      console.log("Making fetch request to:", `${API_URL}/api/farmers`);
+        response = await fetch(`${API_URL}/api/farmers/${editingData._id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(farmerData),
+        });
+      } else {
+        // Create new farmer
+        const rsbsaNumber = await generateRSBSANumber(formData.barangay);
+        const fullName = `${formData.firstName} ${formData.lastName}`;
+        farmerData = {
+          ...formData,
+          rsbsaNumber,
+          fullName,
+        };
 
-      const response = await fetch(`${API_URL}/api/farmers`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(farmerData),
-      });
+        console.log("Generated RSBSA:", rsbsaNumber);
+        console.log("Creating farmer with data:", farmerData);
+
+        response = await fetch(`${API_URL}/api/farmers`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(farmerData),
+        });
+      }
 
       console.log("Response status:", response.status);
       console.log("Response ok:", response.ok);
@@ -279,14 +366,26 @@ const AddFarmerModal = ({ isOpen, onClose, onSubmit }) => {
       if (!response.ok) {
         const errorData = await response.json();
         console.error("Error response:", errorData);
-        throw new Error(errorData.message || "Failed to create farmer");
+        throw new Error(
+          errorData.message ||
+            `Failed to ${isEditing ? "update" : "create"} farmer`,
+        );
       }
 
       const result = await response.json();
-      console.log("✅ Farmer created successfully:", result);
+      console.log(
+        `✅ Farmer ${isEditing ? "updated" : "created"} successfully:`,
+        result,
+      );
 
       // Show success message
-      alert(`Farmer added successfully! RSBSA: ${rsbsaNumber}`);
+      toast.success(
+        `Farmer ${isEditing ? "updated" : "added"} successfully!${!isEditing ? ` RSBSA: ${farmerData.rsbsaNumber}` : ""}`,
+        {
+          duration: 4000,
+          position: "top-right",
+        },
+      );
 
       // Call onSubmit prop to notify parent component
       onSubmit?.(result.data || farmerData);
@@ -306,8 +405,14 @@ const AddFarmerModal = ({ isOpen, onClose, onSubmit }) => {
       setContactDisplay("");
       onClose?.();
     } catch (error) {
-      console.error("❌ Error creating farmer:", error);
-      alert(`Error: ${error.message}`);
+      console.error(
+        `❌ Error ${isEditing ? "updating" : "creating"} farmer:`,
+        error,
+      );
+      toast.error(`Error: ${error.message}`, {
+        duration: 4000,
+        position: "top-right",
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -358,7 +463,7 @@ const AddFarmerModal = ({ isOpen, onClose, onSubmit }) => {
         {/* Modal Header */}
         <div className="flex items-center justify-between border-b border-gray-200 p-6">
           <h2 className="text-lg font-bold text-[var(--color-text-primary)]">
-            Add New Farmer
+            {isEditing ? "Edit Farmer" : "Add New Farmer"}
           </h2>
           <button
             onClick={handleCancel}
@@ -606,7 +711,13 @@ const AddFarmerModal = ({ isOpen, onClose, onSubmit }) => {
               disabled={isSubmitting}
               className="flex-1 rounded-md bg-blue-600 px-4 py-2 font-medium text-white transition-colors hover:bg-blue-700 disabled:bg-blue-400"
             >
-              {isSubmitting ? "Adding Farmer..." : "Add Farmer"}
+              {isSubmitting
+                ? isEditing
+                  ? "Updating Farmer..."
+                  : "Adding Farmer..."
+                : isEditing
+                  ? "Update Farmer"
+                  : "Add Farmer"}
             </button>
           </div>
         </div>
