@@ -26,9 +26,8 @@ export default function PagesLayout({ children }) {
       // Close the modal
       setIsAddFarmerModalOpen(false);
 
-      // You could trigger a page refresh or emit an event here
-      // For now, let's just show a success message
-      alert(`Farmer "${farmerData.fullName}" added successfully!`);
+      // Success message is already shown in AddFarmerModal via toast
+      // No need to show another alert here
 
       // If you're on the records page, you might want to refresh it
       if (pathname === "/pages/records") {
@@ -53,8 +52,8 @@ export default function PagesLayout({ children }) {
       // Close the modal
       setIsAddBarangayModalOpen(false);
 
-      // Show success message
-      alert(`Barangay "${barangayData.barangayName}" added successfully!`);
+      // Success message is already shown in ReportsHeatMap via toast
+      // No need to show another alert here
 
       // If you're on the reports page, refresh it
       if (pathname === "/pages/reports") {

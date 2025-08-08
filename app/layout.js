@@ -1,5 +1,6 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import { Lato, Quicksand } from 'next/font/google'
+import { Toaster } from "react-hot-toast";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -36,6 +37,7 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} ${lato.variable} ${quicksand.variable} antialiased`}
       >
         {children}
+        <Toaster />
       </body>
     </html>
   );
