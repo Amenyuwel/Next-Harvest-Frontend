@@ -261,3 +261,51 @@ export const farmersData = [
     contact: "+63 912 345 6793",
   },
 ];
+
+export const activityLogs = [
+  {
+    id: 1,
+    action: "ADD",
+    item: "Rice Farm Record",
+    description: "Added new rice farm in Barangay San Miguel",
+    timestamp: "2024-08-09 10:30 AM",
+    user: "Juan Dela Cruz",
+    status: "success"
+  },
+  {
+    id: 2,
+    action: "EDIT",
+    item: "Pest Report #PR-2024-078",
+    description: "Updated severity level from low to medium",
+    timestamp: "2024-08-08 2:15 PM",
+    user: "Juan Dela Cruz",
+    status: "info"
+  },
+  {
+    id: 3,
+    action: "DELETE",
+    item: "Corn Harvest Record",
+    description: "Removed duplicate harvest entry",
+    timestamp: "2024-08-07 9:45 AM",
+    user: "Juan Dela Cruz",
+    status: "warning"
+  },
+  {
+    id: 4,
+    action: "ADD",
+    item: "Treatment Application",
+    description: "Added Imidacloprid treatment record",
+    timestamp: "2024-08-06 4:20 PM",
+    user: "Juan Dela Cruz",
+    status: "success"
+  },
+  {
+    id: 5,
+    action: "EDIT",
+    item: "Farm Profile",
+    description: "Updated contact information and location",
+    timestamp: "2024-08-05 11:00 AM",
+    user: "Juan Dela Cruz",
+    status: "info"
+  }
+];
