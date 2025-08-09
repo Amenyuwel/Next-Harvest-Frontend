@@ -2,6 +2,17 @@ import React, { useState, useEffect } from "react";
 import { Icon } from "@iconify/react";
 import toast from "react-hot-toast";
 import AddFarmerModal from "./AddFarmerModal";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 const RecordsFarmerTable = ({
   farmers,
@@ -226,22 +237,12 @@ const RecordsFarmerTable = ({
     // Close modal
     setIsEditModalOpen(false);
     setEditingFarmer(null);
-
-    // You can add a callback prop to refresh the farmers list
-    // or the parent component should handle this
+    // Toast is already shown in the modal
     console.log("Farmer updated:", updatedFarmer);
   };
 
-  // Handle delete farmer
+  // Handle delete farmer confirmation
   const handleDeleteFarmer = async (farmer) => {
-    if (
-      !confirm(
-        `Are you sure you want to delete farmer ${farmer.fullName || farmer.firstName + " " + farmer.lastName}?`,
-      )
-    ) {
-      return;
-    }
-
     try {
       if (onDeleteFarmer) {
         await onDeleteFarmer(farmer);
@@ -433,17 +434,44 @@ const RecordsFarmerTable = ({
                       >
                         <Icon icon="mdi:pencil" width="16" height="16" />
                       </button>
-                      <button
-                        onClick={() => handleDeleteFarmer(farmer)}
-                        className="flex h-8 w-8 items-center justify-center rounded-lg bg-red-100 text-red-600 transition hover:bg-red-200"
-                        title="Delete Farmer"
-                      >
-                        <Icon
-                          icon="mdi:delete-outline"
-                          width="16"
-                          height="16"
-                        />
-                      </button>
+
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <button
+                            className="flex h-8 w-8 items-center justify-center rounded-lg bg-red-100 text-red-600 transition hover:bg-red-200"
+                            title="Delete Farmer"
+                          >
+                            <Icon
+                              icon="mdi:delete-outline"
+                              width="16"
+                              height="16"
+                            />
+                          </button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>Delete Farmer</AlertDialogTitle>
+                            <AlertDialogDescription>
+                              Are you sure you want to delete farmer{" "}
+                              <strong>
+                                {farmer.fullName ||
+                                  farmer.name ||
+                                  `${farmer.firstName} ${farmer.lastName}`}
+                              </strong>
+                              ? This action cannot be undone and will permanently remove all farmer data.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction
+                              onClick={() => handleDeleteFarmer(farmer)}
+                              className="bg-red-600 hover:bg-red-700"
+                            >
+                              Delete Farmer
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
                     </div>
                   </td>
                 </tr>

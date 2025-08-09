@@ -1,5 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { X } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 const AddBarangayModal = ({
   isOpen,
@@ -84,7 +95,7 @@ const AddBarangayModal = ({
   if (!isOpen) return null;
 
   return (
-    <div className="bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center bg-[var(--color-modal-bg)]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
       <div className="mx-4 w-full max-w-md rounded-lg bg-white shadow-xl">
         {/* Modal Header */}
         <div className="flex items-center justify-between border-b border-gray-200 p-6">
@@ -170,22 +181,53 @@ const AddBarangayModal = ({
             >
               Cancel
             </button>
-            <button
-              type="button"
-              onClick={handleSubmit}
-              disabled={
-                isSubmitting || !formData.barangayId || !formData.barangayName
-              }
-              className="flex-1 rounded-md bg-blue-600 px-4 py-2 font-medium text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              {isSubmitting
-                ? isEditing
-                  ? "Updating..."
-                  : "Adding..."
-                : isEditing
-                  ? "Update Barangay"
-                  : "Add Barangay"}
-            </button>
+
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <button
+                  type="button"
+                  disabled={
+                    isSubmitting ||
+                    !formData.barangayId ||
+                    !formData.barangayName
+                  }
+                  className="flex-1 rounded-md bg-blue-600 px-4 py-2 font-medium text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  {isSubmitting
+                    ? isEditing
+                      ? "Updating..."
+                      : "Adding..."
+                    : isEditing
+                      ? "Update Barangay"
+                      : "Add Barangay"}
+                </button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>
+                    {isEditing ? "Confirm Update" : "Confirm Addition"}
+                  </AlertDialogTitle>
+                  <AlertDialogDescription>
+                    {isEditing
+                      ? `Are you sure you want to update the barangay "${formData.barangayName}" (ID: ${formData.barangayId})? This will modify the existing record.`
+                      : `Are you sure you want to add "${formData.barangayName}" with ID ${formData.barangayId} as a new barangay? This will create a new barangay record.`}
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={handleSubmit}
+                    className={
+                      isEditing
+                        ? "bg-blue-600 hover:bg-blue-700"
+                        : "bg-green-600 hover:bg-green-700"
+                    }
+                  >
+                    {isEditing ? "Update Barangay" : "Add Barangay"}
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </div>
         </div>
       </div>
