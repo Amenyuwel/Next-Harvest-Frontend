@@ -2,9 +2,11 @@ import React from "react";
 import { Icon } from "@iconify/react";
 
 const Reports = () => (
-  <article className="bg-white rounded-2xl shadow p-4 h-full w-full flex flex-col">
+  <article className="flex h-full w-full flex-col rounded-2xl bg-white p-4 shadow">
     <header className="mb-4 flex-shrink-0">
-      <h2 className="text-lg font-bold text-black">Training Reports</h2>
+      <h2 className="text-lg font-bold text-[var(--color-text-primary)]">
+        Training Reports
+      </h2>
     </header>
 
     {/* Detection Analytics */}
@@ -16,8 +18,8 @@ const Reports = () => (
         Detection Analytics
       </h3>
       <div className="flex flex-col gap-3">
-        <div className="bg-[var(--color-reports-bg)] rounded-xl p-3 flex flex-col">
-          <header className="flex items-center justify-between mb-2">
+        <div className="flex flex-col rounded-xl bg-[var(--color-reports-bg)] p-3">
+          <header className="mb-2 flex items-center justify-between">
             <h4 className="text-sm font-semibold text-black">CLASSES</h4>
             <Icon
               icon="carbon:pest"
@@ -27,11 +29,11 @@ const Reports = () => (
               aria-hidden="true"
             />
           </header>
-          <div className="text-center mb-3">
+          <div className="mb-3 text-center">
             <data value="38" className="text-3xl font-bold text-black">
               38
             </data>
-            <span className="text-xs text-gray-500 ml-1" aria-label="percent">
+            <span className="ml-1 text-xs text-gray-500" aria-label="percent">
               %
             </span>
           </div>
@@ -45,7 +47,7 @@ const Reports = () => (
                 icon="solar:bug-bold"
                 width="12"
                 height="12"
-                className="text-black mr-2"
+                className="mr-2 text-black"
                 aria-hidden="true"
               />
               <span className="text-gray-600">Insects</span>
@@ -55,7 +57,7 @@ const Reports = () => (
                 icon="material-symbols:pest-control-rodent"
                 width="12"
                 height="12"
-                className="text-black mr-2"
+                className="mr-2 text-black"
                 aria-hidden="true"
               />
               <span className="text-gray-600">Rodents</span>
@@ -65,7 +67,7 @@ const Reports = () => (
                 icon="fluent-emoji-high-contrast:worm"
                 width="12"
                 height="12"
-                className="text-black mr-2"
+                className="mr-2 text-black"
                 aria-hidden="true"
               />
               <span className="text-gray-600">Worms</span>

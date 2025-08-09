@@ -1,19 +1,95 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Icon } from "@iconify/react";
-import { pestReportsData } from "@/assets/dummydata";
 
 const PestClassesTable = () => {
   const [activeTab, setActiveTab] = useState("All");
   const [searchTerm, setSearchTerm] = useState("");
+  const [pestData, setPestData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+
+  // Fetch pest data from API
+  useEffect(() => {
+    fetchPestData();
+  }, []);
+
+  const fetchPestData = async () => {
+    try {
+      setLoading(true);
+      setError(""); // Clear previous errors
+
+      console.log("Fetching pest data from:", `${API_URL}/api/pests`);
+      const response = await fetch(`${API_URL}/api/pests`);
+
+      console.log("Response status:", response.status);
+      console.log("Response ok:", response.ok);
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error("Error response:", errorText);
+        throw new Error(
+          `HTTP error! status: ${response.status} - ${errorText}`,
+        );
+      }
+
+      const result = await response.json();
+      console.log("API Response:", result);
+
+      if (result.success) {
+        setPestData(result.data);
+        setError(""); // Clear any previous errors
+      } else {
+        setError(result.message || "Failed to fetch pest data");
+      }
+    } catch (error) {
+      console.error("Error fetching pest data:", error);
+      setError(`Failed to load pest data: ${error.message}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Helper function to format array data as string
+  const formatArrayToString = (array) => {
+    if (!array || array.length === 0) return "";
+    return array.join(", ");
+  };
+
+  // Filter pest data based on search term
+  const filteredPests = pestData.filter((pest) => {
+    const searchLower = searchTerm.toLowerCase();
+    return (
+      pest.pestName?.toLowerCase().includes(searchLower) ||
+      formatArrayToString(pest.recommendations)
+        ?.toLowerCase()
+        .includes(searchLower) ||
+      formatArrayToString(pest.activeMonth)
+        ?.toLowerCase()
+        .includes(searchLower) ||
+      pest.season?.toLowerCase().includes(searchLower)
+    );
+  });
 
   return (
     <div className="flex h-full w-full flex-col overflow-hidden rounded-2xl bg-white shadow">
       {/* Header */}
       <div className="border-b border-gray-200 px-6 py-5">
-        <h2 className="text-xl font-semibold text-gray-800">
-          Pest Classes Table
-        </h2>
+        <div className="flex items-center justify-between">
+          <h2 className="text-lg font-bold text-[var(--color-text-primary)]">
+            Pest Classes Table
+          </h2>
+          {/* Refresh Button */}
+          <button
+            onClick={fetchPestData}
+            className="rounded-lg p-2 text-gray-600 transition-colors hover:bg-gray-100"
+            title="Refresh Data"
+          >
+            <Icon icon="mdi:refresh" width="20" height="20" />
+          </button>
+        </div>
       </div>
 
       {/* Tabs and Search */}
@@ -22,7 +98,7 @@ const PestClassesTable = () => {
         <div className="relative w-full md:w-72">
           <input
             type="text"
-            placeholder="e.g. snail"
+            placeholder="Search pest name, recommendations, season..."
             className="w-full rounded-lg border border-gray-200 py-2.5 pr-4 pl-10 text-sm focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -43,106 +119,134 @@ const PestClassesTable = () => {
         </div>
       </div>
 
+      {/* Loading/Error States */}
+      {loading && (
+        <div className="flex flex-1 items-center justify-center">
+          <div className="text-center">
+            <Icon
+              icon="mdi:loading"
+              className="mb-2 animate-spin text-4xl text-blue-500"
+            />
+            <p className="text-gray-500">Loading pest data...</p>
+          </div>
+        </div>
+      )}
+
+      {error && !loading && (
+        <div className="flex flex-1 items-center justify-center">
+          <div className="text-center">
+            <Icon
+              icon="mdi:alert-circle"
+              className="mb-2 text-4xl text-red-500"
+            />
+            <p className="mb-2 text-red-500">{error}</p>
+            <button
+              onClick={fetchPestData}
+              className="rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+            >
+              Try Again
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Table */}
-      <div className="scrollbar-hide flex-1 overflow-auto">
-        <table className="w-full table-auto">
-          <thead className="sticky top-0 z-10 bg-white">
-            <tr className="border-b border-gray-100 text-left text-sm font-medium text-gray-600">
-              <th className="px-6 py-4">Pest Name</th>
-              <th className="px-6 py-4">Description</th>
-              <th className="px-6 py-4">Recommendations</th>
-              <th className="px-6 py-4">Active Month</th>
-              <th className="px-6 py-4">Season</th>
-              <th className="px-6 py-4">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="bg-white">
-            {pestReportsData
-              .filter((row) =>
-                row.pestName.toLowerCase().includes(searchTerm.toLowerCase()),
-              )
-              .map((row) => (
-                <tr
-                  key={row.id}
-                  className="border-b border-gray-100 hover:bg-gray-50"
-                >
-                  <td className="px-6 py-4 text-sm font-medium text-gray-900">
-                    {row.pestName}
-                  </td>
-
-                  <td className="px-6 py-4 text-sm text-gray-600">
-                    {row.description}
-                  </td>
-
-                  <td className="px-6 py-4 text-sm text-gray-600">
-                    {row.recommended}
-                  </td>
-
-                  <td className="px-6 py-4">
-                    <span
-                      className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-medium ${
-                        row.activeMonth === "Decreased"
-                          ? "bg-green-100 text-green-700"
-                          : "bg-orange-100 text-orange-700"
-                      }`}
-                    >
-                      <Icon
-                        icon={
-                          row.activeMonth === "Decreased"
-                            ? "mdi:trending-down"
-                            : "mdi:trending-up"
-                        }
-                        width="12"
-                        height="12"
-                        className="mr-1"
-                      />
-                      {row.activeMonth}
-                    </span>
-                  </td>
-
-                  <td className="px-6 py-4">
-                    <span
-                      className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-medium ${
-                        row.season === "Summer" || row.season === "All season"
-                          ? "bg-orange-100 text-orange-700"
-                          : "bg-blue-100 text-blue-700"
-                      }`}
-                    >
-                      <Icon
-                        icon={
-                          row.season === "All season"
-                            ? "mdi:calendar"
-                            : row.season === "Summer"
-                              ? "mdi:weather-sunny"
-                              : "mdi:weather-rainy"
-                        }
-                        width="12"
-                        height="12"
-                        className="mr-1"
-                      />
-                      {row.season === "All season" ? "El Niño" : row.season}
-                    </span>
-                  </td>
-
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-2">
-                      <button className="flex h-8 w-8 items-center justify-center rounded-lg bg-green-100 text-green-600 transition hover:bg-green-200">
-                        <Icon icon="mdi:check" width="16" height="16" />
-                      </button>
-                      <button className="flex h-8 w-8 items-center justify-center rounded-lg bg-red-100 text-red-600 transition hover:bg-red-200">
-                        <Icon
-                          icon="mdi:delete-outline"
-                          width="16"
-                          height="16"
-                        />
-                      </button>
-                    </div>
+      {!loading && !error && (
+        <div className="scrollbar-hide flex-1 overflow-auto">
+          <table className="w-full table-auto">
+            <thead className="sticky top-0 z-10 bg-gray-50/70">
+              <tr className="text-left text-xs font-semibold tracking-wider text-[var(--color-text-primary)] uppercase">
+                <th className="px-6 py-4">Pest Name</th>
+                <th className="px-6 py-4">Recommendations</th>
+                <th className="px-6 py-4">Active Month</th>
+                <th className="px-6 py-4">Season</th>
+                <th className="px-6 py-4">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-100 bg-white">
+              {filteredPests.length === 0 ? (
+                <tr>
+                  <td
+                    colSpan="5"
+                    className="px-6 py-8 text-center text-gray-500"
+                  >
+                    {searchTerm
+                      ? "No pest data found matching your search."
+                      : "No pest data found."}
                   </td>
                 </tr>
-              ))}
-          </tbody>
-        </table>
-      </div>
+              ) : (
+                filteredPests.map((pest, index) => (
+                  <tr
+                    key={pest._id || index}
+                    className="transition-colors duration-150 hover:bg-gray-50/50"
+                  >
+                    <td className="px-6 py-5 whitespace-nowrap">
+                      <span className="text-sm font-medium text-[var(--color-text-description)]">
+                        {pest.pestName}
+                      </span>
+                    </td>
+
+                    <td className="px-6 py-5">
+                      <span className="text-sm font-medium text-[var(--color-text-description)]">
+                        {formatArrayToString(pest.recommendations)}
+                      </span>
+                    </td>
+
+                    <td className="px-6 py-5">
+                      <span className="text-sm font-medium text-[var(--color-text-description)]">
+                        {formatArrayToString(pest.activeMonth)}
+                      </span>
+                    </td>
+
+                    <td className="px-6 py-5 whitespace-nowrap">
+                      <span
+                        className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-medium ${
+                          pest.season === "Summer" ||
+                          pest.season === "All season" ||
+                          pest.season === "Dry Season"
+                            ? "bg-orange-100 text-orange-700"
+                            : "bg-blue-100 text-blue-700"
+                        }`}
+                      >
+                        <Icon
+                          icon={
+                            pest.season === "All season"
+                              ? "mdi:calendar"
+                              : pest.season === "Summer" ||
+                                  pest.season === "Dry Season"
+                                ? "mdi:weather-sunny"
+                                : "mdi:weather-rainy"
+                          }
+                          width="12"
+                          height="12"
+                          className="mr-1"
+                        />
+                        {pest.season}
+                      </span>
+                    </td>
+
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center gap-2">
+                        <button className="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-100 text-gray-600 transition hover:bg-gray-200">
+                          <Icon icon="mdi:pencil" width="16" height="16" />
+                        </button>
+                        <button className="flex h-8 w-8 items-center justify-center rounded-lg bg-red-100 text-red-600 transition hover:bg-red-200">
+                          <Icon
+                            icon="mdi:delete-outline"
+                            width="16"
+                            height="16"
+                          />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 };

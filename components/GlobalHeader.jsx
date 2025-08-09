@@ -1,17 +1,28 @@
 import React from "react";
 import { Icon } from "@iconify/react";
+import { usePathname } from "next/navigation";
+import routeConfig from "@/app/config/routeConfig";
 
 const GlobalHeader = ({
-  title,
-  showAddButton = true,
-  addButtonText = "Add Farmer",
-  onAddClick,
+  title: propTitle,
+  showAddButton: propShowAddButton,
+  addButtonText: propAddButtonText,
+  onAddClick: propOnAddClick,
   showProfile = true,
 }) => {
+  const pathname = usePathname();
+  const config = routeConfig[pathname] || {};
+
+  // Prefer props if provided, else use config, else fallback
+  const title = propTitle ?? config.title ?? "";
+  const showAddButton = propShowAddButton ?? config.showAddButton ?? false;
+  const addButtonText = propAddButtonText ?? config.addButtonText ?? "";
+  const onAddClick = propOnAddClick ?? (() => {});
+
   return (
     <div className="flex w-full items-center justify-between px-6 py-4">
       {/* Title */}
-      <h1 className="text-4xl font-semibold text-black">{title}</h1>
+      <h1 className="text-4xl font-semibold text-[var(--color-text-primary)]">{title}</h1>
 
       {/* Right side - Add Button + Profile */}
       <div className="flex items-center gap-4">

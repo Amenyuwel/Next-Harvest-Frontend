@@ -23,8 +23,8 @@ const UploadImages = () => {
   const handleFileUpload = (classId, files) => {
     setClasses((prev) =>
       prev.map((cls) =>
-        cls.id === classId ? { ...cls, files: [...cls.files, ...files] } : cls
-      )
+        cls.id === classId ? { ...cls, files: [...cls.files, ...files] } : cls,
+      ),
     );
   };
 
@@ -39,22 +39,27 @@ const UploadImages = () => {
 
   return (
     <section
-      className="bg-white rounded-2xl shadow h-full w-full flex flex-col overflow-x-hidden"
+      className="flex h-full w-full flex-col overflow-x-hidden rounded-2xl bg-white shadow"
       aria-label="Model training interface"
     >
       {/* Header */}
-      <header className="flex-shrink-0 px-4 py-4 border-b border-gray-100">
+      <header className="flex-shrink-0 border-b border-gray-100 px-4 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <h2 className="text-lg font-bold text-black">Model Training</h2>
+            <h2 className="text-lg font-bold text-[var(--color-text-primary)]">
+              Model Training
+            </h2>
           </div>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="flex-1 min-h-0 px-4 pb-4 flex flex-col">
+      <main className="flex min-h-0 flex-1 flex-col px-4 pb-4">
         {/* Training Controls */}
-        <section className="mb-4 mt-4 flex-shrink-0" aria-labelledby="training-controls">
+        <section
+          className="mt-4 mb-4 flex-shrink-0"
+          aria-labelledby="training-controls"
+        >
           <h3 id="training-controls" className="sr-only">
             Training Controls
           </h3>
@@ -66,7 +71,7 @@ const UploadImages = () => {
 
         {/* Class Management */}
         <section
-          className="relative flex-1 min-h-0 overflow-y-auto overflow-x-hidden"
+          className="relative min-h-0 flex-1 overflow-x-hidden overflow-y-auto"
           aria-labelledby="class-management"
         >
           <h3 id="class-management" className="sr-only">

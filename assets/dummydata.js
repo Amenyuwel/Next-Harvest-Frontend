@@ -1,18 +1,28 @@
 export const graphData = {
   labels: [
-    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
   ],
   datasets: [
     {
       label: "Rice Production",
       data: [65, 59, 80, 81, 56, 55, 40, 85, 90, 75, 82, 88],
-      borderColor: "#10B981",
-      backgroundColor: "rgba(16, 185, 129, 0.1)",
+      borderColor: "var(--color-rice)",
+      backgroundColor: "rgba(163, 217, 119, 0.1)",
       borderWidth: 3,
       fill: true,
       tension: 0.4,
-      pointBackgroundColor: "#10B981",
+      pointBackgroundColor: "var(--color-rice)",
       pointBorderColor: "#fff",
       pointBorderWidth: 2,
       pointRadius: 5,
@@ -21,12 +31,12 @@ export const graphData = {
     {
       label: "Corn Production",
       data: [28, 48, 40, 19, 86, 27, 90, 65, 70, 55, 60, 75],
-      borderColor: "#F59E0B",
-      backgroundColor: "rgba(245, 158, 11, 0.1)",
+      borderColor: "var(--color-corn)",
+      backgroundColor: "rgba(244, 197, 66, 0.1)",
       borderWidth: 3,
       fill: true,
       tension: 0.4,
-      pointBackgroundColor: "#F59E0B",
+      pointBackgroundColor: "var(--color-corn)",
       pointBorderColor: "#fff",
       pointBorderWidth: 2,
       pointRadius: 5,
@@ -110,36 +120,36 @@ export const notifications = [
   },
   {
     id: 2,
-    title: "Irrigation Alert",
-    subtitle: "Corn Field",
-    date: "May 12",
-    tag: "3 days ago",
-    icon: "mdi:water-alert",
-    iconBg: "#E0F2FE",
-    tagBg: "#DBEAFE",
-    tagColor: "#2563EB",
+    title: "Pest Detected",
+    subtitle: "Rice Field",
+    date: "May 13",
+    tag: "last 2 days",
+    icon: "solar:bug-bold",
+    iconBg: "#DDF5D6",
+    tagBg: "#FFE6B2",
+    tagColor: "#FF9900",
+  },
+  {
+    id: 3,
+    title: "Pest Detected",
+    subtitle: "Rice Field",
+    date: "May 13",
+    tag: "last 2 days",
+    icon: "solar:bug-bold",
+    iconBg: "#DDF5D6",
+    tagBg: "#FFE6B2",
+    tagColor: "#FF9900",
   },
   {
     id: 4,
-    title: "Weather Warning",
-    subtitle: "All Fields",
-    date: "May 9",
-    tag: "1 week ago",
-    icon: "mdi:weather-lightning-rainy",
-    iconBg: "#FEE2E2",
-    tagBg: "#FEE2E2",
-    tagColor: "#DC2626",
-  },
-  {
-    id: 5,
-    title: "Fertilizer Applied",
+    title: "Pest Detected",
     subtitle: "Rice Field",
-    date: "May 8",
-    tag: "1 week ago",
-    icon: "mdi:leaf",
-    iconBg: "#D1FAE5",
-    tagBg: "#D1FAE5",
-    tagColor: "#059669",
+    date: "May 13",
+    tag: "last 2 days",
+    icon: "solar:bug-bold",
+    iconBg: "#DDF5D6",
+    tagBg: "#FFE6B2",
+    tagColor: "#FF9900",
   },
 ];
 
@@ -148,7 +158,6 @@ export const pestReportsData = [
     id: 2,
     number: "02",
     pestName: "Snail",
-    description: "Regular",
     recommended: "Manual Rams",
     activeMonth: "Decreased",
     season: "All season",
@@ -158,7 +167,6 @@ export const pestReportsData = [
     id: 3,
     number: "03",
     pestName: "Fall Armyworm",
-    description: "Regular",
     recommended: "Manual Rams",
     activeMonth: "Decreased",
     season: "All season",
@@ -168,7 +176,6 @@ export const pestReportsData = [
     id: 4,
     number: "04",
     pestName: "Stem Borer",
-    description: "Regular",
     recommended: "Manual Rams",
     activeMonth: "Decreased",
     season: "All season",
@@ -187,16 +194,6 @@ export const farmReports = [
       { label: "Rice Farmers", value: 3 },
     ],
   },
-  {
-    id: 2,
-    title: "Recent Harvests",
-    icon: "ph:farm-fill",
-    stats: [
-      { label: "Total Registered", value: 7 },
-      { label: "Corn Farmers", value: 4 },
-      { label: "Rice Farmers", value: 3 },
-    ],
-  },
 ];
 
 export const pestReports = [
@@ -205,81 +202,62 @@ export const pestReports = [
     title: "Pest Reports",
     icon: "ph:farm-fill",
     stats: [
-      { label: "Total Registered", value: 7 },
-      { label: "Corn Farmers", value: 4 },
-      { label: "Rice Farmers", value: 3 },
+      { label: "Snail", value: 7 },
+      { label: "Fall Armyworm", value: 4 },
+      { label: "Stem Borer", value: 3 },
     ],
+  },
+];
+
+export const farmersData = [
+  {
+    id: 1,
+    rsbsa: "00001",
+    name: "Emerson Alvarado",
+    description: "Regular",
+    crop: "Rice",
+    area: "1.1 ha",
+    barangay: "Lagao",
+    contact: "+63 912 345 6789",
   },
   {
     id: 2,
-    title: "Average Income Est.",
-    icon: "ph:farm-fill",
-    stats: [
-      { label: "Total Registered", value: 7 },
-      { label: "Corn Farmers", value: 4 },
-      { label: "Rice Farmers", value: 3 },
-    ],
+    rsbsa: "00002",
+    name: "Romel Birada",
+    description: "Regular",
+    crop: "Corn",
+    area: "1.1 ha",
+    barangay: "San Isidro",
+    contact: "+63 912 345 6790",
+  },
+  {
+    id: 3,
+    rsbsa: "00003",
+    name: "Billy Joe Mengote",
+    description: "Premium",
+    crop: "Rice",
+    area: "10 ha",
+    barangay: "Fatima",
+    contact: "+63 912 345 6791",
+  },
+  {
+    id: 4,
+    rsbsa: "00004",
+    name: "Kylie Malagamba",
+    description: "Regular",
+    crop: "Corn",
+    area: "5 ha",
+    barangay: "San Isidro",
+    contact: "+63 912 345 6792",
+  },
+  {
+    id: 5,
+    rsbsa: "00005",
+    name: "Anita Salubre Palomares",
+    description: "Regular",
+    crop: "Rice",
+    area: "2 ha",
+    barangay: "Lagao",
+    contact: "+63 912 345 6793",
   },
 ];
-
-export const profileData = {
-  _id: "68931aa15c6f6d67bfacb45c",
-  username: "Amenyuwel",
-  password: "s2bs10$iFzq1yVjAMsz/J2SO2H.NMvIlj8iJnqZmHmrg9tHkVc.bq/OpH0",
-  email: "emmanueldmalagamba@gmail.com",
-  role: "admin",
-  firstname: "Emmanuel",
-  lastname: "Malagamba",
-  middleName: null,
-  isActive: true,
-  lastLogin: null,
-  createdAt: "2025-08-06T09:04:33.246+00:00",
-  updatedAt: "2025-08-06T09:04:33.246+00:00"
-};
-
-export const profileStats = [
-  {
-    label: "Total Farms",
-    value: 5,
-    icon: "ph:farm-fill",
-    color: "text-chartGreen",
-    bgColor: "bg-green-50"
-  },
-  {
-    label: "Active Crops",
-    value: 12,
-    icon: "mdi:leaf",
-    color: "text-chartOrange",
-    bgColor: "bg-orange-50"
-  },
-  {
-    label: "Harvest This Month",
-    value: 3,
-    icon: "mdi:grain",
-    color: "text-chartBlue",
-    bgColor: "bg-blue-50"
-  },
-  {
-    label: "Reports Generated",
-    value: 24,
-    icon: "mdi:chart-line",
-    color: "text-chartPurple",
-    bgColor: "bg-purple-50"
-  }
-];
-
-export const profileChartData = {
-  labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-  datasets: [
-    {
-      label: "Monthly Activity",
-      data: [12, 19, 15, 25, 22, 30],
-      borderColor: "#10B981",
-      backgroundColor: "rgba(16, 185, 129, 0.1)",
-      borderWidth: 2,
-      fill: true,
-      tension: 0.4,
-    },
-  ],
-};
-

@@ -3,7 +3,6 @@ import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { Icon } from "@iconify/react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
-import { motion } from "framer-motion";
 import { sidebarConfig } from "@/app/config/sidebarConfig";
 
 function Sidebar() {
@@ -11,29 +10,35 @@ function Sidebar() {
   const router = useRouter();
   const pathname = usePathname();
 
+  // Memoize menu items for performance
   const mainMenuItems = useMemo(() => sidebarConfig.main, []);
   const bottomMenuItems = useMemo(() => sidebarConfig.bottom, []);
-  const allItems = useMemo(
-    () => [...mainMenuItems, ...bottomMenuItems],
-    [mainMenuItems, bottomMenuItems],
-  );
 
-  // Update active menu item on route change
+  // Set active item based on current path
   useEffect(() => {
-    const currentItem = allItems.find((item) => item.path === pathname);
-    if (currentItem) setActiveItem(currentItem.id);
-  }, [pathname, allItems]);
+    const currentItem = [...mainMenuItems, ...bottomMenuItems].find(
+      (item) => item.path === pathname
+    );
+    if (currentItem) {
+      setActiveItem(currentItem.id);
+    }
+  }, [pathname, mainMenuItems, bottomMenuItems]);
 
-  // Prefetch routes
+  // Prefetch navigation links for faster transitions
   useEffect(() => {
     mainMenuItems.forEach((item) => {
       if (item.path) router.prefetch(item.path);
     });
-  }, [mainMenuItems, router]);
+    bottomMenuItems.forEach((item) => {
+      if (item.path) router.prefetch(item.path);
+    });
+  }, [mainMenuItems, bottomMenuItems, router]);
 
+  // Handle menu item clicks
   const handleItemClick = useCallback(
     (item) => {
       setActiveItem(item.id);
+
       if (item.action === "logout") {
         localStorage.removeItem("token");
         router.push("/login");
@@ -41,57 +46,64 @@ function Sidebar() {
         router.push(item.path);
       }
     },
-    [router],
+    [router]
   );
 
+  // Render a menu item
   const renderMenuItem = useCallback(
     (item) => (
-      <motion.div
+      <div
         key={item.id}
-        initial={false}
         onClick={() => handleItemClick(item)}
-        className={`group relative flex h-20 w-20 cursor-pointer items-center justify-center rounded-3xl transition-all duration-200 ${
-          activeItem === item.id
-            ? "border-[var(--color-icons-accent)] bg-transparent"
-            : "border-transparent hover:border-gray-500"
-        }`}
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
+        className={`group relative flex h-20 w-20 cursor-pointer items-center justify-center rounded-3xl transition-all duration-200 
+          ${
+            activeItem === item.id
+              ? "border-[var(--color-icons-accent)] bg-transparent"
+              : "border-transparent hover:border-gray-500"
+          }`}
       >
         <Icon
           icon={item.icon}
           width="24"
           height="24"
-          className={`transition-colors duration-200 ${
-            activeItem === item.id
-              ? "text-[var(--color-icons-accent)]"
-              : "text-gray-400 group-hover:text-white"
-          }`}
+          className={`transition-colors duration-200 
+            ${
+              activeItem === item.id
+                ? "text-[var(--color-icons-accent)]"
+                : "text-gray-400 group-hover:text-white"
+            }`}
         />
-        {/* Tooltip with z-50 for top layering */}
+        {/* Tooltip */}
         <div className="pointer-events-none absolute left-16 z-50 rounded-lg bg-gray-800 px-3 py-2 text-sm whitespace-nowrap text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100">
           {item.label}
           <div className="absolute top-1/2 left-0 h-2 w-2 -translate-x-1 -translate-y-1/2 rotate-45 transform bg-gray-800"></div>
         </div>
-      </motion.div>
+      </div>
     ),
-    [activeItem, handleItemClick],
+    [activeItem, handleItemClick]
   );
 
   return (
-    <div className="mt-4 flex h-[98.5%] w-25 flex-col items-center rounded-3xl bg-[var(--color-sidebar-bg)] py-6 shadow-lg">
-      <Link href="/pages/profile">
+    <div className="mt-4 flex h-[98.5%] w-[100px] flex-col items-center rounded-3xl bg-[var(--color-sidebar-bg)] py-6 shadow-lg">
+      {/* Profile link */}
+      <Link href="/pages/profile" passHref>
         <div className="mb-8 flex h-12 w-12 cursor-pointer items-center justify-center rounded-full hover:ring-2 hover:ring-gray-400">
+          {/* User avatar placeholder */}
           <div className="h-8 w-8 rounded-full bg-gray-500" />
         </div>
       </Link>
-      <div className="flex flex-1 flex-col">
-        {mainMenuItems.map(renderMenuItem)}
-      </div>
+
+      {/* Main menu */}
+      <div className="flex flex-1 flex-col">{mainMenuItems.map(renderMenuItem)}</div>
+
+      {/* Separator */}
       <div className="my-4 h-px w-8 bg-gray-600" />
+
+      {/* Bottom menu */}
       <div className="flex flex-col">{bottomMenuItems.map(renderMenuItem)}</div>
     </div>
   );
 }
 
+// Memoize Sidebar to avoid unnecessary re-renders
 export default React.memo(Sidebar);

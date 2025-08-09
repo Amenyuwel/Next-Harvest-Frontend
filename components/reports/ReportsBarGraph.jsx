@@ -18,21 +18,21 @@ const data = [
     count: 15,
     fullName: "Golden Apple Snail",
     severity: "Medium",
-    color: "#06b6d4",
+    color: "var(--color-snail)",
   },
   {
-    pest: "STEM_BORER",
+    pest: "STEMBORER",
     count: 30,
     fullName: "Rice Stem Borer",
     severity: "High",
-    color: "#ef4444",
+    color: "var(--color-stem)",
   },
   {
     pest: "FALLARMYWORM",
     count: 20,
     fullName: "Fall Armyworm",
     severity: "Medium",
-    color: "#f59e0b",
+    color: "var(--color-worm)",
   },
 ];
 
@@ -52,7 +52,7 @@ const CustomTooltip = ({ active, payload, label }) => {
             className="h-3 w-3 rounded-full"
             style={{ backgroundColor: data.color }}
           ></div>
-          <h3 className="font-semibold text-gray-800">{data.fullName}</h3>
+          <h4 className="font-semibold text-gray-800">{data.fullName}</h4>
         </div>
         <div className="space-y-1 text-sm">
           <p className="text-gray-600">
@@ -87,20 +87,25 @@ const ReportsBarGraph = () => {
   const [hoveredBar, setHoveredBar] = useState(null);
 
   return (
-    <div className="mx-auto h-[400px] w-full rounded-xl bg-gradient-to-br from-slate-50 to-gray-100 p-6 shadow-lg">
+    <div className="flex h-full w-full flex-col rounded-xl bg-white p-6 shadow">
       <div className="mb-6 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
         <div className="flex items-center gap-3">
-          <h3 className="text-lg font-semibold text-gray-800">
+          <h2 className="text-lg font-bold text-[var(--color-text-primary)]">
             Report Count by Pest Type
-          </h3>
+          </h2>
         </div>
         <div className="text-sm text-gray-600">
           Total Reports:{" "}
-          <span className="font-semibold text-emerald-600">{totalCount}</span>
+          <span
+            className="font-semibold text-emerald-600"
+            aria-label={`${totalCount} total reports`}
+          >
+            {totalCount}
+          </span>
         </div>
       </div>
 
-      <div className="h-96 w-full">
+      <div className="flex-1 min-h-0 w-full">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
             data={data}
@@ -170,7 +175,7 @@ const ReportsBarGraph = () => {
 
             <ReferenceLine
               y={averageCount}
-              stroke="#8b5cf6"
+              stroke="var(--color-chart-gray)"
               strokeDasharray="5 5"
             />
 

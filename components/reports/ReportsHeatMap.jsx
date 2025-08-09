@@ -1,53 +1,281 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Icon } from "@iconify/react";
-
-const barangayHeatData = [
-  { name: "Barangay 1", snail: 5, fallarmyworm: 2, stemborer: 0 },
-  { name: "Barangay 2", snail: 8, fallarmyworm: 4, stemborer: 1 },
-  { name: "Barangay 3", snail: 12, fallarmyworm: 7, stemborer: 3 },
-  { name: "Barangay 4", snail: 2, fallarmyworm: 1, stemborer: 0 },
-  { name: "Barangay 5", snail: 15, fallarmyworm: 10, stemborer: 4 },
-  // Add more as needed
-];
+import toast from "react-hot-toast";
+import AddBarangayModal from "./AddBarangayModal";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 const getHeatColor = (value) => {
-  if (value === 0) return "bg-gray-100 text-gray-700";
-  if (value < 5) return "bg-green-100 text-green-700";
-  if (value < 10) return "bg-yellow-100 text-yellow-700";
-  return "bg-red-100 text-red-700";
+  if (value === 0) return "bg-gray-100";
+  if (value < 5) return "bg-green-100";
+  if (value < 10) return "bg-yellow-100";
+  return "bg-red-100";
 };
 
 const ReportsHeatMap = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [barangayData, setBarangayData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingBarangay, setEditingBarangay] = useState(null);
 
-  const filteredData = barangayHeatData.filter((row) =>
-    row.name.toLowerCase().includes(searchTerm.toLowerCase()),
+  // Fetch barangays from MongoDB
+  const fetchBarangays = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch("http://localhost:5000/api/barangays");
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      if (data.success) {
+        // Transform MongoDB data to match your component structure
+        const transformedData = data.data.map((barangay) => ({
+          id: barangay._id,
+          number: barangay.barangayId,
+          name: barangay.barangayName,
+          // Add default pest data (you can fetch this from a separate endpoint later)
+          snail: 0,
+          fallarmyworm: 0,
+          stemborer: 0,
+        }));
+
+        setBarangayData(transformedData);
+      } else {
+        setError(data.message || "Failed to fetch barangays");
+      }
+    } catch (error) {
+      console.error("Error fetching barangays:", error);
+      setError("Failed to load barangays. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Add new barangay
+  const handleAddBarangay = async (formData) => {
+    try {
+      const response = await fetch("http://localhost:5000/api/barangays", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          barangayId: formData.barangayId,
+          barangayName: formData.barangayName,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          data.message || `HTTP error! status: ${response.status}`,
+        );
+      }
+
+      if (data.success) {
+        // Refresh the barangay list
+        fetchBarangays();
+        toast.success("Barangay added successfully!", {
+          duration: 4000,
+          position: "top-right",
+        });
+      } else {
+        toast.error(data.message || "Failed to add barangay", {
+          duration: 4000,
+          position: "top-right",
+        });
+      }
+    } catch (error) {
+      console.error("Error adding barangay:", error);
+      toast.error(
+        error.message || "Failed to add barangay. Please try again.",
+        {
+          duration: 4000,
+          position: "top-right",
+        },
+      );
+    }
+  };
+
+  // Edit barangay
+  const handleEditBarangay = (barangay) => {
+    setEditingBarangay({
+      id: barangay.id,
+      barangayId: barangay.number,
+      barangayName: barangay.name,
+    });
+    setIsModalOpen(true);
+  };
+
+  // Update barangay
+  const handleUpdateBarangay = async (formData) => {
+    try {
+      const response = await fetch(
+        `http://localhost:5000/api/barangays/${editingBarangay.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            barangayId: formData.barangayId,
+            barangayName: formData.barangayName,
+          }),
+        },
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          data.message || `HTTP error! status: ${response.status}`,
+        );
+      }
+
+      if (data.success) {
+        // Refresh the barangay list
+        fetchBarangays();
+        setEditingBarangay(null);
+        toast.success("Barangay updated successfully!", {
+          duration: 4000,
+          position: "top-right",
+        });
+      } else {
+        toast.error(data.message || "Failed to update barangay", {
+          duration: 4000,
+          position: "top-right",
+        });
+      }
+    } catch (error) {
+      console.error("Error updating barangay:", error);
+      toast.error(
+        error.message || "Failed to update barangay. Please try again.",
+        {
+          duration: 4000,
+          position: "top-right",
+        },
+      );
+    }
+  };
+
+  // Handle modal submission (add or edit)
+  const handleModalSubmit = (formData) => {
+    if (editingBarangay) {
+      handleUpdateBarangay(formData);
+    } else {
+      handleAddBarangay(formData);
+    }
+  };
+
+  // Handle modal close
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+    setEditingBarangay(null);
+  };
+
+  // Handle delete barangay confirmation
+  const handleDeleteBarangay = async (barangay) => {
+    try {
+      const response = await fetch(
+        `http://localhost:5000/api/barangays/${barangay.id}`,
+        {
+          method: "DELETE",
+        },
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          data.message || `HTTP error! status: ${response.status}`,
+        );
+      }
+
+      if (data.success) {
+        // Refresh the barangay list
+        fetchBarangays();
+        toast.success("Barangay deleted successfully!", {
+          duration: 4000,
+          position: "top-right",
+        });
+      } else {
+        toast.error(data.message || "Failed to delete barangay", {
+          duration: 4000,
+          position: "top-right",
+        });
+      }
+    } catch (error) {
+      console.error("Error deleting barangay:", error);
+      toast.error(
+        error.message || "Failed to delete barangay. Please try again.",
+        {
+          duration: 4000,
+          position: "top-right",
+        },
+      );
+    }
+  };
+
+  // Filter data based on search term
+  const filteredData = barangayData.filter(
+    (row) =>
+      row.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      row.number.includes(searchTerm) ||
+      (searchTerm.toLowerCase() === "snail" && row.snail > 0) ||
+      (searchTerm.toLowerCase() === "fall armyworm" && row.fallarmyworm > 0) ||
+      (searchTerm.toLowerCase() === "stemborer" && row.stemborer > 0) ||
+      (searchTerm.toLowerCase() === "armyworm" && row.fallarmyworm > 0),
   );
+
+  // Fetch data on component mount
+  useEffect(() => {
+    fetchBarangays();
+  }, []);
 
   return (
     <div className="flex h-full w-full flex-col overflow-hidden rounded-2xl bg-white shadow">
       {/* Header */}
       <div className="border-b border-gray-200 px-6 py-5">
-        <h2 className="text-xl font-semibold text-gray-800">
-          Pest Heatmap by Barangay
-        </h2>
+        <div className="flex items-center justify-between">
+          <h2 className="text-lg font-bold text-[var(--color-text-primary)]">
+            Pest Heatmap by Barangay
+          </h2>
+          {/* Refresh Button */}
+          <button
+            onClick={fetchBarangays}
+            className="rounded-lg p-2 text-gray-600 transition-colors hover:bg-gray-100"
+            title="Refresh Data"
+          >
+            <Icon icon="mdi:refresh" width="20" height="20" />
+          </button>
+        </div>
       </div>
 
       {/* Search + Legend */}
       <div className="flex flex-col gap-2 border-b border-gray-100 px-6 py-3 md:flex-row md:items-center md:justify-between">
         {/* Left: Button + Search */}
         <div className="flex flex-col gap-2 md:flex-row md:items-center md:gap-3">
-          {/* Add Button */}
-          <button className="h-10 rounded-2xl bg-red-600 px-4 text-sm font-medium text-white transition hover:bg-red-700">
-            Add Barangay
-          </button>
-
           {/* Search */}
           <div className="relative w-full md:w-72">
             <input
               type="text"
-              placeholder="Search barangay..."
+              placeholder="Search barangay or pest type..."
               className="w-full rounded-lg border border-gray-200 py-2.5 pr-4 pl-10 text-sm focus:border-transparent focus:ring-2 focus:ring-blue-500 focus:outline-none"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -68,75 +296,189 @@ const ReportsHeatMap = () => {
           </div>
         </div>
 
-        {/* Right: Legend + More Button */}
-        <div className="flex flex-wrap items-center justify-between gap-4 md:mt-0">
+        {/* Right: Legend */}
+        <div className="flex flex-wrap items-center justify-end gap-4 md:mt-0">
           {/* Legend */}
           <div className="flex flex-wrap items-center gap-3 text-sm font-medium">
             <div className="flex items-center gap-1">
-              <span className="h-4 w-4 rounded border border-gray-300 bg-gray-100"></span>
+              <span className="h-4 w-4 rounded border border-gray-300 bg-gray-100 text-left text-xs font-semibold tracking-wider text-[var(--color-text-primary)] uppercase"></span>
               None
             </div>
             <div className="flex items-center gap-1">
-              <span className="h-4 w-4 rounded border border-green-300 bg-green-100"></span>
+              <span className="h-4 w-4 rounded border border-green-300 bg-green-100 text-left text-xs font-semibold tracking-wider text-[var(--color-text-primary)] uppercase"></span>
               Low
             </div>
             <div className="flex items-center gap-1">
-              <span className="h-4 w-4 rounded border border-yellow-300 bg-yellow-100"></span>
+              <span className="h-4 w-4 rounded border border-yellow-300 bg-yellow-100 text-left text-xs font-semibold tracking-wider text-[var(--color-text-primary)] uppercase"></span>
               Medium
             </div>
             <div className="flex items-center gap-1">
-              <span className="h-4 w-4 rounded border border-red-300 bg-red-100"></span>
+              <span className="h-4 w-4 rounded border border-red-300 bg-red-100 text-left text-xs font-semibold tracking-wider text-[var(--color-text-primary)] uppercase"></span>
               High
             </div>
           </div>
-
-          {/* More Options Button */}
-          <button className="rounded-lg p-2 text-gray-600 transition-colors hover:bg-gray-100">
-            <span className="text-lg">⋮</span>
-          </button>
         </div>
       </div>
 
+      {/* Loading/Error States */}
+      {loading && (
+        <div className="flex flex-1 items-center justify-center">
+          <div className="text-center">
+            <Icon
+              icon="mdi:loading"
+              className="mb-2 animate-spin text-4xl text-blue-500"
+            />
+            <p className="text-gray-500">Loading barangays...</p>
+          </div>
+        </div>
+      )}
+
+      {error && !loading && (
+        <div className="flex flex-1 items-center justify-center">
+          <div className="text-center">
+            <Icon
+              icon="mdi:alert-circle"
+              className="mb-2 text-4xl text-red-500"
+            />
+            <p className="mb-2 text-red-500">{error}</p>
+            <button
+              onClick={fetchBarangays}
+              className="rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+            >
+              Try Again
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Table */}
-      <div className="scrollbar-hide flex-1 overflow-auto">
-        <table className="w-full table-auto">
-          <thead className="sticky top-0 z-10 bg-white">
-            <tr className="border-b border-gray-100 text-left text-sm font-medium text-gray-600">
-              <th className="px-6 py-4">Barangay</th>
-              <th className="px-6 py-4">Snail</th>
-              <th className="px-6 py-4">Fall Armyworm</th>
-              <th className="px-6 py-4">Stemborer</th>
-            </tr>
-          </thead>
-          <tbody className="bg-white">
-            {filteredData.map((row, idx) => (
-              <tr
-                key={idx}
-                className="border-b border-gray-100 hover:bg-gray-50"
-              >
-                <td className="px-6 py-4 text-sm font-medium text-gray-900">
-                  {row.name}
-                </td>
-                <td
-                  className={`px-6 py-4 text-sm font-medium ${getHeatColor(row.snail)}`}
-                >
-                  {row.snail}
-                </td>
-                <td
-                  className={`px-6 py-4 text-sm font-medium ${getHeatColor(row.fallarmyworm)}`}
-                >
-                  {row.fallarmyworm}
-                </td>
-                <td
-                  className={`px-6 py-4 text-sm font-medium ${getHeatColor(row.stemborer)}`}
-                >
-                  {row.stemborer}
-                </td>
+      {!loading && !error && (
+        <div className="scrollbar-hide flex-1 overflow-auto">
+          <table className="w-full table-fixed">
+            <thead className="sticky top-0 z-10 bg-gray-50/70">
+              <tr className="text-left text-xs font-semibold tracking-wider text-[var(--color-text-primary)] uppercase">
+                <th className="w-1/6 px-6 py-4">Barangay Number</th>
+                <th className="w-1/6 px-6 py-4">Barangay</th>
+                <th className="w-1/6 px-6 py-4">Snail</th>
+                <th className="w-1/6 px-6 py-4">Fall Armyworm</th>
+                <th className="w-1/6 px-6 py-4">Stemborer</th>
+                <th className="w-1/6 px-6 py-4">Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody className="divide-y divide-gray-100 bg-white">
+              {filteredData.length === 0 ? (
+                <tr>
+                  <td
+                    colSpan="6"
+                    className="px-6 py-8 text-center text-gray-500"
+                  >
+                    {searchTerm
+                      ? "No barangays found matching your search."
+                      : "No barangays found."}
+                  </td>
+                </tr>
+              ) : (
+                filteredData.map((row, idx) => (
+                  <tr
+                    key={row.id || idx}
+                    className="transition-colors duration-150 hover:bg-gray-50/50"
+                  >
+                    <td className="px-6 py-5 whitespace-nowrap">
+                      <span className="text-sm font-medium text-[var(--color-text-description)]">
+                        {row.number}
+                      </span>
+                    </td>
+                    <td className="px-6 py-5 whitespace-nowrap">
+                      <span className="text-sm font-medium text-[var(--color-text-description)]">
+                        {row.name}
+                      </span>
+                    </td>
+                    <td
+                      className={`px-6 py-5 whitespace-nowrap ${getHeatColor(row.snail)}`}
+                    >
+                      <span className="text-sm font-medium text-[var(--color-text-description)]">
+                        {row.snail}
+                      </span>
+                    </td>
+                    <td
+                      className={`px-6 py-5 whitespace-nowrap ${getHeatColor(row.fallarmyworm)}`}
+                    >
+                      <span className="text-sm font-medium text-[var(--color-text-description)]">
+                        {row.fallarmyworm}
+                      </span>
+                    </td>
+                    <td
+                      className={`px-6 py-5 whitespace-nowrap ${getHeatColor(row.stemborer)}`}
+                    >
+                      <span className="text-sm font-medium text-[var(--color-text-description)]">
+                        {row.stemborer}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => handleEditBarangay(row)}
+                          className="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-100 text-gray-600 transition hover:bg-gray-200"
+                          title="Edit Barangay"
+                        >
+                          <Icon icon="mdi:pencil" width="16" height="16" />
+                        </button>
+
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <button
+                              className="flex h-8 w-8 items-center justify-center rounded-lg bg-red-100 text-red-600 transition hover:bg-red-200"
+                              title="Delete Barangay"
+                            >
+                              <Icon
+                                icon="mdi:delete-outline"
+                                width="16"
+                                height="16"
+                              />
+                            </button>
+                          </AlertDialogTrigger>
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>
+                                Delete Barangay
+                              </AlertDialogTitle>
+                              <AlertDialogDescription>
+                                Are you sure you want to delete barangay{" "}
+                                <strong>{row.name}</strong> (ID: {row.number})?
+                                This action cannot be undone and will
+                                permanently remove all barangay data and related
+                                pest information.
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>Cancel</AlertDialogCancel>
+                              <AlertDialogAction
+                                onClick={() => handleDeleteBarangay(row)}
+                                className="bg-red-600 hover:bg-red-700"
+                              >
+                                Delete Barangay
+                              </AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      {/* Add Barangay Modal */}
+      <AddBarangayModal
+        isOpen={isModalOpen}
+        onClose={handleModalClose}
+        onSubmit={handleModalSubmit}
+        editingData={editingBarangay}
+        isEditing={!!editingBarangay}
+      />
     </div>
   );
 };

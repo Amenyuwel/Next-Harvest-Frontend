@@ -1,211 +1,187 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { Pie, PieChart, ResponsiveContainer, Sector, Cell } from "recharts";
 
-const RecordsFarmerPie = () => {
+const renderActiveShape = ({
+  cx,
+  cy,
+  midAngle,
+  innerRadius,
+  outerRadius,
+  startAngle,
+  endAngle,
+  fill,
+  payload,
+  percent,
+  value,
+}) => {
+  const RADIAN = Math.PI / 180;
+  const sin = Math.sin(-RADIAN * (midAngle ?? 1));
+  const cos = Math.cos(-RADIAN * (midAngle ?? 1));
+  const sx = (cx ?? 0) + ((outerRadius ?? 0) + 10) * cos;
+  const sy = (cy ?? 0) + ((outerRadius ?? 0) + 10) * sin;
+  const mx = (cx ?? 0) + ((outerRadius ?? 0) + 30) * cos;
+  const my = (cy ?? 0) + ((outerRadius ?? 0) + 30) * sin;
+  const ex = mx + (cos >= 0 ? 1 : -1) * 22;
+  const ey = my;
+  const textAnchor = cos >= 0 ? "start" : "end";
+
+  return (
+    <g>
+      {/* Center text showing hovered item details */}
+      <text
+        x={cx}
+        y={cy}
+        dy={-10}
+        textAnchor="middle"
+        fill="#333"
+        fontSize="24"
+        fontWeight="bold"
+      >
+        {value}
+      </text>
+      <text x={cx} y={cy} dy={10} textAnchor="middle" fill="#666" fontSize="14">
+        {payload.name}
+      </text>
+      <text x={cx} y={cy} dy={25} textAnchor="middle" fill="#999" fontSize="12">
+        {`${((percent ?? 1) * 100).toFixed(1)}%`}
+      </text>
+
+      <Sector
+        cx={cx}
+        cy={cy}
+        innerRadius={innerRadius}
+        outerRadius={outerRadius}
+        startAngle={startAngle}
+        endAngle={endAngle}
+        fill={fill}
+      />
+      <Sector
+        cx={cx}
+        cy={cy}
+        startAngle={startAngle}
+        endAngle={endAngle}
+        innerRadius={(outerRadius ?? 0) + 6}
+        outerRadius={(outerRadius ?? 0) + 10}
+        fill={fill}
+      />
+    </g>
+  );
+};
+
+const RecordsFarmerPie = ({ farmers = [], loading = false }) => {
+  const [activeIndex, setActiveIndex] = useState(null);
+  const [crops, setCrops] = useState([]);
+
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+
+  // Fetch crops for name lookup
+  useEffect(() => {
+    fetchCrops();
+  }, []);
+
+  const fetchCrops = async () => {
+    try {
+      const response = await fetch(`${API_URL}/api/crops`);
+      if (response.ok) {
+        const result = await response.json();
+        if (result.success && result.data) {
+          setCrops(result.data);
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching crops:", error);
+    }
+  };
+
+  // Helper function to get crop name from ID
+  const getCropName = (cropId) => {
+    const crop = crops.find((c) => c.cropId === cropId);
+    return crop
+      ? crop.cropName.charAt(0).toUpperCase() +
+          crop.cropName.slice(1).toLowerCase()
+      : cropId;
+  };
+
+  // Calculate rice and corn farmers from real data
+  const riceFarmers = farmers.filter((farmer) => {
+    const cropName = getCropName(farmer.crop);
+    return cropName.toLowerCase().includes("rice");
+  }).length;
+
+  const cornFarmers = farmers.filter((farmer) => {
+    const cropName = getCropName(farmer.crop);
+    return cropName.toLowerCase().includes("corn");
+  }).length;
+
+  // Use real data instead of dummy data
   const statsData = [
-    { crop: "Rice", value: 35, color: "#10b981", lightColor: "#f0fdf4" },
-    { crop: "Corn", value: 40, color: "#f59e0b", lightColor: "#fffbeb" },
+    { name: "Rice", value: riceFarmers, color: "var(--color-rice)" },
+    { name: "Corn", value: cornFarmers, color: "var(--color-corn)" },
   ];
 
   const totalValue = statsData.reduce((sum, item) => sum + item.value, 0);
-  const radius = 120;
-  const centerX = 200;
-  const centerY = 150;
 
   return (
-    <div className="flex h-full flex-col rounded-2xl border border-gray-100 bg-white p-8 shadow-sm">
-      <div className="mb-8 flex items-center justify-between">
-        <div>
-          <h3 className="text-xl font-semibold text-gray-900">
+    <div className="flex h-full flex-col rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+      <div className="flex items-center justify-center">
+        <header>
+          <h2 className="text-lg font-bold text-[var(--color-text-primary)]">
             Crop Distribution
-          </h3>
-          <p className="mt-1 text-sm text-gray-600">
-            Farmer statistics by crop type
-          </p>
-        </div>
+          </h2>
+        </header>
       </div>
 
       {/* Pie Chart */}
-      <div className="relative mb-8 flex flex-1 justify-center">
-        <svg
-          width="400"
-          height="300"
-          viewBox="0 0 400 300"
-          className="overflow-visible"
-        >
-          <defs>
-            {statsData.map((item, index) => (
-              <linearGradient
-                key={index}
-                id={`pieGradient${index + 1}`}
-                x1="0%"
-                y1="0%"
-                x2="100%"
-                y2="100%"
+      <div
+        className="relative mb-10 flex flex-1 justify-center"
+        style={{ minHeight: 300 }}
+      >
+        <ResponsiveContainer width="100%" height={300}>
+          <PieChart>
+            <Pie
+              activeIndex={activeIndex}
+              activeShape={activeIndex !== null ? renderActiveShape : undefined}
+              data={statsData}
+              cx="50%"
+              cy="45%"
+              innerRadius={60}
+              outerRadius={90}
+              dataKey="value"
+              onMouseEnter={(_, idx) => setActiveIndex(idx)}
+              onMouseLeave={() => setActiveIndex(null)}
+              isAnimationActive={false}
+            >
+              {statsData.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={entry.color} />
+              ))}
+            </Pie>
+            {activeIndex === null && (
+              <text
+                x="50%"
+                y="45%"
+                dy={-5}
+                textAnchor="middle"
+                fill="#333"
+                fontSize="28"
+                fontWeight="bold"
               >
-                <stop
-                  offset="0%"
-                  style={{ stopColor: item.color, stopOpacity: 0.9 }}
-                />
-                <stop
-                  offset="100%"
-                  style={{ stopColor: item.color, stopOpacity: 0.7 }}
-                />
-              </linearGradient>
-            ))}
-          </defs>
-
-          {/* Pie Slices */}
-          {statsData.map((item, index) => {
-            let startAngle = 0;
-            for (let i = 0; i < index; i++) {
-              startAngle += (statsData[i].value / totalValue) * 360;
-            }
-            const endAngle = startAngle + (item.value / totalValue) * 360;
-            const midAngle = (startAngle + endAngle) / 2;
-
-            // Convert to radians
-            const startRad = (startAngle * Math.PI) / 180;
-            const endRad = (endAngle * Math.PI) / 180;
-            const midRad = (midAngle * Math.PI) / 180;
-
-            // Calculate arc path
-            const x1 = centerX + radius * Math.cos(startRad);
-            const y1 = centerY + radius * Math.sin(startRad);
-            const x2 = centerX + radius * Math.cos(endRad);
-            const y2 = centerY + radius * Math.sin(endRad);
-
-            const largeArcFlag = endAngle - startAngle > 180 ? 1 : 0;
-
-            const pathData = [
-              `M ${centerX} ${centerY}`,
-              `L ${x1} ${y1}`,
-              `A ${radius} ${radius} 0 ${largeArcFlag} 1 ${x2} ${y2}`,
-              "Z",
-            ].join(" ");
-
-            // Label position
-            const labelRadius = radius + 30;
-            const labelX = centerX + labelRadius * Math.cos(midRad);
-            const labelY = centerY + labelRadius * Math.sin(midRad);
-
-            const percentage = ((item.value / totalValue) * 100).toFixed(1);
-
-            return (
-              <g key={index} className="group cursor-pointer">
-                {/* Pie slice */}
-                <path
-                  d={pathData}
-                  fill={`url(#pieGradient${index + 1})`}
-                  stroke="white"
-                  strokeWidth="3"
-                  className="origin-center transition-all duration-300 hover:scale-105"
-                  style={{ transformOrigin: `${centerX}px ${centerY}px` }}
-                />
-
-                {/* Value label */}
-                <text
-                  x={centerX + radius * 0.7 * Math.cos(midRad)}
-                  y={centerY + radius * 0.7 * Math.sin(midRad)}
-                  textAnchor="middle"
-                  dominantBaseline="middle"
-                  className="fill-white text-sm font-bold"
-                >
-                  {item.value}
-                </text>
-
-                {/* Percentage label outside */}
-                <text
-                  x={labelX}
-                  y={labelY}
-                  textAnchor="middle"
-                  dominantBaseline="middle"
-                  className="fill-gray-600 text-xs font-medium"
-                >
-                  {percentage}%
-                </text>
-
-                {/* Crop name */}
-                <text
-                  x={labelX}
-                  y={labelY + 15}
-                  textAnchor="middle"
-                  dominantBaseline="middle"
-                  className="text-sm font-semibold"
-                  fill={item.color}
-                >
-                  {item.crop}
-                </text>
-              </g>
-            );
-          })}
-
-          {/* Center circle for donut effect (optional) */}
-          <circle
-            cx={centerX}
-            cy={centerY}
-            r="40"
-            fill="white"
-            stroke="#e5e7eb"
-            strokeWidth="2"
-          />
-
-          {/* Total in center */}
-          <text
-            x={centerX}
-            y={centerY - 5}
-            textAnchor="middle"
-            dominantBaseline="middle"
-            className="fill-gray-900 text-lg font-bold"
-          >
-            {totalValue}
-          </text>
-          <text
-            x={centerX}
-            y={centerY + 12}
-            textAnchor="middle"
-            dominantBaseline="middle"
-            className="fill-gray-500 text-xs"
-          >
-            Total
-          </text>
-        </svg>
-      </div>
-
-      {/* Legend */}
-      <div className="mb-6 flex flex-wrap justify-center gap-6">
-        {statsData.map((item, index) => {
-          const percentage = ((item.value / totalValue) * 100).toFixed(1);
-          return (
-            <div key={index} className="flex items-center gap-2">
-              <div
-                className="h-4 w-4 rounded-sm"
-                style={{ backgroundColor: item.color }}
-              ></div>
-              <span className="text-sm font-medium text-gray-700">
-                {item.crop}
-              </span>
-              <span className="text-sm text-gray-500">
-                ({item.value} - {percentage}%)
-              </span>
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Summary */}
-      <div className="border-t border-gray-100 pt-6">
-        <div className="grid grid-cols-2 gap-4">
-          <div className="text-center">
-            <p className="text-2xl font-bold text-gray-900">{totalValue}</p>
-            <p className="text-xs text-gray-600">Total Farmers</p>
-          </div>
-          <div className="text-center">
-            <p className="text-2xl font-bold text-gray-900">
-              {statsData.length}
-            </p>
-            <p className="text-xs text-gray-600">Crop Types</p>
-          </div>
-        </div>
+                {totalValue}
+              </text>
+            )}
+            {activeIndex === null && (
+              <text
+                x="50%"
+                y="45%"
+                dy={20}
+                textAnchor="middle"
+                fill="#666"
+                fontSize="14"
+              >
+                Total Farmers
+              </text>
+            )}
+          </PieChart>
+        </ResponsiveContainer>
       </div>
     </div>
   );
