@@ -7,9 +7,9 @@ import ProfileNotifications from '@/components/profile/ProfileNotifications';
 
 function ProfilePage() {
   return (
-    <div className="h-full w-full p-6 ">
+    <div className="h-full w-full p-6">
       {/* Bento Grid Layout */}
-      <div className="grid grid-cols-12 grid-rows-12 gap-6 h-full">
+      <div className="grid grid-cols-12 grid-rows-12 gap-4 h-full">
         {/* Profile Info - Left Column */}
         <div className="col-span-3 row-span-12">
           <ProfileInfo />
