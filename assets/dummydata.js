@@ -222,3 +222,64 @@ export const pestReports = [
   },
 ];
 
+export const profileData = {
+  _id: "68931aa15c6f6d67bfacb45c",
+  username: "Amenyuwel",
+  password: "s2bs10$iFzq1yVjAMsz/J2SO2H.NMvIlj8iJnqZmHmrg9tHkVc.bq/OpH0",
+  email: "emmanueldmalagamba@gmail.com",
+  role: "admin",
+  firstname: "Emmanuel",
+  lastname: "Malagamba",
+  middleName: null,
+  isActive: true,
+  lastLogin: null,
+  createdAt: "2025-08-06T09:04:33.246+00:00",
+  updatedAt: "2025-08-06T09:04:33.246+00:00"
+};
+
+export const profileStats = [
+  {
+    label: "Total Farms",
+    value: 5,
+    icon: "ph:farm-fill",
+    color: "text-chartGreen",
+    bgColor: "bg-green-50"
+  },
+  {
+    label: "Active Crops",
+    value: 12,
+    icon: "mdi:leaf",
+    color: "text-chartOrange",
+    bgColor: "bg-orange-50"
+  },
+  {
+    label: "Harvest This Month",
+    value: 3,
+    icon: "mdi:grain",
+    color: "text-chartBlue",
+    bgColor: "bg-blue-50"
+  },
+  {
+    label: "Reports Generated",
+    value: 24,
+    icon: "mdi:chart-line",
+    color: "text-chartPurple",
+    bgColor: "bg-purple-50"
+  }
+];
+
+export const profileChartData = {
+  labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+  datasets: [
+    {
+      label: "Monthly Activity",
+      data: [12, 19, 15, 25, 22, 30],
+      borderColor: "#10B981",
+      backgroundColor: "rgba(16, 185, 129, 0.1)",
+      borderWidth: 2,
+      fill: true,
+      tension: 0.4,
+    },
+  ],
+};
+

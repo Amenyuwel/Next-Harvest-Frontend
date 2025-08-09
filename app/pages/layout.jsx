@@ -37,7 +37,7 @@ export default function PagesLayout({ children }) {
               showAddButton={headerConfig.showAddButton}
               addButtonText={headerConfig.addButtonText}
               onAddClick={headerConfig.onAddClick}
-              showProfile={true}
+              showProfile={pathname !== '/pages/profile'}
             />
           </div>
 
