@@ -36,7 +36,7 @@ const GlobalHeader = ({
           </button>
         )}
 
-        {showProfile && (
+        {showProfile && pathname !== '/pages/profile' && (
           <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-full bg-gray-300">
             <img
               src="/api/placeholder/48/48"
