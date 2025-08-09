@@ -8,9 +8,9 @@ const GlobalHeader = ({
   showAddButton: propShowAddButton,
   addButtonText: propAddButtonText,
   onAddClick: propOnAddClick,
-  showProfile = true,
 }) => {
   const pathname = usePathname();
+  
   const config = routeConfig[pathname] || {};
 
   // Prefer props if provided, else use config, else fallback
@@ -24,7 +24,7 @@ const GlobalHeader = ({
       {/* Title */}
       <h1 className="text-4xl font-semibold text-[var(--color-text-primary)]">{title}</h1>
 
-      {/* Right side - Add Button + Profile */}
+      {/* Right side - Add Button */}
       <div className="flex items-center gap-4">
         {showAddButton && (
           <button
@@ -34,16 +34,6 @@ const GlobalHeader = ({
             {addButtonText}
             <Icon icon="mdi:plus" width="20" height="20" />
           </button>
-        )}
-
-        {showProfile && pathname !== '/pages/profile' && (
-          <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-full bg-gray-300">
-            <img
-              src="/api/placeholder/48/48"
-              alt="Profile"
-              className="h-full w-full object-cover"
-            />
-          </div>
         )}
       </div>
     </div>

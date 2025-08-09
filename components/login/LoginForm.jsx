@@ -2,10 +2,12 @@
 import React, { useState } from "react";
 import { Icon } from "@iconify/react";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/app/context/AuthContext";
 import Register from "../register/RegisterForm";
 
 function LoginForm() {
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
+  const { login } = useAuth();
 
   const [showRegister, setShowRegister] = useState(false);
   const [formData, setFormData] = useState({
@@ -43,10 +45,9 @@ function LoginForm() {
       const data = await response.json();
 
       if (data.success) {
-        // Store token in localStorage
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("user", JSON.stringify(data.user));
-
+        // Use the AuthContext login method
+        login(data.user, data.token);
+        
         // Redirect to dashboard
         router.push("/pages/dashboard");
       } else {

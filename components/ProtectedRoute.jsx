@@ -1,23 +1,11 @@
 "use client";
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { useAuth } from "@/app/context/AuthContext";
+import NotFound from "./NotFound";
 
-export default function Page() {
-  const router = useRouter();
+const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
 
-  useEffect(() => {
-    if (!loading) {
-      if (isAuthenticated()) {
-        router.replace("/pages/dashboard");
-      } else {
-        router.replace("/login");
-      }
-    }
-  }, [router, isAuthenticated, loading]);
-
-  // Show loading while checking authentication
+  // Show loading spinner while checking authentication
   if (loading) {
     return (
       <div className="flex h-screen items-center justify-center bg-[var(--color-background-gray)]">
@@ -29,5 +17,18 @@ export default function Page() {
     );
   }
 
-  return null;
-}
+  // Show 404 page if not authenticated
+  if (!isAuthenticated()) {
+    return (
+      <NotFound
+        title="Access Denied"
+        message="You need to be logged in to access this page. Please login to continue."
+        showLoginButton={true}
+      />
+    );
+  }
+
+  return children;
+};
+
+export default ProtectedRoute;

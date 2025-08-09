@@ -4,11 +4,13 @@ import { Icon } from "@iconify/react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import { sidebarConfig } from "@/app/config/sidebarConfig";
+import { useAuth } from "@/app/context/AuthContext";
 
 function Sidebar() {
   const [activeItem, setActiveItem] = useState("dashboard");
   const router = useRouter();
   const pathname = usePathname();
+  const { logout } = useAuth();
 
   // Memoize menu items for performance
   const mainMenuItems = useMemo(() => sidebarConfig.main, []);
@@ -40,13 +42,12 @@ function Sidebar() {
       setActiveItem(item.id);
 
       if (item.action === "logout") {
-        localStorage.removeItem("token");
-        router.push("/login");
+        logout();
       } else if (item.path) {
         router.push(item.path);
       }
     },
-    [router]
+    [router, logout]
   );
 
   // Render a menu item
