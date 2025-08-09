@@ -3,6 +3,17 @@ import React, { useState, useEffect } from "react";
 import { Icon } from "@iconify/react";
 import toast from "react-hot-toast";
 import AddBarangayModal from "./AddBarangayModal";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 const getHeatColor = (value) => {
   if (value === 0) return "bg-gray-100";
@@ -178,15 +189,11 @@ const ReportsHeatMap = () => {
     setEditingBarangay(null);
   };
 
-  // Delete barangay
-  const handleDeleteBarangay = async (barangayId) => {
-    if (!confirm("Are you sure you want to delete this barangay?")) {
-      return;
-    }
-
+  // Handle delete barangay confirmation
+  const handleDeleteBarangay = async (barangay) => {
     try {
       const response = await fetch(
-        `http://localhost:5000/api/barangays/${barangayId}`,
+        `http://localhost:5000/api/barangays/${barangay.id}`,
         {
           method: "DELETE",
         },
@@ -416,17 +423,44 @@ const ReportsHeatMap = () => {
                         >
                           <Icon icon="mdi:pencil" width="16" height="16" />
                         </button>
-                        <button
-                          onClick={() => handleDeleteBarangay(row.id)}
-                          className="flex h-8 w-8 items-center justify-center rounded-lg bg-red-100 text-red-600 transition hover:bg-red-200"
-                          title="Delete Barangay"
-                        >
-                          <Icon
-                            icon="mdi:delete-outline"
-                            width="16"
-                            height="16"
-                          />
-                        </button>
+
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <button
+                              className="flex h-8 w-8 items-center justify-center rounded-lg bg-red-100 text-red-600 transition hover:bg-red-200"
+                              title="Delete Barangay"
+                            >
+                              <Icon
+                                icon="mdi:delete-outline"
+                                width="16"
+                                height="16"
+                              />
+                            </button>
+                          </AlertDialogTrigger>
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>
+                                Delete Barangay
+                              </AlertDialogTitle>
+                              <AlertDialogDescription>
+                                Are you sure you want to delete barangay{" "}
+                                <strong>{row.name}</strong> (ID: {row.number})?
+                                This action cannot be undone and will
+                                permanently remove all barangay data and related
+                                pest information.
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>Cancel</AlertDialogCancel>
+                              <AlertDialogAction
+                                onClick={() => handleDeleteBarangay(row)}
+                                className="bg-red-600 hover:bg-red-700"
+                              >
+                                Delete Barangay
+                              </AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
                       </div>
                     </td>
                   </tr>

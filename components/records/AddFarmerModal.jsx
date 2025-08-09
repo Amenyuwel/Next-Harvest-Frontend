@@ -1,6 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { X, ChevronDown } from "lucide-react";
 import toast from "react-hot-toast";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 const AddFarmerModal = ({
   isOpen,
@@ -314,7 +325,6 @@ const AddFarmerModal = ({
   const handleSubmit = async () => {
     setIsSubmitting(true);
     try {
-      console.log("=== FRONTEND SUBMIT START ===");
       console.log("API_URL:", API_URL);
       console.log("Is Editing:", isEditing);
 
@@ -458,7 +468,7 @@ const AddFarmerModal = ({
   if (!isOpen) return null;
 
   return (
-    <div className="bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center bg-[var(--color-modal-bg)]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
       <div className="mx-4 w-full max-w-md rounded-lg bg-white shadow-xl">
         {/* Modal Header */}
         <div className="flex items-center justify-between border-b border-gray-200 p-6">
@@ -705,20 +715,49 @@ const AddFarmerModal = ({
             >
               Cancel
             </button>
-            <button
-              type="button"
-              onClick={handleSubmit}
-              disabled={isSubmitting}
-              className="flex-1 rounded-md bg-blue-600 px-4 py-2 font-medium text-white transition-colors hover:bg-blue-700 disabled:bg-blue-400"
-            >
-              {isSubmitting
-                ? isEditing
-                  ? "Updating Farmer..."
-                  : "Adding Farmer..."
-                : isEditing
-                  ? "Update Farmer"
-                  : "Add Farmer"}
-            </button>
+
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <button
+                  type="button"
+                  disabled={isSubmitting}
+                  className="flex-1 rounded-md bg-blue-600 px-4 py-2 font-medium text-white transition-colors hover:bg-blue-700 disabled:bg-blue-400"
+                >
+                  {isSubmitting
+                    ? isEditing
+                      ? "Updating Farmer..."
+                      : "Adding Farmer..."
+                    : isEditing
+                      ? "Update Farmer"
+                      : "Add Farmer"}
+                </button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>
+                    {isEditing ? "Confirm Update" : "Confirm Addition"}
+                  </AlertDialogTitle>
+                  <AlertDialogDescription>
+                    {isEditing
+                      ? `Are you sure you want to update the farmer information for ${formData.firstName} ${formData.lastName}? This will modify the existing record.`
+                      : `Are you sure you want to add ${formData.firstName} ${formData.lastName} as a new farmer? This will create a new farmer record.`}
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={handleSubmit}
+                    className={
+                      isEditing
+                        ? "bg-blue-600 hover:bg-blue-700"
+                        : "bg-green-600 hover:bg-green-700"
+                    }
+                  >
+                    {isEditing ? "Update Farmer" : "Add Farmer"}
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </div>
         </div>
       </div>
