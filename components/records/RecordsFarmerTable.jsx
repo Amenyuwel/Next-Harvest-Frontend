@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Icon } from "@iconify/react";
 import toast from "react-hot-toast";
 import AddFarmerModal from "./AddFarmerModal";
+import { authenticatedGet, authenticatedDelete } from "../../utils/apiUtils.js";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -247,16 +248,11 @@ const RecordsFarmerTable = ({
       if (onDeleteFarmer) {
         await onDeleteFarmer(farmer);
       } else {
-        // Default delete logic
-        const response = await fetch(`${API_URL}/api/farmers/${farmer._id}`, {
-          method: "DELETE",
-        });
+        // Default delete logic using authenticated request
+        const result = await authenticatedDelete(
+          `${API_URL}/api/farmers/${farmer._id}`,
+        );
 
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const result = await response.json();
         if (result.success) {
           toast.success("Farmer deleted successfully!", {
             duration: 4000,
@@ -458,7 +454,8 @@ const RecordsFarmerTable = ({
                                   farmer.name ||
                                   `${farmer.firstName} ${farmer.lastName}`}
                               </strong>
-                              ? This action cannot be undone and will permanently remove all farmer data.
+                              ? This action cannot be undone and will
+                              permanently remove all farmer data.
                             </AlertDialogDescription>
                           </AlertDialogHeader>
                           <AlertDialogFooter>

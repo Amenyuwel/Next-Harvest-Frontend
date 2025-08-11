@@ -1,56 +1,14 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Icon } from "@iconify/react";
+import { usePests, useSearch } from "../../hooks/index.js";
 
 const PestClassesTable = () => {
   const [activeTab, setActiveTab] = useState("All");
   const [searchTerm, setSearchTerm] = useState("");
-  const [pestData, setPestData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
 
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
-
-  // Fetch pest data from API
-  useEffect(() => {
-    fetchPestData();
-  }, []);
-
-  const fetchPestData = async () => {
-    try {
-      setLoading(true);
-      setError(""); // Clear previous errors
-
-      console.log("Fetching pest data from:", `${API_URL}/api/pests`);
-      const response = await fetch(`${API_URL}/api/pests`);
-
-      console.log("Response status:", response.status);
-      console.log("Response ok:", response.ok);
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error("Error response:", errorText);
-        throw new Error(
-          `HTTP error! status: ${response.status} - ${errorText}`,
-        );
-      }
-
-      const result = await response.json();
-      console.log("API Response:", result);
-
-      if (result.success) {
-        setPestData(result.data);
-        setError(""); // Clear any previous errors
-      } else {
-        setError(result.message || "Failed to fetch pest data");
-      }
-    } catch (error) {
-      console.error("Error fetching pest data:", error);
-      setError(`Failed to load pest data: ${error.message}`);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // Use custom hooks
+  const { pests, loading, error, refreshPests } = usePests();
 
   // Helper function to format array data as string
   const formatArrayToString = (array) => {
@@ -58,20 +16,9 @@ const PestClassesTable = () => {
     return array.join(", ");
   };
 
-  // Filter pest data based on search term
-  const filteredPests = pestData.filter((pest) => {
-    const searchLower = searchTerm.toLowerCase();
-    return (
-      pest.pestName?.toLowerCase().includes(searchLower) ||
-      formatArrayToString(pest.recommendations)
-        ?.toLowerCase()
-        .includes(searchLower) ||
-      formatArrayToString(pest.activeMonth)
-        ?.toLowerCase()
-        .includes(searchLower) ||
-      pest.season?.toLowerCase().includes(searchLower)
-    );
-  });
+  // Use search hook with appropriate fields
+  const searchFields = ["pestName", "recommendations", "activeMonth", "season"];
+  const filteredPests = useSearch(pests, searchFields, searchTerm);
 
   return (
     <div className="flex h-full w-full flex-col overflow-hidden rounded-2xl bg-white shadow">
@@ -83,7 +30,7 @@ const PestClassesTable = () => {
           </h2>
           {/* Refresh Button */}
           <button
-            onClick={fetchPestData}
+            onClick={refreshPests}
             className="rounded-lg p-2 text-gray-600 transition-colors hover:bg-gray-100"
             title="Refresh Data"
           >
