@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { X, ChevronDown } from "lucide-react";
 import toast from "react-hot-toast";
+import { authenticatedGet, authenticatedPost, authenticatedPut } from "../../utils/apiUtils.js";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -152,18 +153,12 @@ const AddFarmerModal = ({
   const fetchBarangays = async () => {
     setLoadingBarangays(true);
     try {
-      const response = await fetch(`${API_URL}/api/barangays`);
-      if (response.ok) {
-        const result = await response.json();
-        if (result.success && result.data) {
-          setBarangays(result.data);
-          setFilteredBarangays(result.data);
-        } else {
-          console.error("API returned error:", result.message);
-        }
+      const result = await authenticatedGet(`${API_URL}/api/barangays`);
+      if (result.success && result.data) {
+        setBarangays(result.data);
+        setFilteredBarangays(result.data);
       } else {
-        const errorText = await response.text();
-        console.error("Failed to fetch barangays:", response.status, errorText);
+        console.error("API returned error:", result.message);
       }
     } catch (error) {
       console.error("Network error fetching barangays:", error);
@@ -175,17 +170,11 @@ const AddFarmerModal = ({
   const fetchCrops = async () => {
     setLoadingCrops(true);
     try {
-      const response = await fetch(`${API_URL}/api/crops`);
-      if (response.ok) {
-        const result = await response.json();
-        if (result.success && result.data) {
-          setCrops(result.data);
-        } else {
-          console.error("API returned error:", result.message);
-        }
+      const result = await authenticatedGet(`${API_URL}/api/crops`);
+      if (result.success && result.data) {
+        setCrops(result.data);
       } else {
-        const errorText = await response.text();
-        console.error("Failed to fetch crops:", response.status, errorText);
+        console.error("API returned error:", result.message);
       }
     } catch (error) {
       console.error("Network error fetching crops:", error);
@@ -329,7 +318,7 @@ const AddFarmerModal = ({
       console.log("Is Editing:", isEditing);
 
       let farmerData;
-      let response;
+      let result;
 
       if (isEditing) {
         // Update existing farmer
@@ -341,13 +330,8 @@ const AddFarmerModal = ({
 
         console.log("Updating farmer with data:", farmerData);
 
-        response = await fetch(`${API_URL}/api/farmers/${editingData._id}`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(farmerData),
-        });
+        result = await authenticatedPut(`${API_URL}/api/farmers/${editingData._id}`, farmerData);
+        console.log("✅ Farmer updated successfully:", result);
       } else {
         // Create new farmer
         const rsbsaNumber = await generateRSBSANumber(formData.barangay);
@@ -361,32 +345,9 @@ const AddFarmerModal = ({
         console.log("Generated RSBSA:", rsbsaNumber);
         console.log("Creating farmer with data:", farmerData);
 
-        response = await fetch(`${API_URL}/api/farmers`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(farmerData),
-        });
+        result = await authenticatedPost(`${API_URL}/api/farmers`, farmerData);
+        console.log("✅ Farmer created successfully:", result);
       }
-
-      console.log("Response status:", response.status);
-      console.log("Response ok:", response.ok);
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error("Error response:", errorData);
-        throw new Error(
-          errorData.message ||
-            `Failed to ${isEditing ? "update" : "create"} farmer`,
-        );
-      }
-
-      const result = await response.json();
-      console.log(
-        `✅ Farmer ${isEditing ? "updated" : "created"} successfully:`,
-        result,
-      );
 
       // Show success message
       toast.success(
@@ -432,15 +393,10 @@ const AddFarmerModal = ({
   const generateRSBSANumber = async (barangayId) => {
     try {
       // Get farmer count for this barangay
-      const response = await fetch(
+      const result = await authenticatedGet(
         `${API_URL}/api/farmers/count/${barangayId}`,
       );
 
-      if (!response.ok) {
-        throw new Error("Failed to get farmer count");
-      }
-
-      const result = await response.json();
       const farmerCount = result.data.count || 0;
 
       // Find the selected barangay to get its barangayId

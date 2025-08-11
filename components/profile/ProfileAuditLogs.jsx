@@ -5,6 +5,7 @@ import {
   formatTimestamp,
   getActionIcon,
   getActionColor,
+  getMeaningfulChangesCount,
 } from "../../utils/auditUtils.js";
 
 const ProfileAuditLogs = () => {
@@ -130,8 +131,10 @@ const ProfileAuditLogs = () => {
                 </div>
                 {activity.changes && activity.changes.length > 0 && (
                   <div className="mt-2 rounded border bg-white px-2 py-1 text-xs text-gray-600">
-                    📊 {activity.changes.length} field
-                    {activity.changes.length > 1 ? "s" : ""} modified
+                    📊{" "}
+                    {getMeaningfulChangesCount(activity.changes)}{" "}
+                    meaningful field
+                    {getMeaningfulChangesCount(activity.changes) !== 1 ? "s" : ""} modified
                   </div>
                 )}
               </div>

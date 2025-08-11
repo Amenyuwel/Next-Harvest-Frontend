@@ -170,3 +170,42 @@ export const getStatusDot = (action) => {
       return "bg-gray-500";
   }
 };
+
+// Helper function to filter meaningful changes (excludes technical fields and empty values)
+export const filterMeaningfulChanges = (changes) => {
+  if (!changes || !Array.isArray(changes)) return [];
+  
+  return changes.filter((change) => {
+    const technicalFields = [
+      "_id",
+      "__v", 
+      "createdAt",
+      "updatedAt",
+      "id",
+      "timestamp",
+      "lastModified",
+      "lastUpdated"
+    ];
+    
+    // Skip technical fields
+    if (technicalFields.includes(change.field)) return false;
+
+    // Check if values are empty
+    const isOldEmpty =
+      change.oldValue === null ||
+      change.oldValue === undefined ||
+      (typeof change.oldValue === "string" && change.oldValue.trim() === "");
+    const isNewEmpty =
+      change.newValue === null ||
+      change.newValue === undefined ||
+      (typeof change.newValue === "string" && change.newValue.trim() === "");
+
+    // Skip if both values are empty or one is empty (not meaningful for updates)
+    return !(isOldEmpty && isNewEmpty) && !(isOldEmpty || isNewEmpty);
+  });
+};
+
+// Helper function to get meaningful changes count
+export const getMeaningfulChangesCount = (changes) => {
+  return filterMeaningfulChanges(changes).length;
+};

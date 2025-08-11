@@ -1,5 +1,6 @@
 import React from "react";
 import { Icon } from "@iconify/react";
+import { filterMeaningfulChanges } from "../../utils/auditUtils.js";
 
 const AuditLogItem = ({ log, index, getCropName }) => {
   // Helper functions moved inline to avoid dependencies
@@ -317,17 +318,7 @@ const ChangesDropdown = ({
   formatFieldName,
   formatFieldValue,
 }) => {
-  const meaningfulChanges = log.changes.filter((change) => {
-    const technicalFields = ["_id", "__v", "createdAt", "updatedAt", "id"];
-    if (technicalFields.includes(change.field)) return false;
-
-    const isOldEmpty =
-      !change.oldValue || change.oldValue.toString().trim() === "";
-    const isNewEmpty =
-      !change.newValue || change.newValue.toString().trim() === "";
-
-    return !(isOldEmpty && isNewEmpty) && !(isOldEmpty || isNewEmpty);
-  });
+  const meaningfulChanges = filterMeaningfulChanges(log.changes);
 
   return (
     <details className="group mt-3 cursor-pointer">
