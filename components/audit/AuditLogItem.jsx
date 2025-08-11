@@ -1,5 +1,6 @@
 import React from "react";
 import { Icon } from "@iconify/react";
+import { filterMeaningfulChanges } from "../../utils/auditUtils.js";
 
 const AuditLogItem = ({ log, index, getCropName }) => {
   // Helper functions moved inline to avoid dependencies
@@ -16,28 +17,40 @@ const AuditLogItem = ({ log, index, getCropName }) => {
 
   const getActionIcon = (action) => {
     switch (action) {
-      case "CREATE": return "material-symbols:add-circle";
-      case "UPDATE": return "material-symbols:edit";
-      case "DELETE": return "material-symbols:delete";
-      default: return "material-symbols:description";
+      case "CREATE":
+        return "material-symbols:add-circle";
+      case "UPDATE":
+        return "material-symbols:edit";
+      case "DELETE":
+        return "material-symbols:delete";
+      default:
+        return "material-symbols:description";
     }
   };
 
   const getActionColor = (action) => {
     switch (action) {
-      case "CREATE": return "bg-green-100 text-green-700 border-green-200";
-      case "UPDATE": return "bg-blue-100 text-blue-700 border-blue-200";
-      case "DELETE": return "bg-red-100 text-red-700 border-red-200";
-      default: return "bg-gray-100 text-gray-700 border-gray-200";
+      case "CREATE":
+        return "bg-green-100 text-green-700 border-green-200";
+      case "UPDATE":
+        return "bg-blue-100 text-blue-700 border-blue-200";
+      case "DELETE":
+        return "bg-red-100 text-red-700 border-red-200";
+      default:
+        return "bg-gray-100 text-gray-700 border-gray-200";
     }
   };
 
   const getIconColor = (action) => {
     switch (action) {
-      case "CREATE": return "text-green-600";
-      case "UPDATE": return "text-blue-600";
-      case "DELETE": return "text-red-600";
-      default: return "text-gray-600";
+      case "CREATE":
+        return "text-green-600";
+      case "UPDATE":
+        return "text-blue-600";
+      case "DELETE":
+        return "text-red-600";
+      default:
+        return "text-gray-600";
     }
   };
 
@@ -53,18 +66,37 @@ const AuditLogItem = ({ log, index, getCropName }) => {
       barangay: "Barangay",
       contact: "Contact",
     };
-    return fieldMap[fieldName] || fieldName.charAt(0).toUpperCase() + fieldName.slice(1);
+    return (
+      fieldMap[fieldName] ||
+      fieldName.charAt(0).toUpperCase() + fieldName.slice(1)
+    );
   };
 
-  const formatFieldValue = (fieldName, value) => {
-    if (value === null || value === undefined || (typeof value === "string" && value.trim() === "")) {
+  const formatFieldValue = (fieldName, value, getCropName) => {
+    if (
+      value === null ||
+      value === undefined ||
+      (typeof value === "string" && value.trim() === "")
+    ) {
       return "empty";
     }
+
+    // Handle crop field values by converting ID to name
+    if (fieldName === "crop" && getCropName) {
+      const cropName = getCropName(value);
+      // Return the crop name without quotes if conversion was successful
+      return cropName !== value ? cropName : value;
+    }
+
     return JSON.stringify(value);
   };
 
   const generateDescription = (log) => {
-    if (log.action === "CREATE" && log.resourceType === "farmer" && log.changes) {
+    if (
+      log.action === "CREATE" &&
+      log.resourceType === "farmer" &&
+      log.changes
+    ) {
       const fullNameChange = log.changes.find((c) => c.field === "fullName");
       const firstNameChange = log.changes.find((c) => c.field === "firstName");
       const lastNameChange = log.changes.find((c) => c.field === "lastName");
@@ -90,14 +122,12 @@ const AuditLogItem = ({ log, index, getCropName }) => {
   };
 
   return (
-    <div
-      className={`p-6 transition-colors hover:bg-gray-50 ${index === 0 ? "bg-blue-50" : ""}`}
-    >
+    <div className={`p-6 transition-colors hover:bg-gray-50`}>
       <div className="flex items-start space-x-4">
         <div className="flex-shrink-0 pt-1">
-          <Icon 
-            icon={getActionIcon(log.action)} 
-            className={`w-6 h-6 ${getIconColor(log.action)}`}
+          <Icon
+            icon={getActionIcon(log.action)}
+            className={`h-6 w-6 ${getIconColor(log.action)}`}
           />
         </div>
 
@@ -130,7 +160,12 @@ const AuditLogItem = ({ log, index, getCropName }) => {
 
           {/* Changes dropdown */}
           {log.changes && log.changes.length > 0 && (
-            <ChangesDropdown log={log} getCropName={getCropName} formatFieldName={formatFieldName} formatFieldValue={formatFieldValue} />
+            <ChangesDropdown
+              log={log}
+              getCropName={getCropName}
+              formatFieldName={formatFieldName}
+              formatFieldValue={formatFieldValue}
+            />
           )}
         </div>
       </div>
@@ -147,12 +182,16 @@ const FarmerDetailsDropdown = ({ log }) => (
           : "text-red-600 hover:text-red-800"
       }`}
     >
-      <Icon 
-        icon="material-symbols:chevron-right" 
+      <Icon
+        icon="material-symbols:chevron-right"
         className="mr-1 h-4 w-4 transition-transform group-open:rotate-90"
       />
-      <Icon 
-        icon={log.action === "CREATE" ? "material-symbols:person-add" : "material-symbols:person-remove"} 
+      <Icon
+        icon={
+          log.action === "CREATE"
+            ? "material-symbols:person-add"
+            : "material-symbols:person-remove"
+        }
         className="mr-1 h-4 w-4"
       />
       View farmer details
@@ -183,8 +222,11 @@ const FarmerDetailsContent = ({ log }) => {
     if (log.farmerDetails.rsbsaNumber) {
       farmerDetails.push(
         <div key="rsbsa" className="rounded-lg border bg-blue-50 p-3">
-          <div className="mb-2 text-sm font-medium text-gray-700 flex items-center gap-2">
-            <Icon icon="material-symbols:badge" className="w-4 h-4 text-blue-600" />
+          <div className="mb-2 flex items-center gap-2 text-sm font-medium text-gray-700">
+            <Icon
+              icon="material-symbols:badge"
+              className="h-4 w-4 text-blue-600"
+            />
             RSBSA Number
           </div>
           <div className="text-sm font-semibold text-blue-700">
@@ -224,8 +266,11 @@ const FarmerDetailsContent = ({ log }) => {
     if (rsbsaChange && rsbsaChange[dataSource]) {
       farmerDetails.push(
         <div key="rsbsa" className="rounded-lg border bg-blue-50 p-3">
-          <div className="mb-2 text-sm font-medium text-gray-700 flex items-center gap-2">
-            <Icon icon="material-symbols:badge" className="w-4 h-4 text-blue-600" />
+          <div className="mb-2 flex items-center gap-2 text-sm font-medium text-gray-700">
+            <Icon
+              icon="material-symbols:badge"
+              className="h-4 w-4 text-blue-600"
+            />
             RSBSA Number
           </div>
           <div className="text-sm font-semibold text-blue-700">
@@ -240,8 +285,8 @@ const FarmerDetailsContent = ({ log }) => {
     farmerDetails
   ) : (
     <div className="rounded-lg border bg-gray-50 p-3">
-      <div className="text-sm text-gray-500 flex items-center gap-2">
-        <Icon icon="material-symbols:info" className="w-4 h-4" />
+      <div className="flex items-center gap-2 text-sm text-gray-500">
+        <Icon icon="material-symbols:info" className="h-4 w-4" />
         No additional farmer details available
       </div>
     </div>
@@ -255,8 +300,11 @@ const FarmerDetailCard = ({ label, value, action }) => {
 
   return (
     <div className={`rounded-lg border ${bgColor} p-3`}>
-      <div className="mb-2 text-sm font-medium text-gray-700 flex items-center gap-2">
-        <Icon icon="material-symbols:person" className={`w-4 h-4 ${iconColor}`} />
+      <div className="mb-2 flex items-center gap-2 text-sm font-medium text-gray-700">
+        <Icon
+          icon="material-symbols:person"
+          className={`h-4 w-4 ${iconColor}`}
+        />
         {label}
       </div>
       <div className={`text-sm font-semibold ${textColor}`}>{value}</div>
@@ -264,24 +312,19 @@ const FarmerDetailCard = ({ label, value, action }) => {
   );
 };
 
-const ChangesDropdown = ({ log, getCropName, formatFieldName, formatFieldValue }) => {
-  const meaningfulChanges = log.changes.filter((change) => {
-    const technicalFields = ["_id", "__v", "createdAt", "updatedAt", "id"];
-    if (technicalFields.includes(change.field)) return false;
-
-    const isOldEmpty =
-      !change.oldValue || change.oldValue.toString().trim() === "";
-    const isNewEmpty =
-      !change.newValue || change.newValue.toString().trim() === "";
-
-    return !(isOldEmpty && isNewEmpty) && !(isOldEmpty || isNewEmpty);
-  });
+const ChangesDropdown = ({
+  log,
+  getCropName,
+  formatFieldName,
+  formatFieldValue,
+}) => {
+  const meaningfulChanges = filterMeaningfulChanges(log.changes);
 
   return (
     <details className="group mt-3 cursor-pointer">
       <summary className="flex items-center text-sm font-medium text-blue-600 hover:text-blue-800">
-        <Icon 
-          icon="material-symbols:chevron-right" 
+        <Icon
+          icon="material-symbols:chevron-right"
           className="mr-1 h-4 w-4 transition-transform group-open:rotate-90"
         />
         <Icon icon="material-symbols:change-history" className="mr-1 h-4 w-4" />
@@ -303,24 +346,32 @@ const ChangesDropdown = ({ log, getCropName, formatFieldName, formatFieldValue }
   );
 };
 
-const ChangeItem = ({ change, getCropName, formatFieldName, formatFieldValue }) => (
+const ChangeItem = ({
+  change,
+  getCropName,
+  formatFieldName,
+  formatFieldValue,
+}) => (
   <div className="rounded-lg border bg-gray-50 p-3">
-    <div className="mb-2 text-sm font-medium text-gray-700 flex items-center gap-2">
-      <Icon icon="material-symbols:edit-note" className="w-4 h-4 text-gray-600" />
+    <div className="mb-2 flex items-center gap-2 text-sm font-medium text-gray-700">
+      <Icon
+        icon="material-symbols:edit-note"
+        className="h-4 w-4 text-gray-600"
+      />
       {formatFieldName(change.field)}
     </div>
     <div className="flex items-center space-x-2 text-xs">
-      <span className="rounded border bg-red-100 px-2 py-1 text-red-700 flex items-center gap-1">
-        <Icon icon="material-symbols:remove" className="w-3 h-3" />
-        {formatFieldValue(change.field, change.oldValue)}
+      <span className="flex items-center gap-1 rounded border bg-red-100 px-2 py-1 text-red-700">
+        <Icon icon="material-symbols:remove" className="h-3 w-3" />
+        {formatFieldValue(change.field, change.oldValue, getCropName)}
       </span>
-      <Icon 
-        icon="material-symbols:arrow-forward" 
+      <Icon
+        icon="material-symbols:arrow-forward"
         className="h-4 w-4 text-gray-400"
       />
-      <span className="rounded border bg-green-100 px-2 py-1 text-green-700 flex items-center gap-1">
-        <Icon icon="material-symbols:add" className="w-3 h-3" />
-        {formatFieldValue(change.field, change.newValue)}
+      <span className="flex items-center gap-1 rounded border bg-green-100 px-2 py-1 text-green-700">
+        <Icon icon="material-symbols:add" className="h-3 w-3" />
+        {formatFieldValue(change.field, change.newValue, getCropName)}
       </span>
     </div>
   </div>

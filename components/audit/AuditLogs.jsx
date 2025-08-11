@@ -41,37 +41,38 @@ const AuditLogs = () => {
   if (error) return <ErrorMessage error={error} onRetry={refreshAuditLogs} />;
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="mb-2 text-3xl font-bold text-gray-900">Audit Logs</h1>
-          <p className="text-gray-600">
-            Track all system activities and changes
-          </p>
+    <div className="flex h-full flex-col">
+      <div className="flex min-h-0 flex-1 flex-col px-4 py-6 sm:px-6 lg:px-8">
+        {/* Stats Cards and Filters Row */}
+        <div className="mb-4 flex flex-shrink-0 items-start justify-between gap-6">
+          {/* Stats Cards Component - Left */}
+          <div className="flex-1">
+            <AuditStatsCard
+              stats={stats}
+              pagination={{ totalCount: auditLogs.length }}
+            />
+          </div>
+
+          {/* Filters Component - Right */}
+          <div className="flex-shrink-0">
+            <AuditFilter
+              filters={filters}
+              onFilterChange={handleFilterChange}
+              onClearFilters={clearFilters}
+              actionOptions={actionOptions}
+              resourceTypeOptions={resourceTypeOptions}
+            />
+          </div>
         </div>
 
-        {/* Stats Cards Component */}
-        <AuditStatsCard
-          stats={stats}
-          pagination={{ totalCount: auditLogs.length }}
-        />
-
-        {/* Filters Component */}
-        <AuditFilter
-          filters={filters}
-          onFilterChange={handleFilterChange}
-          onClearFilters={clearFilters}
-          actionOptions={actionOptions}
-          resourceTypeOptions={resourceTypeOptions}
-        />
-
         {/* Audit Logs List */}
-        <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+        <div className="min-h-0 flex-1 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
           {auditLogs.length === 0 ? (
-            <EmptyState filters={filters} onClearFilters={clearFilters} />
+            <div className="flex h-full items-center justify-center">
+              <EmptyState filters={filters} onClearFilters={clearFilters} />
+            </div>
           ) : (
-            <div className="divide-y divide-gray-200">
+            <div className="scrollbar-hide h-full divide-y divide-gray-200 overflow-y-auto">
               {auditLogs.map((log, index) => (
                 <AuditLogItem
                   key={log._id}
