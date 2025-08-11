@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Icon } from "@iconify/react";
 import toast from "react-hot-toast";
 import AddBarangayModal from "./AddBarangayModal";
+import { authenticatedGet, authenticatedPost, authenticatedPut, authenticatedDelete } from "../../utils/apiUtils.js";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -34,13 +35,7 @@ const ReportsHeatMap = () => {
   const fetchBarangays = async () => {
     try {
       setLoading(true);
-      const response = await fetch("http://localhost:5000/api/barangays");
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data = await response.json();
+      const data = await authenticatedGet("http://localhost:5000/api/barangays");
 
       if (data.success) {
         // Transform MongoDB data to match your component structure
@@ -69,20 +64,12 @@ const ReportsHeatMap = () => {
   // Add new barangay
   const handleAddBarangay = async (formData) => {
     try {
-      const response = await fetch("http://localhost:5000/api/barangays", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          barangayId: formData.barangayId,
-          barangayName: formData.barangayName,
-        }),
+      const data = await authenticatedPost("http://localhost:5000/api/barangays", {
+        barangayId: formData.barangayId,
+        barangayName: formData.barangayName,
       });
 
-      const data = await response.json();
-
-      if (!response.ok) {
+      if (data.success) {
         throw new Error(
           data.message || `HTTP error! status: ${response.status}`,
         );
@@ -126,27 +113,13 @@ const ReportsHeatMap = () => {
   // Update barangay
   const handleUpdateBarangay = async (formData) => {
     try {
-      const response = await fetch(
+      const data = await authenticatedPut(
         `http://localhost:5000/api/barangays/${editingBarangay.id}`,
         {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            barangayId: formData.barangayId,
-            barangayName: formData.barangayName,
-          }),
-        },
+          barangayId: formData.barangayId,
+          barangayName: formData.barangayName,
+        }
       );
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(
-          data.message || `HTTP error! status: ${response.status}`,
-        );
-      }
 
       if (data.success) {
         // Refresh the barangay list
@@ -192,20 +165,9 @@ const ReportsHeatMap = () => {
   // Handle delete barangay confirmation
   const handleDeleteBarangay = async (barangay) => {
     try {
-      const response = await fetch(
-        `http://localhost:5000/api/barangays/${barangay.id}`,
-        {
-          method: "DELETE",
-        },
+      const data = await authenticatedDelete(
+        `http://localhost:5000/api/barangays/${barangay.id}`
       );
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(
-          data.message || `HTTP error! status: ${response.status}`,
-        );
-      }
 
       if (data.success) {
         // Refresh the barangay list

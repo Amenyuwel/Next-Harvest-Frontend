@@ -26,6 +26,12 @@ export const sidebarConfig = {
       path: "/pages/train",
     },
     {
+      id: "audit",
+      icon: "material-symbols:history",
+      label: "Audit Logs",
+      path: "/pages/audit",
+    },
+    {
       id: "profile",
       icon: "lucide:user-round",
       label: "Profile",

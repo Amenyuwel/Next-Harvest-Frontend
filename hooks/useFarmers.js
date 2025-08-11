@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { authenticatedGet } from "../utils/apiUtils.js";
 
 export const useFarmers = () => {
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -10,13 +11,7 @@ export const useFarmers = () => {
     const fetchFarmers = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`${API_URL}/api/farmers`);
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const result = await response.json();
+        const result = await authenticatedGet(`${API_URL}/api/farmers`);
         setFarmers(result.data || []);
       } catch (err) {
         setError(err.message);

@@ -1,37 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
+import { useCrops } from "../../hooks/index.js";
 
 const TotalHectares = ({ farmers = [], loading = false }) => {
-  const [crops, setCrops] = useState([]);
-
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
-
-  // Fetch crops for name lookup
-  useEffect(() => {
-    fetchCrops();
-  }, []);
-
-  const fetchCrops = async () => {
-    try {
-      const response = await fetch(`${API_URL}/api/crops`);
-      if (response.ok) {
-        const result = await response.json();
-        if (result.success && result.data) {
-          setCrops(result.data);
-        }
-      }
-    } catch (error) {
-      console.error("Error fetching crops:", error);
-    }
-  };
-
-  // Helper function to get crop name from ID
-  const getCropName = (cropId) => {
-    const crop = crops.find((c) => c.cropId === cropId);
-    return crop
-      ? crop.cropName.charAt(0).toUpperCase() +
-          crop.cropName.slice(1).toLowerCase()
-      : cropId;
-  };
+  // Use custom hook for crops
+  const { getCropName } = useCrops();
 
   // Calculate total hectares from farmers data
   const totalHectares = farmers.reduce((total, farmer) => {
