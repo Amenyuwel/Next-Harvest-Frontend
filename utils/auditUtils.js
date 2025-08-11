@@ -1,5 +1,11 @@
 // Helper function to format field names
 import { Icon } from "@iconify/react";
+
+// API configuration
+export const getApiBaseUrl = () => {
+  return process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+};
+
 export const formatFieldName = (fieldName) => {
   const fieldMap = {
     firstName: "First Name",
@@ -113,36 +119,54 @@ export const formatTimestamp = (timestamp) => {
 };
 
 export const formatResourceType = (resourceType) => {
-  return resourceType.charAt(0).toUpperCase() + resourceType.slice(1).replace("_", " ");
+  return (
+    resourceType.charAt(0).toUpperCase() +
+    resourceType.slice(1).replace("_", " ")
+  );
 };
 
 // Helper function to get action icons
 export const getActionIcon = (action) => {
   switch (action) {
-    case "CREATE": return "mdi:plus-circle";
-    case "UPDATE": return "mdi:pencil";
-    case "DELETE": return "mdi:delete";
-    case "READ": return "mdi:eye";
-    default: return "mdi:file-document";
+    case "CREATE":
+      return <Icon icon="mdi:plus" className="text-green-600" />;
+    case "UPDATE":
+      return <Icon icon="mdi:pencil" className="text-blue-600" />;
+    case "DELETE":
+      return <Icon icon="mdi:trash-can" className="text-red-600" />;
+    case "READ":
+      return <Icon icon="mdi:eye" className="text-gray-600" />;
+    default:
+      return <Icon icon="mdi:file-document" className="text-gray-600" />;
   }
 };
+
 
 // Helper function to get action colors
 export const getActionColor = (action) => {
   switch (action) {
-    case "CREATE": return "bg-green-100 text-green-800 border-green-200";
-    case "UPDATE": return "bg-blue-100 text-blue-800 border-blue-200";
-    case "DELETE": return "bg-red-100 text-red-800 border-red-200";
-    case "READ": return "bg-gray-100 text-gray-800 border-gray-200";
-    default: return "bg-gray-100 text-gray-800 border-gray-200";
+    case "CREATE":
+      return "bg-green-100 text-green-800 border-green-200";
+    case "UPDATE":
+      return "bg-blue-100 text-blue-800 border-blue-200";
+    case "DELETE":
+      return "bg-red-100 text-red-800 border-red-200";
+    case "READ":
+      return "bg-gray-100 text-gray-800 border-gray-200";
+    default:
+      return "bg-gray-100 text-gray-800 border-gray-200";
   }
 };
 
 export const getStatusDot = (action) => {
   switch (action) {
-    case "CREATE": return "bg-green-500";
-    case "UPDATE": return "bg-blue-500";
-    case "DELETE": return "bg-red-500";
-    default: return "bg-gray-500";
+    case "CREATE":
+      return "bg-green-500";
+    case "UPDATE":
+      return "bg-blue-500";
+    case "DELETE":
+      return "bg-red-500";
+    default:
+      return "bg-gray-500";
   }
 };
