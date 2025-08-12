@@ -1,37 +1,37 @@
 // app/config/routeConfig.js
 
 const routeConfig = {
-  "/pages/dashboard": {
+  "/dashboard": {
     title: "Dashboard",
     showAddButton: true,
     addButtonText: "Add Farmer",
   },
-  "/pages/records": {
+  "/records": {
     title: "Farmers",
     showAddButton: true,
     addButtonText: "Add Farmer",
   },
-  "/pages/reports": {
+  "/reports": {
     title: "Reports",
     showAddButton: true,
     addButtonText: "Add Barangay",
   },
-  "/pages/audit": {
+  "/audit": {
     title: "Logs",
     showAddButton: false,
     addButtonText: "",
   },
-  "/pages/train": {
+  "/train": {
     title: "Training",
     showAddButton: false,
     addButtonText: "",
   },
-  "/pages/profile": {
+  "/profile": {
     title: "Profile",
     showAddButton: true,
     addButtonText: "Generate Report",
   },
-  "/pages/settings": {
+  "/settings": {
     title: "Settings",
     showAddButton: false,
     addButtonText: "",
