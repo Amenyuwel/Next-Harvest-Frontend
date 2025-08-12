@@ -3,14 +3,14 @@ import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { Icon } from "@iconify/react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
-import { sidebarConfig } from "@/app/config/sidebarConfig";
 import { useAuth } from "@/app/context/AuthContext";
+import { sidebarConfig } from "@/app/config/sidebarConfig";
 
 function Sidebar() {
   const [activeItem, setActiveItem] = useState("dashboard");
   const router = useRouter();
   const pathname = usePathname();
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
 
   // Memoize menu items for performance
   const mainMenuItems = useMemo(() => sidebarConfig.main, []);
@@ -19,7 +19,7 @@ function Sidebar() {
   // Set active item based on current path
   useEffect(() => {
     const currentItem = [...mainMenuItems, ...bottomMenuItems].find(
-      (item) => item.path === pathname
+      (item) => item.path === pathname,
     );
     if (currentItem) {
       setActiveItem(currentItem.id);
@@ -38,17 +38,32 @@ function Sidebar() {
 
   // Handle menu item clicks
   const handleItemClick = useCallback(
-    (item) => {
+    async (item) => {
       setActiveItem(item.id);
 
       if (item.action === "logout") {
-        logout();
+        await logout();
+        // Don't navigate here - let AuthContext handle it
       } else if (item.path) {
         router.push(item.path);
       }
     },
-    [router, logout]
+    [logout, router],
   );
+
+  // Filter menu items based on user role
+  const getFilteredMenuItems = (menuItems) => {
+    return menuItems.filter((item) => {
+      // If no roles specified, show to everyone
+      if (!item.roles) return true;
+
+      // If roles specified, check if user's role is included
+      return user && item.roles.includes(user.role);
+    });
+  };
+
+  const filteredMainItems = getFilteredMenuItems(mainMenuItems);
+  const filteredBottomItems = getFilteredMenuItems(bottomMenuItems);
 
   // Render a menu item
   const renderMenuItem = useCallback(
@@ -56,23 +71,21 @@ function Sidebar() {
       <div
         key={item.id}
         onClick={() => handleItemClick(item)}
-        className={`group relative flex h-20 w-20 cursor-pointer items-center justify-center rounded-3xl transition-all duration-200 
-          ${
-            activeItem === item.id
-              ? "border-[var(--color-icons-accent)] bg-transparent"
-              : "border-transparent hover:border-gray-500"
-          }`}
+        className={`group relative flex h-20 w-20 cursor-pointer items-center justify-center rounded-3xl transition-all duration-200 ${
+          activeItem === item.id
+            ? "border-[var(--color-icons-accent)] bg-transparent"
+            : "border-transparent hover:border-gray-500"
+        }`}
       >
         <Icon
           icon={item.icon}
           width="24"
           height="24"
-          className={`transition-colors duration-200 
-            ${
-              activeItem === item.id
-                ? "text-[var(--color-icons-accent)]"
-                : "text-gray-400 group-hover:text-white"
-            }`}
+          className={`transition-colors duration-200 ${
+            activeItem === item.id
+              ? "text-[var(--color-icons-accent)]"
+              : "text-gray-400 group-hover:text-white"
+          }`}
         />
         {/* Tooltip */}
         <div className="pointer-events-none absolute left-16 z-50 rounded-lg bg-gray-800 px-3 py-2 text-sm whitespace-nowrap text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100">
@@ -81,7 +94,7 @@ function Sidebar() {
         </div>
       </div>
     ),
-    [activeItem, handleItemClick]
+    [activeItem, handleItemClick],
   );
 
   return (
@@ -95,13 +108,29 @@ function Sidebar() {
       </Link>
 
       {/* Main menu */}
-      <div className="flex flex-1 flex-col">{mainMenuItems.map(renderMenuItem)}</div>
+      <div className="flex flex-1 flex-col">
+        {filteredMainItems.length > 0 ? (
+          filteredMainItems.map(renderMenuItem)
+        ) : (
+          <div className="flex flex-col items-center justify-center py-4 text-gray-500">
+            No accessible menu items
+          </div>
+        )}
+      </div>
 
       {/* Separator */}
       <div className="my-4 h-px w-8 bg-gray-600" />
 
       {/* Bottom menu */}
-      <div className="flex flex-col">{bottomMenuItems.map(renderMenuItem)}</div>
+      <div className="flex flex-col">
+        {filteredBottomItems.length > 0 ? (
+          filteredBottomItems.map(renderMenuItem)
+        ) : (
+          <div className="flex flex-col items-center justify-center py-4 text-gray-500">
+            No accessible menu items
+          </div>
+        )}
+      </div>
     </div>
   );
 }

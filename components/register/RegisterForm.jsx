@@ -36,6 +36,14 @@ function RegisterForm() {
     setLoading(true);
     setError("");
 
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      setError("Please enter a valid email address (e.g., user@example.com)");
+      setLoading(false);
+      return;
+    }
+
     // Validation
     if (formData.password !== formData.confirmPassword) {
       setError("Passwords do not match");

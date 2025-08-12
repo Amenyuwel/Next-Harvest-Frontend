@@ -16,6 +16,11 @@ const routeConfig = {
     showAddButton: true,
     addButtonText: "Add Barangay",
   },
+  "/pages/audit": {
+    title: "Logs",
+    showAddButton: false,
+    addButtonText: "",
+  },
   "/pages/train": {
     title: "Training",
     showAddButton: false,
