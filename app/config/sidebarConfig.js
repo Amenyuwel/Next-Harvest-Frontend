@@ -24,6 +24,7 @@ export const sidebarConfig = {
       icon: "mdi:graph",
       label: "Train",
       path: "/pages/train",
+      roles: ["superAdmin"],
     },
     {
       id: "profile",

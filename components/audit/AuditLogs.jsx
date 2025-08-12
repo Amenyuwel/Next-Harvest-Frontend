@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import { useAuth } from "../../app/context/AuthContext"; // Use the exported useAuth hook
 import { useAuditLogs, useAuditStats, useCrops } from "../../hooks/index.js";
 import AuditFilter from "./AuditFilter.jsx";
 import AuditStatsCard from "./AuditStatsCard.jsx";
@@ -9,6 +10,22 @@ import ErrorMessage from "./ErrorMessage.jsx";
 import EmptyState from "./EmptyState.jsx";
 
 const AuditLogs = () => {
+  // Add authentication check using useAuth hook
+  const { user } = useAuth(); // Use useAuth hook instead of useContext
+  
+  // Only allow superAdmins
+  if (!user || user.role !== "superAdmin") {
+    return (
+      <div className="flex h-full items-center justify-center">
+        <div className="text-center">
+          <div className="mb-4 text-6xl text-red-500">🚫</div>
+          <h2 className="mb-2 text-xl font-semibold text-gray-900">Access Denied</h2>
+          <p className="text-gray-600">You don't have permission to view audit logs.</p>
+        </div>
+      </div>
+    );
+  }
+
   const [filters, setFilters] = useState({
     action: "",
     resourceType: "",

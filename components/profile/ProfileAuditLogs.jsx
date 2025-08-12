@@ -1,5 +1,6 @@
 "use client";
 
+import { useAuth } from "../../app/context/AuthContext"; // Use the exported useAuth hook
 import { useAuditLogs } from "../../hooks";
 import {
   formatTimestamp,
@@ -9,6 +10,14 @@ import {
 } from "../../utils/auditUtils.js";
 
 const ProfileAuditLogs = () => {
+  // Add authentication check using useAuth hook
+  const { user } = useAuth(); // Use useAuth hook instead of useContext
+  
+  // Only show to superAdmins
+  if (!user || user.role !== "superAdmin") {
+    return null; // Component won't render for non-superAdmins
+  }
+
   // Use the existing useAuditLogs hook instead of custom state management
   const {
     auditLogs: recentActivity,

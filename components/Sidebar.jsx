@@ -3,14 +3,14 @@ import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { Icon } from "@iconify/react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
-import { sidebarConfig } from "@/app/config/sidebarConfig";
 import { useAuth } from "@/app/context/AuthContext";
+import { sidebarConfig } from "@/app/config/sidebarConfig";
 
 function Sidebar() {
   const [activeItem, setActiveItem] = useState("dashboard");
   const router = useRouter();
   const pathname = usePathname();
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
 
   // Memoize menu items for performance
   const mainMenuItems = useMemo(() => sidebarConfig.main, []);
@@ -49,6 +49,20 @@ function Sidebar() {
     },
     [router, logout]
   );
+
+  // Filter menu items based on user role
+  const getFilteredMenuItems = (menuItems) => {
+    return menuItems.filter((item) => {
+      // If no roles specified, show to everyone
+      if (!item.roles) return true;
+
+      // If roles specified, check if user's role is included
+      return user && item.roles.includes(user.role);
+    });
+  };
+
+  const filteredMainItems = getFilteredMenuItems(mainMenuItems);
+  const filteredBottomItems = getFilteredMenuItems(bottomMenuItems);
 
   // Render a menu item
   const renderMenuItem = useCallback(
@@ -95,13 +109,29 @@ function Sidebar() {
       </Link>
 
       {/* Main menu */}
-      <div className="flex flex-1 flex-col">{mainMenuItems.map(renderMenuItem)}</div>
+      <div className="flex flex-1 flex-col">
+        {filteredMainItems.length > 0 ? (
+          filteredMainItems.map(renderMenuItem)
+        ) : (
+          <div className="flex flex-col items-center justify-center py-4 text-gray-500">
+            No accessible menu items
+          </div>
+        )}
+      </div>
 
       {/* Separator */}
       <div className="my-4 h-px w-8 bg-gray-600" />
 
       {/* Bottom menu */}
-      <div className="flex flex-col">{bottomMenuItems.map(renderMenuItem)}</div>
+      <div className="flex flex-col">
+        {filteredBottomItems.length > 0 ? (
+          filteredBottomItems.map(renderMenuItem)
+        ) : (
+          <div className="flex flex-col items-center justify-center py-4 text-gray-500">
+            No accessible menu items
+          </div>
+        )}
+      </div>
     </div>
   );
 }
