@@ -2,7 +2,7 @@ import React from "react";
 
 const AuditStatsCard = ({ stats, pagination }) => {
   return (
-    <div className="mb-8 grid grid-cols-1 gap-6 md:grid-cols-4">
+    <div className="grid grid-cols-1 gap-6 md:grid-cols-4">
       <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
         <div className="flex items-center">
           <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-100">

@@ -1,9 +1,12 @@
 "use client";
 import { useAuth } from "@/app/context/AuthContext";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import NotFound from "./NotFound";
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
+  const router = useRouter();
 
   // Show loading spinner while checking authentication
   if (loading) {
@@ -17,14 +20,22 @@ const ProtectedRoute = ({ children }) => {
     );
   }
 
-  // Show 404 page if not authenticated
+  // Redirect to login if not authenticated (instead of showing 404)
+  useEffect(() => {
+    if (!loading && !isAuthenticated()) {
+      router.replace("/login");
+    }
+  }, [isAuthenticated, loading, router]);
+
+  // Show loading while redirecting to prevent flash of 404
   if (!isAuthenticated()) {
     return (
-      <NotFound
-        title="Access Denied"
-        message="You need to be logged in to access this page. Please login to continue."
-        showLoginButton={true}
-      />
+      <div className="flex h-screen items-center justify-center bg-[var(--color-background-gray)]">
+        <div className="text-center">
+          <div className="mb-4 h-8 w-8 animate-spin rounded-full border-4 border-blue-500 border-t-transparent"></div>
+          <p className="text-gray-600">Redirecting...</p>
+        </div>
+      </div>
     );
   }
 

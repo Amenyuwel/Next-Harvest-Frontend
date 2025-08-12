@@ -20,6 +20,13 @@ export const sidebarConfig = {
       path: "/pages/reports",
     },
     {
+      id: "audit",
+      icon: "material-symbols:history",
+      label: "Logs",
+      path: "/pages/audit",
+      roles: ["superAdmin"],
+    },
+    {
       id: "training",
       icon: "mdi:graph",
       label: "Train",

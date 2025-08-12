@@ -47,7 +47,7 @@ function LoginForm() {
       if (data.success) {
         // Use the AuthContext login method
         login(data.user, data.token);
-        
+
         // Redirect to dashboard
         router.push("/pages/dashboard");
       } else {
