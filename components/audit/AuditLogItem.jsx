@@ -64,6 +64,7 @@ const AuditLogItem = ({ log, index, getCropName }) => {
       crop: "Crop",
       area: "Area",
       barangay: "Barangay",
+      barangayName: "Barangay Name",
       contact: "Contact",
     };
     return (
@@ -221,7 +222,7 @@ const FarmerDetailsContent = ({ log }) => {
 
     if (log.farmerDetails.rsbsaNumber) {
       farmerDetails.push(
-        <div key="rsbsa" className="rounded-lg border bg-blue-50 p-3">
+        <div key="rsbsa" className="rounded-lg border bg-gray-50 p-3">
           <div className="mb-2 flex items-center gap-2 text-sm font-medium text-gray-700">
             <Icon
               icon="material-symbols:badge"
@@ -229,7 +230,7 @@ const FarmerDetailsContent = ({ log }) => {
             />
             RSBSA Number
           </div>
-          <div className="text-sm font-semibold text-blue-700">
+          <div className="text-sm font-semibold text-gray-700">
             {log.farmerDetails.rsbsaNumber}
           </div>
         </div>,
@@ -265,7 +266,7 @@ const FarmerDetailsContent = ({ log }) => {
 
     if (rsbsaChange && rsbsaChange[dataSource]) {
       farmerDetails.push(
-        <div key="rsbsa" className="rounded-lg border bg-blue-50 p-3">
+        <div key="rsbsa" className="rounded-lg border bg-gray-50 p-3">
           <div className="mb-2 flex items-center gap-2 text-sm font-medium text-gray-700">
             <Icon
               icon="material-symbols:badge"
@@ -273,7 +274,7 @@ const FarmerDetailsContent = ({ log }) => {
             />
             RSBSA Number
           </div>
-          <div className="text-sm font-semibold text-blue-700">
+          <div className="text-sm font-semibold text-gray-700">
             {rsbsaChange[dataSource]}
           </div>
         </div>,
@@ -294,12 +295,10 @@ const FarmerDetailsContent = ({ log }) => {
 };
 
 const FarmerDetailCard = ({ label, value, action }) => {
-  const bgColor = action === "CREATE" ? "bg-green-50" : "bg-red-50";
-  const textColor = action === "CREATE" ? "text-green-700" : "text-red-700";
   const iconColor = action === "CREATE" ? "text-green-600" : "text-red-600";
 
   return (
-    <div className={`rounded-lg border ${bgColor} p-3`}>
+    <div className="rounded-lg border bg-gray-50 p-3">
       <div className="mb-2 flex items-center gap-2 text-sm font-medium text-gray-700">
         <Icon
           icon="material-symbols:person"
@@ -307,7 +306,7 @@ const FarmerDetailCard = ({ label, value, action }) => {
         />
         {label}
       </div>
-      <div className={`text-sm font-semibold ${textColor}`}>{value}</div>
+      <div className="text-sm font-semibold text-gray-700">{value}</div>
     </div>
   );
 };

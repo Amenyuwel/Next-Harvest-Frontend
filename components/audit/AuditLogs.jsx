@@ -122,7 +122,7 @@ const AuditLogs = () => {
             </div>
           ) : (
             <div className="scrollbar-hide h-full overflow-y-auto">
-              <div className="divide-y divide-gray-100">
+              <div className="divide-y divide-gray-100 pb-40">
                 {auditLogs.map((log, index) => (
                   <div
                     key={log._id}
