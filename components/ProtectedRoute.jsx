@@ -8,6 +8,13 @@ const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
   const router = useRouter();
 
+  // Redirect to login if not authenticated (must be before any conditional returns)
+  useEffect(() => {
+    if (!loading && !isAuthenticated()) {
+      router.replace("/login");
+    }
+  }, [isAuthenticated, loading, router]);
+
   // Show loading spinner while checking authentication
   if (loading) {
     return (
@@ -19,13 +26,6 @@ const ProtectedRoute = ({ children }) => {
       </div>
     );
   }
-
-  // Redirect to login if not authenticated (instead of showing 404)
-  useEffect(() => {
-    if (!loading && !isAuthenticated()) {
-      router.replace("/login");
-    }
-  }, [isAuthenticated, loading, router]);
 
   // Show loading while redirecting to prevent flash of 404
   if (!isAuthenticated()) {
