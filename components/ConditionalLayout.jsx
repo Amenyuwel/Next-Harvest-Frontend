@@ -9,12 +9,13 @@ export default function ConditionalLayout({ children }) {
   // Memoize dashboard page check to avoid recalculation
   const isDashboardPage = useMemo(() => {
     return (
-      pathname?.startsWith("/pages/dashboard") ||
-      pathname?.startsWith("/pages/records") ||
-      pathname?.startsWith("/pages/reports") ||
-      pathname?.startsWith("/pages/train") ||
-      pathname?.startsWith("/pages/profile") ||
-      pathname?.startsWith("/pages/settings")
+      pathname?.startsWith("/dashboard") ||
+      pathname?.startsWith("/records") ||
+      pathname?.startsWith("/reports") ||
+      pathname?.startsWith("/train") ||
+      pathname?.startsWith("/profile") ||
+      pathname?.startsWith("/settings") ||
+      pathname?.startsWith("/audit")
     );
   }, [pathname]);
 

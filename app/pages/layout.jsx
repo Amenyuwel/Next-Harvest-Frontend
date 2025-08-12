@@ -31,7 +31,7 @@ export default function PagesLayout({ children }) {
       // No need to show another alert here
 
       // If you're on the records page, you might want to refresh it
-      if (pathname === "/pages/records") {
+      if (pathname === "/records") {
         // The records page should handle refreshing its own data
         // through the onSubmit callback in AddFarmerModal
         window.location.reload(); // Simple solution for now
@@ -57,7 +57,7 @@ export default function PagesLayout({ children }) {
       // No need to show another alert here
 
       // If you're on the reports page, refresh it
-      if (pathname === "/pages/reports") {
+      if (pathname === "/reports") {
         window.location.reload(); // Simple solution for now
       }
     } catch (error) {
@@ -67,10 +67,10 @@ export default function PagesLayout({ children }) {
   };
 
   const handleAddClick = () => {
-    if (pathname === "/pages/dashboard" || pathname === "/pages/records") {
+    if (pathname === "/dashboard" || pathname === "/records") {
       setIsAddFarmerModalOpen(true);
     }
-    if (pathname === "/pages/reports") {
+    if (pathname === "/reports") {
       setIsAddBarangayModalOpen(true);
     }
   };

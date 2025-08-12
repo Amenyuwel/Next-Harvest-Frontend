@@ -13,7 +13,7 @@ function Loginpage() {
   useEffect(() => {
     // Redirect if already authenticated
     if (!loading && isAuthenticated()) {
-      router.replace("/pages/dashboard");
+      router.replace("/dashboard");
       return;
     }
 
