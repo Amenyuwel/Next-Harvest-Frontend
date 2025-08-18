@@ -1,9 +1,8 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Icon } from "@iconify/react";
-import toast from "react-hot-toast";
 import AddBarangayModal from "./AddBarangayModal";
-import { authenticatedGet, authenticatedPost, authenticatedPut, authenticatedDelete } from "../../utils/apiUtils.js";
+import { useBarangays } from "../../hooks/useBarangays";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -25,80 +24,30 @@ const getHeatColor = (value) => {
 
 const ReportsHeatMap = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [barangayData, setBarangayData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingBarangay, setEditingBarangay] = useState(null);
 
-  // Fetch barangays from MongoDB
-  const fetchBarangays = async () => {
-    try {
-      setLoading(true);
-      const data = await authenticatedGet("http://localhost:5000/api/barangays");
+  // Use the useBarangays hook
+  const {
+    barangays,
+    loading,
+    error,
+    refreshBarangays,
+    addBarangay,
+    updateBarangay,
+    deleteBarangay,
+  } = useBarangays();
 
-      if (data.success) {
-        // Transform MongoDB data to match your component structure
-        const transformedData = data.data.map((barangay) => ({
-          id: barangay._id,
-          number: barangay.barangayId,
-          name: barangay.barangayName,
-          // Add default pest data (you can fetch this from a separate endpoint later)
-          snail: 0,
-          fallarmyworm: 0,
-          stemborer: 0,
-        }));
-
-        setBarangayData(transformedData);
-      } else {
-        setError(data.message || "Failed to fetch barangays");
-      }
-    } catch (error) {
-      console.error("Error fetching barangays:", error);
-      setError("Failed to load barangays. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Add new barangay
-  const handleAddBarangay = async (formData) => {
-    try {
-      const data = await authenticatedPost("http://localhost:5000/api/barangays", {
-        barangayId: formData.barangayId,
-        barangayName: formData.barangayName,
-      });
-
-      if (data.success) {
-        throw new Error(
-          data.message || `HTTP error! status: ${response.status}`,
-        );
-      }
-
-      if (data.success) {
-        // Refresh the barangay list
-        fetchBarangays();
-        toast.success("Barangay added successfully!", {
-          duration: 4000,
-          position: "top-right",
-        });
-      } else {
-        toast.error(data.message || "Failed to add barangay", {
-          duration: 4000,
-          position: "top-right",
-        });
-      }
-    } catch (error) {
-      console.error("Error adding barangay:", error);
-      toast.error(
-        error.message || "Failed to add barangay. Please try again.",
-        {
-          duration: 4000,
-          position: "top-right",
-        },
-      );
-    }
-  };
+  // Transform barangay data to match the component structure
+  const barangayData = barangays.map((barangay) => ({
+    id: barangay._id,
+    number: barangay.barangayId,
+    name: barangay.barangayName,
+    // Add default pest data (you can fetch this from a separate endpoint later)
+    snail: 0,
+    fallarmyworm: 0,
+    stemborer: 0,
+  }));
 
   // Edit barangay
   const handleEditBarangay = (barangay) => {
@@ -110,49 +59,17 @@ const ReportsHeatMap = () => {
     setIsModalOpen(true);
   };
 
-  // Update barangay
-  const handleUpdateBarangay = async (formData) => {
-    try {
-      const data = await authenticatedPut(
-        `http://localhost:5000/api/barangays/${editingBarangay.id}`,
-        {
-          barangayId: formData.barangayId,
-          barangayName: formData.barangayName,
-        }
-      );
-
-      if (data.success) {
-        // Refresh the barangay list
-        fetchBarangays();
-        setEditingBarangay(null);
-        toast.success("Barangay updated successfully!", {
-          duration: 4000,
-          position: "top-right",
-        });
-      } else {
-        toast.error(data.message || "Failed to update barangay", {
-          duration: 4000,
-          position: "top-right",
-        });
-      }
-    } catch (error) {
-      console.error("Error updating barangay:", error);
-      toast.error(
-        error.message || "Failed to update barangay. Please try again.",
-        {
-          duration: 4000,
-          position: "top-right",
-        },
-      );
-    }
-  };
-
   // Handle modal submission (add or edit)
-  const handleModalSubmit = (formData) => {
+  const handleModalSubmit = async (formData) => {
+    let success;
     if (editingBarangay) {
-      handleUpdateBarangay(formData);
+      success = await updateBarangay(editingBarangay.id, formData);
     } else {
-      handleAddBarangay(formData);
+      success = await addBarangay(formData);
+    }
+    if (success) {
+      setIsModalOpen(false);
+      setEditingBarangay(null);
     }
   };
 
@@ -164,34 +81,7 @@ const ReportsHeatMap = () => {
 
   // Handle delete barangay confirmation
   const handleDeleteBarangay = async (barangay) => {
-    try {
-      const data = await authenticatedDelete(
-        `http://localhost:5000/api/barangays/${barangay.id}`
-      );
-
-      if (data.success) {
-        // Refresh the barangay list
-        fetchBarangays();
-        toast.success("Barangay deleted successfully!", {
-          duration: 4000,
-          position: "top-right",
-        });
-      } else {
-        toast.error(data.message || "Failed to delete barangay", {
-          duration: 4000,
-          position: "top-right",
-        });
-      }
-    } catch (error) {
-      console.error("Error deleting barangay:", error);
-      toast.error(
-        error.message || "Failed to delete barangay. Please try again.",
-        {
-          duration: 4000,
-          position: "top-right",
-        },
-      );
-    }
+    await deleteBarangay(barangay.id);
   };
 
   // Filter data based on search term
@@ -205,11 +95,6 @@ const ReportsHeatMap = () => {
       (searchTerm.toLowerCase() === "armyworm" && row.fallarmyworm > 0),
   );
 
-  // Fetch data on component mount
-  useEffect(() => {
-    fetchBarangays();
-  }, []);
-
   return (
     <div className="flex h-full w-full flex-col overflow-hidden rounded-2xl bg-white shadow">
       {/* Header */}
@@ -220,7 +105,7 @@ const ReportsHeatMap = () => {
           </h2>
           {/* Refresh Button */}
           <button
-            onClick={fetchBarangays}
+            onClick={refreshBarangays}
             className="rounded-lg p-2 text-gray-600 transition-colors hover:bg-gray-100"
             title="Refresh Data"
           >
@@ -304,7 +189,7 @@ const ReportsHeatMap = () => {
             />
             <p className="mb-2 text-red-500">{error}</p>
             <button
-              onClick={fetchBarangays}
+              onClick={refreshBarangays}
               className="rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
             >
               Try Again
