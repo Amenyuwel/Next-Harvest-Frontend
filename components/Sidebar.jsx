@@ -100,7 +100,7 @@ function Sidebar() {
   return (
     <div className="mt-4 flex h-[98.5%] w-[100px] flex-col items-center rounded-3xl bg-[var(--color-sidebar-bg)] py-6 shadow-lg">
       {/* Profile link */}
-      <Link href="/pages/profile" passHref>
+      <Link href="/profile" passHref>
         <div className="mb-8 flex h-12 w-12 cursor-pointer items-center justify-center rounded-full hover:ring-2 hover:ring-gray-400">
           {/* User avatar placeholder */}
           <div className="h-8 w-8 rounded-full bg-gray-500" />
