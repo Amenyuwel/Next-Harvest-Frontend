@@ -77,10 +77,13 @@ const RecordsFarmerTable = ({
 
   const getCropName = (cropId) => {
     const crop = crops.find((c) => c.cropId === cropId);
-    return crop
-      ? crop.cropName.charAt(0).toUpperCase() +
-          crop.cropName.slice(1).toLowerCase()
-      : cropId;
+    if (crop && crop.cropName) {
+      return crop.cropName.charAt(0).toUpperCase() + crop.cropName.slice(1).toLowerCase();
+    }
+    if (typeof cropId === 'string' && (cropId.toLowerCase() === 'corn' || cropId.toLowerCase() === 'rice')) {
+      return cropId.charAt(0).toUpperCase() + cropId.slice(1).toLowerCase();
+    }
+    return cropId;
   };
 
   // Format contact number to display as +63 format
