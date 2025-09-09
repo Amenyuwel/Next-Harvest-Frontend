@@ -1,8 +1,9 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { Icon } from "@iconify/react";
 import AddBarangayModal from "./AddBarangayModal";
 import { useBarangays } from "../../hooks/useBarangays";
+import { useReports } from "../../hooks/useReports";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -27,27 +28,71 @@ const ReportsHeatMap = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingBarangay, setEditingBarangay] = useState(null);
 
-  // Use the useBarangays hook
+  // Use the hooks
   const {
     barangays,
-    loading,
-    error,
+    loading: barangaysLoading,
+    error: barangaysError,
     refreshBarangays,
     addBarangay,
     updateBarangay,
     deleteBarangay,
   } = useBarangays();
 
-  // Transform barangay data to match the component structure
-  const barangayData = barangays.map((barangay) => ({
-    id: barangay._id,
-    number: barangay.barangayId,
-    name: barangay.barangayName,
-    // Add default pest data (you can fetch this from a separate endpoint later)
-    snail: 0,
-    fallarmyworm: 0,
-    stemborer: 0,
-  }));
+  const {
+    reports,
+    loading: reportsLoading,
+    error: reportsError,
+    refreshReports,
+  } = useReports();
+
+  // Process reports to get pest counts by barangay
+  const pestDataByBarangay = useMemo(() => {
+    if (!reports || reports.length === 0) return {};
+
+    const pestCounts = {};
+
+    reports.forEach((report) => {
+      const barangay = report.barangay;
+      const prediction = report.prediction?.toLowerCase();
+
+      if (!pestCounts[barangay]) {
+        pestCounts[barangay] = {
+          snail: 0,
+          fallarmyworm: 0,
+          stemborer: 0,
+        };
+      }
+
+      if (prediction === "snail") {
+        pestCounts[barangay].snail++;
+      } else if (prediction === "fallarmyworm") {
+        pestCounts[barangay].fallarmyworm++;
+      } else if (prediction === "stemborer") {
+        pestCounts[barangay].stemborer++;
+      }
+    });
+
+    return pestCounts;
+  }, [reports]);
+
+  // Transform barangay data to include pest counts
+  const barangayData = useMemo(() => {
+    return barangays.map((barangay) => {
+      const pestData = pestDataByBarangay[barangay.barangayName] || {
+        snail: 0,
+        fallarmyworm: 0,
+        stemborer: 0,
+      };
+
+      return {
+        id: barangay._id,
+        number: barangay.barangayId,
+        name: barangay.barangayName,
+        ...pestData,
+      };
+    });
+  }, [barangays, pestDataByBarangay]);
 
   // Edit barangay
   const handleEditBarangay = (barangay) => {
@@ -84,6 +129,12 @@ const ReportsHeatMap = () => {
     await deleteBarangay(barangay.id);
   };
 
+  // Refresh all data
+  const refreshAllData = () => {
+    refreshBarangays();
+    refreshReports();
+  };
+
   // Filter data based on search term
   const filteredData = barangayData.filter(
     (row) =>
@@ -92,8 +143,11 @@ const ReportsHeatMap = () => {
       (searchTerm.toLowerCase() === "snail" && row.snail > 0) ||
       (searchTerm.toLowerCase() === "fall armyworm" && row.fallarmyworm > 0) ||
       (searchTerm.toLowerCase() === "stemborer" && row.stemborer > 0) ||
-      (searchTerm.toLowerCase() === "armyworm" && row.fallarmyworm > 0),
+      (searchTerm.toLowerCase() === "armyworm" && row.fallarmyworm > 0)
   );
+
+  const loading = barangaysLoading || reportsLoading;
+  const error = barangaysError || reportsError;
 
   return (
     <div className="flex h-full w-full flex-col overflow-hidden rounded-2xl bg-white shadow">
@@ -105,7 +159,7 @@ const ReportsHeatMap = () => {
           </h2>
           {/* Refresh Button */}
           <button
-            onClick={refreshBarangays}
+            onClick={refreshAllData}
             className="rounded-lg p-2 text-gray-600 transition-colors hover:bg-gray-100"
             title="Refresh Data"
           >
@@ -116,7 +170,7 @@ const ReportsHeatMap = () => {
 
       {/* Search + Legend */}
       <div className="flex flex-col gap-2 border-b border-gray-100 px-6 py-3 md:flex-row md:items-center md:justify-between">
-        {/* Left: Button + Search */}
+        {/* Left: Search */}
         <div className="flex flex-col gap-2 md:flex-row md:items-center md:gap-3">
           {/* Search */}
           <div className="relative w-full md:w-72">
@@ -148,20 +202,20 @@ const ReportsHeatMap = () => {
           {/* Legend */}
           <div className="flex flex-wrap items-center gap-3 text-sm font-medium">
             <div className="flex items-center gap-1">
-              <span className="h-4 w-4 rounded border border-gray-300 bg-gray-100 text-left text-xs font-semibold tracking-wider text-[var(--color-text-primary)] uppercase"></span>
-              None
+              <span className="h-4 w-4 rounded border border-gray-300 bg-gray-100"></span>
+              None (0)
             </div>
             <div className="flex items-center gap-1">
-              <span className="h-4 w-4 rounded border border-green-300 bg-green-100 text-left text-xs font-semibold tracking-wider text-[var(--color-text-primary)] uppercase"></span>
-              Low
+              <span className="h-4 w-4 rounded border border-green-300 bg-green-100"></span>
+              Low (1-4)
             </div>
             <div className="flex items-center gap-1">
-              <span className="h-4 w-4 rounded border border-yellow-300 bg-yellow-100 text-left text-xs font-semibold tracking-wider text-[var(--color-text-primary)] uppercase"></span>
-              Medium
+              <span className="h-4 w-4 rounded border border-yellow-300 bg-yellow-100"></span>
+              Medium (5-9)
             </div>
             <div className="flex items-center gap-1">
-              <span className="h-4 w-4 rounded border border-red-300 bg-red-100 text-left text-xs font-semibold tracking-wider text-[var(--color-text-primary)] uppercase"></span>
-              High
+              <span className="h-4 w-4 rounded border border-red-300 bg-red-100"></span>
+              High (10+)
             </div>
           </div>
         </div>
@@ -175,7 +229,7 @@ const ReportsHeatMap = () => {
               icon="mdi:loading"
               className="mb-2 animate-spin text-4xl text-blue-500"
             />
-            <p className="text-gray-500">Loading barangays...</p>
+            <p className="text-gray-500">Loading data...</p>
           </div>
         </div>
       )}
@@ -189,7 +243,7 @@ const ReportsHeatMap = () => {
             />
             <p className="mb-2 text-red-500">{error}</p>
             <button
-              onClick={refreshBarangays}
+              onClick={refreshAllData}
               className="rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
             >
               Try Again
@@ -241,21 +295,27 @@ const ReportsHeatMap = () => {
                       </span>
                     </td>
                     <td
-                      className={`px-6 py-5 whitespace-nowrap ${getHeatColor(row.snail)}`}
+                      className={`px-6 py-5 whitespace-nowrap ${getHeatColor(
+                        row.snail
+                      )}`}
                     >
                       <span className="text-sm font-medium text-[var(--color-text-description)]">
                         {row.snail}
                       </span>
                     </td>
                     <td
-                      className={`px-6 py-5 whitespace-nowrap ${getHeatColor(row.fallarmyworm)}`}
+                      className={`px-6 py-5 whitespace-nowrap ${getHeatColor(
+                        row.fallarmyworm
+                      )}`}
                     >
                       <span className="text-sm font-medium text-[var(--color-text-description)]">
                         {row.fallarmyworm}
                       </span>
                     </td>
                     <td
-                      className={`px-6 py-5 whitespace-nowrap ${getHeatColor(row.stemborer)}`}
+                      className={`px-6 py-5 whitespace-nowrap ${getHeatColor(
+                        row.stemborer
+                      )}`}
                     >
                       <span className="text-sm font-medium text-[var(--color-text-description)]">
                         {row.stemborer}
