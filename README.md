@@ -1,36 +1,255 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 🌱 Harvest Assistant – Smart Pest Management & Grain Production Platform
 
-## Getting Started
+A full-stack agricultural management system designed to support farmers and agricultural administrators with pest identification, yield forecasting, and training management. Built for the farming communities of General Santos City, this system integrates web and mobile technologies to improve decision-making, promote sustainable farming, and enhance food security.
 
-First, run the development server:
+## 📖 Overview
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+Harvest Assistant combines AI-powered pest management, farmer record monitoring, and data-driven reporting into a single platform. It helps administrators oversee agricultural activities while equipping farmers with tools for pest detection, insecticide guidance, and income estimation.
+
+The system was developed as part of a research initiative at STI College – General Santos, focusing on the challenges faced by local grain producers, particularly rice and corn farmers.
+
+## 🏗️ Project Structure
+
+```
+Harvest/
+├── Harvest-Frontend/          # Next.js React frontend
+│   ├── app/                   # App router pages and configuration
+│   ├── components/            # Reusable React components
+│   ├── assets/               # Static assets and dummy data
+│   └── public/               # Public assets
+└── Harvest-Backend/          # Node.js backend
+    ├── models/               # Database models
+    └── ...                   # Additional backend files
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## ✨ Features
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+### 🔬 Smart Pest Management
+- AI-powered pest identification system
+- Insecticide recommendation engine
+- Pest damage assessment tools
+- Disease pattern recognition
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 📊 Administrative Dashboard
+- Real-time analytics and data visualization
+- Interactive charts and graphs
+- Notification system
+- Quick overview of key agricultural metrics
 
-## Learn More
+### 👨‍🌾 Farmer Management
+- Comprehensive farmer records with RSBSA numbers
+- Crop type tracking (Rice, Corn, etc.)
+- Area and barangay information for General Santos City
+- Contact management and communication tools
+- Tabbed interface for organized data viewing
 
-To learn more about Next.js, take a look at the following resources:
+### 📈 Yield Forecasting & Reports
+- Interactive bar charts and pie charts
+- Data filtering and search capabilities
+- Income estimation tools
+- Visual data representation with tooltips
+- Export functionality for reports
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 🎓 Training Management
+- Training session tracking
+- Pest and disease identification training
+- Progress monitoring
+- Training reports and analytics
+- Educational content delivery
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 👤 User Management
+- Admin authentication system
+- User profiles and settings
+- Secure login/logout functionality
+- Role-based access control
 
-## Deploy on Vercel
+## 🛠️ Technology Stack
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Frontend
+- **Framework**: Next.js 14+ with App Router
+- **UI Library**: React 18+
+- **Styling**: Tailwind CSS with custom CSS variables
+- **Charts**: Recharts for data visualization
+- **Icons**: Iconify React
+- **Animations**: Framer Motion
+- **Fonts**: Lato, Quicksand, Geist
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Backend
+- **Runtime**: Node.js
+- **Database**: MongoDB with native driver
+- **Authentication**: Custom admin authentication system
+- **AI Integration**: Ready for machine learning model integration
+
+### Development Tools
+- **Linting**: ESLint with Next.js configuration
+- **Package Manager**: npm/yarn/pnpm/bun support
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js (v18 or higher)
+- MongoDB database
+- npm, yarn, pnpm, or bun package manager
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd Harvest
+   ```
+
+2. **Frontend Setup**
+   ```bash
+   cd Harvest-Frontend
+   npm install
+   # or
+   yarn install
+   # or
+   pnpm install
+   # or
+   bun install
+   ```
+
+3. **Backend Setup**
+   ```bash
+   cd ../Harvest-Backend
+   npm install
+   ```
+
+4. **Environment Configuration**
+   Create environment files for both frontend and backend with necessary configuration variables.
+
+### Development
+
+1. **Start the backend server**
+   ```bash
+   cd Harvest-Backend
+   npm run dev
+   ```
+
+2. **Start the frontend development server**
+   ```bash
+   cd Harvest-Frontend
+   npm run dev
+   # or
+   yarn dev
+   # or
+   pnpm dev
+   # or
+   bun dev
+   ```
+
+3. **Access the application**
+   Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+## 📱 Key Components
+
+### Navigation
+- **Sidebar**: Collapsible navigation with tooltips
+- **Main Menu**: Dashboard, Farmers, Reports, Pest Management, Training, Profile
+- **Settings**: Configuration and logout functionality
+
+### Data Visualization
+- **Bar Charts**: Agricultural analytics with interactive tooltips
+- **Pie Charts**: Farmer distribution by crop type and region
+- **Progress Indicators**: Training completion and yield tracking
+
+### Smart Agriculture Tools
+- **Pest Detection Interface**: AI-powered pest identification
+- **Yield Calculator**: Income estimation based on crop data
+- **Training Modules**: Interactive learning content
+
+### Tables & Lists
+- **Farmer Records**: Searchable and filterable farmer database
+- **Tab Interface**: Organized data presentation
+- **Responsive Design**: Mobile-friendly layouts
+
+## 🎨 Design System
+
+The application uses a comprehensive design system with:
+- **Custom CSS Variables**: Consistent color scheme and theming
+- **Responsive Grid**: Flexible layouts for all screen sizes
+- **Interactive Elements**: Hover states and smooth transitions
+- **Accessibility**: Screen reader support and keyboard navigation
+
+### Color Palette
+- Primary colors for branding and navigation
+- Chart-specific colors for data visualization
+- Semantic colors for different agricultural data categories
+- High contrast ratios for accessibility
+
+## 🔧 Configuration
+
+### Sidebar Configuration
+The sidebar is configurable through [`sidebarConfig.js`](Harvest-Frontend/app/config/sidebarConfig.js):
+- Main navigation items
+- Bottom utility items
+- Icon and routing configuration
+
+### Tailwind Configuration
+Custom Tailwind setup with extended color palette and font families defined in [`tailwind.config.js`](Harvest-Frontend/tailwind.config.js).
+
+## 📊 Database Models
+
+### RegisterModel
+- Admin user management
+- Username and email-based authentication
+- MongoDB collection integration
+
+### Future Models
+- Farmer profiles and crop data
+- Pest identification records
+- Training progress tracking
+- Yield and income data
+
+## 🎓 Research Background
+
+This project was developed as part of a research initiative at **STI College – General Santos**, addressing the specific agricultural challenges in General Santos City:
+
+- **Target Communities**: Rice and corn farmers in General Santos City
+- **Research Focus**: Smart pest management and grain production optimization
+- **Academic Institution**: STI College – General Santos
+- **Goal**: Improve food security and promote sustainable farming practices
+
+## 🚢 Deployment
+
+### Vercel (Recommended for Frontend)
+The frontend is optimized for deployment on Vercel:
+
+1. Push your code to a Git repository
+2. Connect to Vercel
+3. Deploy with automatic builds
+
+For detailed deployment instructions, see the [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying).
+
+### Backend Deployment
+Deploy the backend to your preferred Node.js hosting service with MongoDB connection.
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 🆘 Support
+
+For support and questions:
+- Create an issue in the repository
+- Check the documentation
+- Review the component examples in the codebase
+
+## 🏫 Academic Partnership
+
+**STI College – General Santos**  
+Research Initiative for Agricultural Technology Development
+
+---
+
+Built with ❤️ for the farming communities of General Santos City using modern web technologies and AI-powered solutions.
