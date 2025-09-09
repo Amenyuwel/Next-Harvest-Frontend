@@ -153,7 +153,7 @@ export const notifications = [
   },
 ];
 
-export const pestReportsData = [
+export const ReportsData = [
   {
     id: 2,
     number: "02",
@@ -196,7 +196,7 @@ export const farmReports = [
   },
 ];
 
-export const pestReports = [
+export const Reports = [
   {
     id: 1,
     title: "Pest Reports",
